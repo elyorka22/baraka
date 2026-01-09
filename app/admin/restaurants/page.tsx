@@ -35,13 +35,13 @@ export default async function AdminRestaurantsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Управление ресторанами
+            Restoranlarni boshqarish
           </h1>
           <a
             href="/admin/restaurants/new"
             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
           >
-            + Добавить ресторан
+            + Restoran qo'shish
           </a>
         </div>
 
