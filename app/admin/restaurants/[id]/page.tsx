@@ -2,6 +2,8 @@ import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { EditRestaurantForm } from '@/components/admin/EditRestaurantForm'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditRestaurantPage({
   params,
 }: {

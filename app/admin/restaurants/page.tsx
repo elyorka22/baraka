@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/common/Navbar'
 import { RestaurantsList } from '@/components/admin/RestaurantsList'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminRestaurantsPage() {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()

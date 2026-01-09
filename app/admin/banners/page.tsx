@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/common/Navbar'
 import { BannersList } from '@/components/admin/BannersList'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminBannersPage() {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()

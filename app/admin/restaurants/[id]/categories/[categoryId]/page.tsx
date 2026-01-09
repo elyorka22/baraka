@@ -2,6 +2,8 @@ import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { EditCategoryForm } from '@/components/admin/EditCategoryForm'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditCategoryPage({
   params,
 }: {

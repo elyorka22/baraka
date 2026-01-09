@@ -2,6 +2,8 @@ import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { EditBannerForm } from '@/components/admin/EditBannerForm'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditBannerPage({
   params,
 }: {

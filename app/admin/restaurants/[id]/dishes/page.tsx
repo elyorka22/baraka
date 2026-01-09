@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/common/Navbar'
 import { DishesManagement } from '@/components/admin/DishesManagement'
 
+export const dynamic = 'force-dynamic'
+
 export default async function RestaurantDishesPage({
   params,
 }: {
