@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Baraka - Система доставки еды
 
-## Getting Started
+Современная система управления доставкой еды с поддержкой множественных ролей.
 
-First, run the development server:
+## Технологический стек
+
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Backend**: Supabase (PostgreSQL, Auth, Storage, Realtime)
+- **Деплой**: Vercel (Frontend), Supabase (Backend), Railway (опционально)
+
+## Роли пользователей
+
+1. **Супер-админ** - полное управление системой
+2. **Менеджер** - управление заказами, сборщиками и курьерами
+3. **Сборщик** - сборка заказов
+4. **Курьер** - доставка заказов
+5. **Клиент** - оформление и отслеживание заказов
+
+## Установка и настройка
+
+### 1. Клонирование и установка зависимостей
+
+```bash
+npm install
+```
+
+### 2. Настройка Supabase
+
+1. Создайте проект на [Supabase](https://supabase.com)
+2. Скопируйте `.env.local.example` в `.env.local`
+3. Заполните переменные окружения:
+   - `NEXT_PUBLIC_SUPABASE_URL` - URL вашего Supabase проекта
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Anon ключ
+   - `SUPABASE_SERVICE_ROLE_KEY` - Service Role ключ
+
+### 3. Применение миграций базы данных
+
+1. Откройте SQL Editor в Supabase Dashboard
+2. Примените миграции в порядке:
+   - `supabase/migrations/001_initial_schema.sql`
+   - `supabase/migrations/002_rls_policies.sql`
+   - `supabase/migrations/003_enable_realtime.sql`
+
+### 4. Настройка Storage
+
+Создайте следующие buckets в Supabase Storage:
+- `banners` - для баннеров
+- `restaurants` - для изображений ресторанов
+- `dishes` - для изображений блюд
+- `categories` - для изображений категорий
+
+Настройте политики доступа для каждого bucket (публичный доступ на чтение).
+
+### 5. Запуск проекта
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Откройте [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 6. Создание первого супер-админа
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+После регистрации первого пользователя, обновите его роль в Supabase:
 
-## Learn More
+```sql
+UPDATE profiles
+SET role = 'super_admin'
+WHERE id = 'ваш_user_id';
+```
 
-To learn more about Next.js, take a look at the following resources:
+Подробные инструкции по деплою см. в [DEPLOYMENT.md](./DEPLOYMENT.md)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Структура проекта
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+baraka/
+├── app/                    # Next.js App Router
+│   ├── admin/             # Страницы супер-админа
+│   ├── manager/           # Страницы менеджера
+│   ├── collector/         # Страницы сборщика
+│   ├── courier/           # Страницы курьера
+│   ├── customer/         # Страницы клиента
+│   └── auth/              # Страницы аутентификации
+├── components/            # React компоненты
+├── lib/                   # Утилиты и конфигурация
+│   └── supabase/         # Supabase клиенты
+├── types/                 # TypeScript типы
+└── supabase/             # Миграции базы данных
+    └── migrations/
+```
 
-## Deploy on Vercel
+## Деплой
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Vercel (Frontend)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Подключите репозиторий к Vercel
+2. Добавьте переменные окружения из `.env.local`
+3. Деплой произойдет автоматически
+
+### Supabase (Backend)
+
+База данных и сервисы уже хостятся на Supabase.
+
+### Railway (опционально)
+
+Можно использовать для дополнительных сервисов или Edge Functions.
+
+## Лицензия
+
+MIT
