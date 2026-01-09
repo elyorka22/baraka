@@ -85,7 +85,7 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     )
   }
@@ -102,12 +102,12 @@ export default function CartPage() {
         </div>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg mb-4">Корзина пуста</p>
+            <p className="text-gray-500 text-lg mb-4">Savat bo'sh</p>
             <Link
               href="/customer"
               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Перейти к ресторанам
+              Restoranlarga o'tish
             </Link>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function CartPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Корзина</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Savat</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -177,7 +177,7 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Итого</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Jami</h2>
               <div className="space-y-2 mb-6">
                 {dishes.map((dish) => {
                   const quantity = cart[dish.id]?.quantity || 0
@@ -191,7 +191,7 @@ export default function CartPage() {
               </div>
               <div className="border-t pt-4 mb-6">
                 <div className="flex justify-between text-xl font-bold">
-                  <span>Итого:</span>
+                  <span>Jami:</span>
                   <span className="text-orange-500">{getTotal()} ₽</span>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export default function CartPage() {
                 href={`/customer/checkout?restaurant=${getRestaurantId()}`}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors block text-center"
               >
-                Оформить заказ
+                Buyurtma berish
               </Link>
             </div>
           </div>

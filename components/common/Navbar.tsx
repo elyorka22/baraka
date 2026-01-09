@@ -26,26 +26,26 @@ export function Navbar({ role, userName }: NavbarProps) {
     switch (role) {
       case 'super_admin':
         return [
-          { href: '/admin/dashboard', label: 'Дашборд' },
-          { href: '/admin/users', label: 'Пользователи' },
-          { href: '/admin/restaurants', label: 'Рестораны' },
-          { href: '/admin/banners', label: 'Баннеры' },
-          { href: '/admin/orders', label: 'Заказы' },
+          { href: '/admin/dashboard', label: 'Boshqaruv paneli' },
+          { href: '/admin/users', label: 'Foydalanuvchilar' },
+          { href: '/admin/restaurants', label: 'Restoranlar' },
+          { href: '/admin/banners', label: 'Bannerlar' },
+          { href: '/admin/orders', label: 'Buyurtmalar' },
         ]
       case 'manager':
         return [
-          { href: '/manager/dashboard', label: 'Дашборд' },
-          { href: '/manager/orders', label: 'Заказы' },
-          { href: '/manager/collectors', label: 'Сборщики' },
-          { href: '/manager/couriers', label: 'Курьеры' },
+          { href: '/manager/dashboard', label: 'Boshqaruv paneli' },
+          { href: '/manager/orders', label: 'Buyurtmalar' },
+          { href: '/manager/collectors', label: 'Yig\'uvchilar' },
+          { href: '/manager/couriers', label: 'Kuryerlar' },
         ]
       case 'collector':
         return [
-          { href: '/collector/orders', label: 'Мои заказы' },
+          { href: '/collector/orders', label: 'Mening buyurtmalarim' },
         ]
       case 'courier':
         return [
-          { href: '/courier/orders', label: 'Доступные заказы' },
+          { href: '/courier/orders', label: 'Mavjud buyurtmalar' },
         ]
       default:
         return []
@@ -83,7 +83,7 @@ export function Navbar({ role, userName }: NavbarProps) {
               disabled={loading}
               className="bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
             >
-              {loading ? 'Выход...' : 'Выйти'}
+              {loading ? 'Chiqilmoqda...' : 'Chiqish'}
             </button>
           </div>
         </div>

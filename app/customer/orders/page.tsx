@@ -91,14 +91,14 @@ export default function CustomerOrdersPage() {
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
-      pending: 'Ожидает обработки',
-      assigned_to_collector: 'Назначен сборщику',
-      collecting: 'Собирается',
-      ready: 'Готов к доставке',
-      assigned_to_courier: 'Назначен курьеру',
-      delivering: 'Доставляется',
-      delivered: 'Доставлен',
-      cancelled: 'Отменен',
+      pending: 'Qayta ishlash kutilmoqda',
+      assigned_to_collector: 'Yig\'uvchiga tayinlangan',
+      collecting: 'Yig\'ilmoqda',
+      ready: 'Yetkazib berishga tayyor',
+      assigned_to_courier: 'Kuryerga tayinlangan',
+      delivering: 'Yetkazilmoqda',
+      delivered: 'Yetkazib berildi',
+      cancelled: 'Bekor qilindi',
     }
     return labels[status] || status
   }
@@ -120,7 +120,7 @@ export default function CustomerOrdersPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     )
   }
@@ -137,23 +137,23 @@ export default function CustomerOrdersPage() {
               href="/customer"
               className="text-gray-700 hover:text-orange-500"
             >
-              Меню
+              Menyu
             </Link>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Мои заказы</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Mening buyurtmalarim</h1>
 
         {orders.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow">
-            <p className="text-gray-500 text-lg mb-4">У вас пока нет заказов</p>
+            <p className="text-gray-500 text-lg mb-4">Hozircha buyurtmalaringiz yo'q</p>
             <Link
               href="/customer"
               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Перейти к ресторанам
+              Restoranlarga o'tish
             </Link>
           </div>
         ) : (
@@ -163,7 +163,7 @@ export default function CustomerOrdersPage() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
-                      Заказ #{order.id.slice(0, 8)}
+                      Buyurtma #{order.id.slice(0, 8)}
                     </h3>
                     <p className="text-sm text-gray-500">
                       {order.restaurants?.name} • {new Date(order.created_at).toLocaleString('ru-RU')}
@@ -175,12 +175,12 @@ export default function CustomerOrdersPage() {
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-sm text-gray-500 mb-1">Адрес доставки</p>
+                  <p className="text-sm text-gray-500 mb-1">Yetkazib berish manzili</p>
                   <p className="text-sm font-medium">{order.address}</p>
                 </div>
 
                 <div className="border-t pt-4 mb-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">Состав заказа:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">Buyurtma tarkibi:</h4>
                   <div className="space-y-1">
                     {order.order_items?.map((item: any) => (
                       <div key={item.id} className="flex justify-between text-sm">
@@ -193,7 +193,7 @@ export default function CustomerOrdersPage() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-900">
-                    Итого: {order.total_price} ₽
+                    Jami: {order.total_price} ₽
                   </span>
                 </div>
               </div>

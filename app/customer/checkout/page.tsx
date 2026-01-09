@@ -96,7 +96,7 @@ function CheckoutContent() {
     }
 
     if (dishes.length === 0) {
-      setError('Корзина пуста')
+      setError('Savat bo\'sh')
       setSubmitting(false)
       return
     }
@@ -158,7 +158,7 @@ function CheckoutContent() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     )
   }
@@ -168,12 +168,12 @@ function CheckoutContent() {
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg mb-4">Корзина пуста</p>
+            <p className="text-gray-500 text-lg mb-4">Savat bo'sh</p>
             <Link
               href="/customer"
               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Перейти к ресторанам
+              Restoranlarga o'tish
             </Link>
           </div>
         </div>
@@ -192,7 +192,7 @@ function CheckoutContent() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Оформление заказа</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Buyurtma berish</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -205,7 +205,7 @@ function CheckoutContent() {
 
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
-                  Адрес доставки *
+                  Yetkazib berish manzili *
                 </label>
                 <input
                   id="address"
@@ -214,13 +214,13 @@ function CheckoutContent() {
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="Улица, дом, квартира"
+                  placeholder="Ko'cha, uy, kvartira"
                 />
               </div>
 
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Телефон *
+                  Telefon *
                 </label>
                 <input
                   id="phone"
@@ -229,7 +229,7 @@ function CheckoutContent() {
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="+7 (999) 123-45-67"
+                  placeholder="+998 (99) 123-45-67"
                 />
               </div>
 
@@ -248,14 +248,14 @@ function CheckoutContent() {
                 />
                 {!user && (
                   <p className="mt-1 text-sm text-gray-500">
-                    Email нужен для уведомлений о статусе заказа
+                    Email buyurtma holati haqida xabarnoma olish uchun kerak
                   </p>
                 )}
               </div>
 
               <div>
                 <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
-                  Примечания
+                  Izohlar
                 </label>
                 <textarea
                   id="notes"
@@ -263,7 +263,7 @@ function CheckoutContent() {
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows={4}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="Дополнительная информация для курьера"
+                  placeholder="Kuryer uchun qo'shimcha ma'lumot"
                 />
               </div>
 
@@ -272,14 +272,14 @@ function CheckoutContent() {
                 disabled={submitting}
                 className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                {submitting ? 'Оформление...' : 'Оформить заказ'}
+                {submitting ? 'Buyurtma berilmoqda...' : 'Buyurtma berish'}
               </button>
             </form>
           </div>
 
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Ваш заказ</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Sizning buyurtmangiz</h2>
               {restaurant && (
                 <p className="text-sm text-gray-500 mb-4">{restaurant.name}</p>
               )}
@@ -297,7 +297,7 @@ function CheckoutContent() {
               </div>
               <div className="border-t pt-4">
                 <div className="flex justify-between text-xl font-bold">
-                  <span>Итого:</span>
+                  <span>Jami:</span>
                   <span className="text-orange-500">{getTotal()} ₽</span>
                 </div>
               </div>
@@ -313,7 +313,7 @@ export default function CheckoutPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     }>
       <CheckoutContent />

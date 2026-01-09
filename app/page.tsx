@@ -54,13 +54,13 @@ export default async function HomePage() {
                     href="/customer/orders"
                     className="text-gray-700 hover:text-orange-500"
                   >
-                    Мои заказы
+                    Mening buyurtmalarim
                   </Link>
                   <Link
                     href="/customer/cart"
                     className="text-gray-700 hover:text-orange-500"
                   >
-                    Корзина
+                    Savat
                   </Link>
                 </>
               ) : (
@@ -69,13 +69,13 @@ export default async function HomePage() {
                     href="/auth/login"
                     className="text-gray-700 hover:text-orange-500"
                   >
-                    Войти
+                    Kirish
                   </Link>
                   <Link
                     href="/auth/register"
                     className="text-gray-700 hover:text-orange-500"
                   >
-                    Регистрация
+                    Ro'yxatdan o'tish
                   </Link>
                 </>
               )}
@@ -104,11 +104,11 @@ export default async function HomePage() {
           </div>
         )}
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Рестораны</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Restoranlar</h1>
 
         {!restaurants || restaurants.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Ресторанов пока нет</p>
+            <p className="text-gray-500 text-lg">Hozircha restoranlar yo'q</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

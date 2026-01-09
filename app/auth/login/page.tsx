@@ -26,7 +26,7 @@ export default function LoginPage() {
     if (authError) {
       // Более понятное сообщение для ошибки подтверждения email
       if (authError.message.includes('Email not confirmed') || authError.message.includes('email_not_confirmed')) {
-        setError('Email не подтвержден. Проверьте почту или обратитесь к администратору.')
+        setError('Email tasdiqlanmagan. Pochtangizni tekshiring yoki administratorga murojaat qiling.')
       } else {
         setError(authError.message)
       }
@@ -59,7 +59,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">
-          Вход в систему
+          Tizimga kirish
         </h1>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -86,7 +86,7 @@ export default function LoginPage() {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              Пароль
+              Parol
             </label>
             <input
               id="password"
@@ -104,7 +104,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
           >
-            {loading ? 'Вход...' : 'Войти'}
+            {loading ? 'Kirilmoqda...' : 'Kirish'}
           </button>
         </form>
 
@@ -113,7 +113,7 @@ export default function LoginPage() {
             href="/auth/register"
             className="text-orange-500 hover:text-orange-600 font-medium"
           >
-            Нет аккаунта? Зарегистрироваться
+            Hisobingiz yo'qmi? Ro'yxatdan o'tish
           </Link>
         </div>
 
@@ -122,7 +122,7 @@ export default function LoginPage() {
             href="/"
             className="text-gray-500 hover:text-gray-600 text-sm"
           >
-            Вернуться на главную
+            Bosh sahifaga qaytish
           </Link>
         </div>
       </div>

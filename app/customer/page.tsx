@@ -46,7 +46,7 @@ export default function CustomerMenuPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     )
   }
@@ -70,7 +70,7 @@ export default function CustomerMenuPage() {
                 href="/customer/cart"
                 className="text-gray-700 hover:text-orange-500"
               >
-                Корзина
+                Savat
               </Link>
             </div>
           </div>

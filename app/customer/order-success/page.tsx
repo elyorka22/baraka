@@ -27,31 +27,31 @@ function OrderSuccessContent() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Заказ успешно оформлен!</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Buyurtma muvaffaqiyatli berildi!</h1>
             {orderId && (
               <p className="text-gray-600 mb-4">
-                Номер заказа: <span className="font-semibold">{orderId}</span>
+                Buyurtma raqami: <span className="font-semibold">{orderId}</span>
               </p>
             )}
             <p className="text-gray-600">
-              Мы свяжемся с вами в ближайшее время для подтверждения заказа.
+              Buyurtmani tasdiqlash uchun tez orada siz bilan bog'lanamiz.
             </p>
           </div>
 
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Что дальше?</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Keyin nima bo'ladi?</h2>
             <ul className="text-left space-y-3 text-gray-600">
               <li className="flex items-start">
                 <span className="text-orange-500 mr-2">•</span>
-                <span>Менеджер проверит ваш заказ и назначит сборщика</span>
+                <span>Menejer buyurtmangizni tekshiradi va yig'uvchini tayinlaydi</span>
               </li>
               <li className="flex items-start">
                 <span className="text-orange-500 mr-2">•</span>
-                <span>После сборки заказа курьер доставит его по указанному адресу</span>
+                <span>Buyurtma yig'ilgandan keyin kuryer uni ko'rsatilgan manzilga yetkazadi</span>
               </li>
               <li className="flex items-start">
                 <span className="text-orange-500 mr-2">•</span>
-                <span>Вы получите уведомление на указанный email или телефон</span>
+                <span>Siz ko'rsatilgan email yoki telefon raqamiga xabarnoma olasiz</span>
               </li>
             </ul>
           </div>
@@ -61,13 +61,13 @@ function OrderSuccessContent() {
               href="/customer"
               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              Вернуться к ресторанам
+              Restoranlarga qaytish
             </Link>
             <Link
               href="/auth/register"
               className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              Зарегистрироваться для отслеживания заказов
+              Buyurtmalarni kuzatish uchun ro'yxatdan o'tish
             </Link>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function OrderSuccessPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     }>
       <OrderSuccessContent />
