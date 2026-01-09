@@ -24,7 +24,12 @@ export default function LoginPage() {
     })
 
     if (authError) {
-      setError(authError.message)
+      // Более понятное сообщение для ошибки подтверждения email
+      if (authError.message.includes('Email not confirmed') || authError.message.includes('email_not_confirmed')) {
+        setError('Email не подтвержден. Проверьте почту или обратитесь к администратору.')
+      } else {
+        setError(authError.message)
+      }
       setLoading(false)
       return
     }

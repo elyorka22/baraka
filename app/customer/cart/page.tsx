@@ -17,12 +17,10 @@ export default function CartPage() {
       const supabase = createSupabaseClient()
       const { data: { user: currentUser } } = await supabase.auth.getUser()
       
-      if (!currentUser) {
-        router.push('/auth/login')
-        return
+      // Авторизация не обязательна для корзины
+      if (currentUser) {
+        setUser(currentUser)
       }
-
-      setUser(currentUser)
 
       // Загружаем корзину из localStorage
       const savedCart = localStorage.getItem('cart')
