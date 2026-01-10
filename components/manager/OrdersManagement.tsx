@@ -26,7 +26,6 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
   const [assigning, setAssigning] = useState<string | null>(null)
   const [showAssignModal, setShowAssignModal] = useState<string | null>(null)
   const [collectors, setCollectors] = useState<any[]>([])
-  const [couriers, setCouriers] = useState<any[]>([])
 
   const filteredOrders = filter === 'all' 
     ? orders 
@@ -48,26 +47,26 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
-      pending: 'Ожидает',
-      assigned_to_collector: 'Назначен сборщику',
-      collecting: 'Собирается',
-      ready: 'Готов',
-      assigned_to_courier: 'Назначен курьеру',
-      delivering: 'Доставляется',
-      delivered: 'Доставлен',
-      cancelled: 'Отменен',
+      pending: 'Kutilmoqda',
+      assigned_to_collector: 'Yig\'uvchiga tayinlangan',
+      collecting: 'Yig\'ilmoqda',
+      ready: 'Tayyor',
+      assigned_to_courier: 'Kuryerga tayinlangan',
+      delivering: 'Yetkazilmoqda',
+      delivered: 'Yetkazib berildi',
+      cancelled: 'Bekor qilindi',
     }
     return labels[status] || status
   }
 
-  const loadCollectorsAndCouriers = async () => {
+  const loadCollectors = async () => {
     const supabase = createSupabaseClient()
-    const [collectorsResult, couriersResult] = await Promise.all([
-      supabase.from('profiles').select('*').eq('role', 'collector').eq('is_active', true),
-      supabase.from('profiles').select('*').eq('role', 'courier').eq('is_active', true),
-    ])
-    if (collectorsResult.data) setCollectors(collectorsResult.data)
-    if (couriersResult.data) setCouriers(couriersResult.data)
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('role', 'collector')
+      .eq('is_active', true)
+    if (data) setCollectors(data)
   }
 
   const handleAssignCollector = async (orderId: string, collectorId: string) => {
@@ -103,49 +102,6 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
     setShowAssignModal(null)
   }
 
-  const handleAssignCourier = async (orderId: string, courierId: string) => {
-    setAssigning(orderId)
-    const supabase = createSupabaseClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    if (!user) return
-
-    // Обновляем или создаем назначение
-    const { data: existing } = await supabase
-      .from('order_assignments')
-      .select('id')
-      .eq('order_id', orderId)
-      .single()
-
-    if (existing) {
-      await supabase
-        .from('order_assignments')
-        .update({ courier_id: courierId })
-        .eq('id', existing.id)
-    } else {
-      await supabase
-        .from('order_assignments')
-        .insert([{
-          order_id: orderId,
-          courier_id: courierId,
-          assigned_by: user.id,
-          status: 'assigned',
-        }])
-    }
-
-    // Обновляем статус заказа
-    await supabase
-      .from('orders')
-      .update({ status: 'assigned_to_courier' })
-      .eq('id', orderId)
-
-    setOrders(orders.map(o => 
-      o.id === orderId ? { ...o, status: 'assigned_to_courier' } : o
-    ))
-
-    setAssigning(null)
-    setShowAssignModal(null)
-  }
 
   return (
     <div>
@@ -154,25 +110,25 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
           onClick={() => setFilter('all')}
           className={`px-4 py-2 rounded-lg ${filter === 'all' ? 'bg-orange-500 text-white' : 'bg-white text-gray-700'}`}
         >
-          Все
+          Barchasi
         </button>
         <button
           onClick={() => setFilter('pending')}
           className={`px-4 py-2 rounded-lg ${filter === 'pending' ? 'bg-orange-500 text-white' : 'bg-white text-gray-700'}`}
         >
-          Ожидают
+          Kutilmoqda
+        </button>
+        <button
+          onClick={() => setFilter('collecting')}
+          className={`px-4 py-2 rounded-lg ${filter === 'collecting' ? 'bg-orange-500 text-white' : 'bg-white text-gray-700'}`}
+        >
+          Yig'ilmoqda
         </button>
         <button
           onClick={() => setFilter('ready')}
           className={`px-4 py-2 rounded-lg ${filter === 'ready' ? 'bg-orange-500 text-white' : 'bg-white text-gray-700'}`}
         >
-          Готовы
-        </button>
-        <button
-          onClick={() => setFilter('delivering')}
-          className={`px-4 py-2 rounded-lg ${filter === 'delivering' ? 'bg-orange-500 text-white' : 'bg-white text-gray-700'}`}
-        >
-          В доставке
+          Tayyor
         </button>
       </div>
 
@@ -182,10 +138,10 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Заказ #{order.id.slice(0, 8)}
+                  Buyurtma #{order.id.slice(0, 8)}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {order.restaurants?.name} • {new Date(order.created_at).toLocaleString('ru-RU')}
+                  {order.restaurants?.name} • {new Date(order.created_at).toLocaleString('uz-UZ')}
                 </p>
               </div>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
@@ -195,12 +151,12 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <p className="text-sm text-gray-500">Клиент</p>
-                <p className="text-sm font-medium">{order.profiles?.full_name || 'Не указано'}</p>
+                <p className="text-sm text-gray-500">Mijoz</p>
+                <p className="text-sm font-medium">{order.profiles?.full_name || 'Ko\'rsatilmagan'}</p>
                 <p className="text-sm text-gray-600">{order.phone}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Адрес</p>
+                <p className="text-sm text-gray-500">Manzil</p>
                 <p className="text-sm font-medium">{order.address}</p>
               </div>
             </div>
@@ -213,30 +169,19 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
                 {order.status === 'pending' && (
                   <button
                     onClick={() => {
-                      loadCollectorsAndCouriers()
+                      loadCollectors()
                       setShowAssignModal(order.id)
                     }}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
                   >
-                    Назначить сборщика
-                  </button>
-                )}
-                {order.status === 'ready' && (
-                  <button
-                    onClick={() => {
-                      loadCollectorsAndCouriers()
-                      setShowAssignModal(order.id)
-                    }}
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors"
-                  >
-                    Назначить курьера
+                    Yig'uvchini tayinlash
                   </button>
                 )}
                 <button
                   onClick={() => router.push(`/manager/orders/${order.id}`)}
                   className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
                 >
-                  Подробнее
+                  Batafsil
                 </button>
               </div>
             </div>
@@ -247,45 +192,27 @@ export function OrdersManagement({ orders: initialOrders }: OrdersManagementProp
       {showAssignModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-xl font-bold mb-4">Назначить сотрудника</h3>
-            {orders.find(o => o.id === showAssignModal)?.status === 'pending' ? (
-              <div>
-                <p className="mb-3 text-sm text-gray-600">Выберите сборщика:</p>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {collectors.map((collector) => (
-                    <button
-                      key={collector.id}
-                      onClick={() => handleAssignCollector(showAssignModal, collector.id)}
-                      disabled={assigning === showAssignModal}
-                      className="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
-                    >
-                      {collector.full_name || collector.id.slice(0, 8)}
-                    </button>
-                  ))}
-                </div>
+            <h3 className="text-xl font-bold mb-4">Yig'uvchini tayinlash</h3>
+            <div>
+              <p className="mb-3 text-sm text-gray-600">Yig'uvchini tanlang:</p>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {collectors.map((collector) => (
+                  <button
+                    key={collector.id}
+                    onClick={() => handleAssignCollector(showAssignModal, collector.id)}
+                    disabled={assigning === showAssignModal}
+                    className="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+                  >
+                    {collector.full_name || collector.id.slice(0, 8)}
+                  </button>
+                ))}
               </div>
-            ) : (
-              <div>
-                <p className="mb-3 text-sm text-gray-600">Выберите курьера:</p>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {couriers.map((courier) => (
-                    <button
-                      key={courier.id}
-                      onClick={() => handleAssignCourier(showAssignModal, courier.id)}
-                      disabled={assigning === showAssignModal}
-                      className="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
-                    >
-                      {courier.full_name || courier.id.slice(0, 8)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            </div>
             <button
               onClick={() => setShowAssignModal(null)}
               className="mt-4 w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
             >
-              Отмена
+              Bekor qilish
             </button>
           </div>
         </div>

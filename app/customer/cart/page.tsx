@@ -29,7 +29,7 @@ export default function CartPage() {
         const cartData = JSON.parse(savedCart)
         setCart(cartData)
 
-        // Загружаем информацию о блюдах
+        // Загружаем информацию о продуктах
         const dishIds = Object.keys(cartData)
         if (dishIds.length > 0) {
           const { data: dishesData } = await supabase

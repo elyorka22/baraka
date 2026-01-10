@@ -27,76 +27,51 @@ export default async function HomePage() {
     }
   }
 
-  // Загружаем рестораны и баннеры для главной страницы
-  const { data: restaurants } = await supabase
+  // Загружаем склады для главной страницы
+  const { data: warehouses } = await supabase
     .from('restaurants')
     .select('*')
     .eq('is_active', true)
     .order('name')
-
-  const { data: banners } = await supabase
-    .from('banners')
-    .select('*')
-    .eq('is_active', true)
-    .order('position')
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
       <div className="container mx-auto px-4 py-8">
-        {banners && banners.length > 0 && (
-          <div className="mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {banners.map((banner) => (
-                <div key={banner.id} className="relative h-48 rounded-lg overflow-hidden">
-                  <img
-                    src={banner.image_url}
-                    alt={banner.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                    <h3 className="text-white text-xl font-bold">{banner.title}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Omborlar</h1>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Restoranlar</h1>
-
-        {!restaurants || restaurants.length === 0 ? (
+        {!warehouses || warehouses.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Hozircha restoranlar yo'q</p>
+            <p className="text-gray-500 text-lg">Hozircha omborlar yo'q</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {restaurants.map((restaurant) => (
+            {warehouses.map((warehouse) => (
               <Link
-                key={restaurant.id}
-                href={`/customer/restaurant/${restaurant.id}`}
+                key={warehouse.id}
+                href={`/customer/restaurant/${warehouse.id}`}
                 className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
               >
-                {restaurant.image_url && (
+                {warehouse.image_url && (
                   <img
-                    src={restaurant.image_url}
-                    alt={restaurant.name}
+                    src={warehouse.image_url}
+                    alt={warehouse.name}
                     className="w-full h-48 object-cover"
                   />
                 )}
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {restaurant.name}
+                    {warehouse.name}
                   </h3>
-                  {restaurant.description && (
+                  {warehouse.description && (
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {restaurant.description}
+                      {warehouse.description}
                     </p>
                   )}
-                  {restaurant.address && (
+                  {warehouse.address && (
                     <p className="text-gray-500 text-sm">
-                      📍 {restaurant.address}
+                      📍 {warehouse.address}
                     </p>
                   )}
                 </div>

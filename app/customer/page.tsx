@@ -9,7 +9,6 @@ import { LogoutButton } from '@/components/common/LogoutButton'
 export default function CustomerMenuPage() {
   const router = useRouter()
   const [restaurants, setRestaurants] = useState<any[]>([])
-  const [banners, setBanners] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
 
@@ -23,26 +22,15 @@ export default function CustomerMenuPage() {
         setUser(currentUser)
       }
       
-      // Загружаем активные рестораны
-      const { data: restaurantsData } = await supabase
+      // Загружаем активные склады
+      const { data: warehousesData } = await supabase
         .from('restaurants')
         .select('*')
         .eq('is_active', true)
         .order('name')
 
-      if (restaurantsData) {
-        setRestaurants(restaurantsData)
-      }
-
-      // Загружаем активные баннеры
-      const { data: bannersData } = await supabase
-        .from('banners')
-        .select('*')
-        .eq('is_active', true)
-        .order('position')
-
-      if (bannersData) {
-        setBanners(bannersData)
+      if (warehousesData) {
+        setRestaurants(warehousesData)
       }
 
       setLoading(false)
@@ -106,30 +94,11 @@ export default function CustomerMenuPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {banners.length > 0 && (
-          <div className="mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {banners.map((banner) => (
-                <div key={banner.id} className="relative h-48 rounded-lg overflow-hidden">
-                  <img
-                    src={banner.image_url}
-                    alt={banner.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                    <h3 className="text-white text-xl font-bold">{banner.title}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Рестораны</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Omborlar</h1>
 
         {restaurants.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Ресторанов пока нет</p>
+            <p className="text-gray-500 text-lg">Hozircha omborlar yo'q</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

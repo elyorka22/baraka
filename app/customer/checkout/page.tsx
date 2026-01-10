@@ -90,7 +90,7 @@ function CheckoutContent() {
     setSubmitting(true)
 
     if (!restaurantId || !restaurant) {
-      setError('Ошибка: ресторан не найден')
+      setError('Xatolik: ombor topilmadi')
       setSubmitting(false)
       return
     }

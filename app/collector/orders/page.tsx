@@ -50,13 +50,13 @@ export default async function CollectorOrdersPage() {
       
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Мои заказы
+          Mening buyurtmalarim
         </h1>
 
         {assignedOrders.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <p className="text-gray-500 text-lg">
-              У вас пока нет назначенных заказов
+              Hozircha tayinlangan buyurtmalar yo'q
             </p>
           </div>
         ) : (
@@ -66,7 +66,7 @@ export default async function CollectorOrdersPage() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
-                      Заказ #{order.id.slice(0, 8)}
+                      Buyurtma #{order.id.slice(0, 8)}
                     </h3>
                     <p className="text-sm text-gray-500">
                       {order.restaurants?.name}
@@ -77,18 +77,18 @@ export default async function CollectorOrdersPage() {
                     order.status === 'collecting' ? 'bg-blue-100 text-blue-800' :
                     'bg-orange-100 text-orange-800'
                   }`}>
-                    {order.status === 'ready' ? 'Готов' :
-                     order.status === 'collecting' ? 'Собирается' :
-                     'Назначен'}
+                    {order.status === 'ready' ? 'Tayyor' :
+                     order.status === 'collecting' ? 'Yig\'ilmoqda' :
+                     'Tayinlangan'}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-gray-500">Адрес доставки</p>
+                    <p className="text-sm text-gray-500">Yetkazib berish manzili</p>
                     <p className="text-sm font-medium">{order.address}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Телефон</p>
+                    <p className="text-sm text-gray-500">Telefon</p>
                     <p className="text-sm font-medium">{order.phone}</p>
                   </div>
                 </div>
@@ -100,7 +100,7 @@ export default async function CollectorOrdersPage() {
                     href={`/collector/order/${order.id}`}
                     className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
                   >
-                    Подробнее
+                    Batafsil
                   </a>
                 </div>
               </div>

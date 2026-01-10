@@ -19,15 +19,15 @@ export default function RestaurantMenuPage() {
     const loadData = async () => {
       const supabase = createSupabaseClient()
       
-      // Загружаем ресторан
-      const { data: restaurantData } = await supabase
+      // Загружаем склад
+      const { data: warehouseData } = await supabase
         .from('restaurants')
         .select('*')
         .eq('id', restaurantId)
         .single()
 
-      if (restaurantData) {
-        setRestaurant(restaurantData)
+      if (warehouseData) {
+        setRestaurant(warehouseData)
       }
 
       // Загружаем категории
@@ -41,7 +41,7 @@ export default function RestaurantMenuPage() {
         setCategories(categoriesData)
       }
 
-      // Загружаем блюда
+      // Загружаем продукты
       const { data: dishesData } = await supabase
         .from('dishes')
         .select('*, categories(*)')
@@ -57,7 +57,7 @@ export default function RestaurantMenuPage() {
       const savedCart = localStorage.getItem('cart')
       if (savedCart) {
         const cartData = JSON.parse(savedCart)
-        // Фильтруем только блюда этого ресторана
+        // Фильтруем только продукты этого склада
         const filteredCart: Record<string, number> = {}
         Object.keys(cartData).forEach(dishId => {
           if (cartData[dishId].restaurantId === restaurantId) {
@@ -77,7 +77,7 @@ export default function RestaurantMenuPage() {
     const newCart = { ...cart, [dishId]: (cart[dishId] || 0) + 1 }
     setCart(newCart)
     
-    // Сохраняем в общую корзину с информацией о ресторане
+    // Сохраняем в общую корзину с информацией о складе
     const savedCart = localStorage.getItem('cart')
     const cartData = savedCart ? JSON.parse(savedCart) : {}
     cartData[dishId] = { quantity: newCart[dishId], restaurantId }
@@ -126,7 +126,7 @@ export default function RestaurantMenuPage() {
   if (!restaurant) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Ресторан не найден</div>
+        <div className="text-gray-500">Ombor topilmadi</div>
       </div>
     )
   }
@@ -165,7 +165,7 @@ export default function RestaurantMenuPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <Link href="/customer" className="text-orange-500 hover:text-orange-600 mb-4 inline-block">
-            ← Restoranlarga qaytish
+            ← Omborlarga qaytish
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">{restaurant.name}</h1>
           {restaurant.description && (

@@ -96,7 +96,7 @@ export default function CollectorOrderDetailPage() {
   }, [orderId, router])
 
   const handleMarkReady = async () => {
-    if (!confirm('Отметить заказ как готовый?')) return
+    if (!confirm('Buyurtmani tayyor deb belgilash?')) return
 
     setUpdating(true)
     const supabase = createSupabaseClient()
@@ -114,7 +114,7 @@ export default function CollectorOrderDetailPage() {
   if (loading || !order || !user || !profile) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Загрузка...</div>
+        <div className="text-gray-500">Yuklanmoqda...</div>
       </div>
     )
   }
@@ -130,17 +130,17 @@ export default function CollectorOrderDetailPage() {
               href="/collector/orders"
               className="text-orange-500 hover:text-orange-600 mb-4 inline-block"
             >
-              ← Назад к заказам
+              ← Buyurtmalarga qaytish
             </a>
             <h1 className="text-3xl font-bold text-gray-900">
-              Заказ #{order.id.slice(0, 8)}
+              Buyurtma #{order.id.slice(0, 8)}
             </h1>
           </div>
 
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <p className="text-sm text-gray-500">Ресторан</p>
+                <p className="text-sm text-gray-500">Ombor</p>
                 <p className="text-lg font-semibold">{order.restaurants?.name}</p>
               </div>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -148,33 +148,33 @@ export default function CollectorOrderDetailPage() {
                 order.status === 'collecting' ? 'bg-blue-100 text-blue-800' :
                 'bg-orange-100 text-orange-800'
               }`}>
-                {order.status === 'ready' ? 'Готов' :
-                 order.status === 'collecting' ? 'Собирается' :
-                 'Назначен'}
+                {order.status === 'ready' ? 'Tayyor' :
+                 order.status === 'collecting' ? 'Yig\'ilmoqda' :
+                 'Tayinlangan'}
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-sm text-gray-500 mb-1">Клиент</p>
-                <p className="font-medium">{order.profiles?.full_name || 'Не указано'}</p>
+                <p className="text-sm text-gray-500 mb-1">Mijoz</p>
+                <p className="font-medium">{order.profiles?.full_name || 'Ko\'rsatilmagan'}</p>
                 <p className="text-sm text-gray-600">{order.phone}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 mb-1">Адрес доставки</p>
+                <p className="text-sm text-gray-500 mb-1">Yetkazib berish manzili</p>
                 <p className="font-medium">{order.address}</p>
               </div>
             </div>
 
             {order.notes && (
               <div className="mb-6">
-                <p className="text-sm text-gray-500 mb-1">Примечания</p>
+                <p className="text-sm text-gray-500 mb-1">Izohlar</p>
                 <p className="text-gray-700">{order.notes}</p>
               </div>
             )}
 
             <div className="border-t pt-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Состав заказа:</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Buyurtma tarkibi:</h3>
               <div className="space-y-3">
                 {orderItems.map((item: any) => (
                   <div key={item.id} className="flex justify-between items-center">
@@ -189,7 +189,7 @@ export default function CollectorOrderDetailPage() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t flex justify-between items-center">
-                <span className="text-lg font-bold">Итого:</span>
+                <span className="text-lg font-bold">Jami:</span>
                 <span className="text-2xl font-bold text-orange-500">{order.total_price} ₽</span>
               </div>
             </div>
@@ -202,7 +202,7 @@ export default function CollectorOrderDetailPage() {
                 disabled={updating}
                 className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                {updating ? 'Обновление...' : 'Отметить как готовый'}
+                {updating ? 'Yangilanmoqda...' : 'Tayyor deb belgilash'}
               </button>
             </div>
           )}
