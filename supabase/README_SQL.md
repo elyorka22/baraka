@@ -75,6 +75,7 @@ DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
 6. ✅ `07_allow_anonymous_orders.sql` - разрешить анонимные заказы
 7. ✅ `08_update_rls_for_anonymous_orders.sql` - обновление RLS для анонимных заказов
 8. ✅ `10_storage_policies.sql` - политики доступа для Storage (после создания buckets в Dashboard)
+9. ✅ `11_make_category_optional.sql` - сделать category_id необязательным для продуктов
 
 ### Для существующей установки (миграция с доставки еды на продукты):
 

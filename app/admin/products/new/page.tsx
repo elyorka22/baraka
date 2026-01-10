@@ -12,13 +12,11 @@ export default function NewProductPage() {
   const [profile, setProfile] = useState<any>(null)
   const [userLoading, setUserLoading] = useState(true)
   const [warehouses, setWarehouses] = useState<any[]>([])
-  const [categories, setCategories] = useState<any[]>([])
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
     restaurant_id: '',
-    category_id: '',
     image_url: '',
   })
   const [loading, setLoading] = useState(false)
@@ -62,32 +60,13 @@ export default function NewProductPage() {
     loadUser()
   }, [router])
 
-  useEffect(() => {
-    if (!formData.restaurant_id) {
-      setCategories([])
-      setFormData(prev => ({ ...prev, category_id: '' }))
-      return
-    }
-
-    const loadCategories = async () => {
-      const supabase = createSupabaseClient()
-      const { data } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('restaurant_id', formData.restaurant_id)
-        .order('name')
-      if (data) setCategories(data)
-    }
-    loadCategories()
-  }, [formData.restaurant_id])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
 
-    if (!formData.restaurant_id || !formData.category_id) {
-      setError('Ombor va kategoriyani tanlang')
+    if (!formData.restaurant_id) {
+      setError('Omborni tanlang')
       setLoading(false)
       return
     }
@@ -99,7 +78,7 @@ export default function NewProductPage() {
         name: formData.name,
         description: formData.description || null,
         price: parseFloat(formData.price),
-        category_id: formData.category_id,
+        category_id: null,
         restaurant_id: formData.restaurant_id,
         image_url: formData.image_url || null,
         is_available: true,
@@ -159,7 +138,7 @@ export default function NewProductPage() {
               <select
                 id="restaurant_id"
                 value={formData.restaurant_id}
-                onChange={(e) => setFormData({ ...formData, restaurant_id: e.target.value, category_id: '' })}
+                onChange={(e) => setFormData({ ...formData, restaurant_id: e.target.value })}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
               >
@@ -170,46 +149,6 @@ export default function NewProductPage() {
                   </option>
                 ))}
               </select>
-            </div>
-
-            <div>
-              <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-2">
-                Kategoriya *
-              </label>
-              <select
-                id="category_id"
-                value={formData.category_id}
-                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                required
-                disabled={!formData.restaurant_id || categories.length === 0}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 disabled:bg-gray-100 disabled:cursor-not-allowed"
-              >
-                <option value="">
-                  {!formData.restaurant_id 
-                    ? 'Avval omborni tanlang' 
-                    : categories.length === 0 
-                    ? 'Bu omborda kategoriyalar yo\'q' 
-                    : 'Kategoriyani tanlang'}
-                </option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-              {formData.restaurant_id && categories.length === 0 && (
-                <p className="mt-2 text-sm text-orange-600">
-                  Bu omborda kategoriyalar yo'q. Avval{' '}
-                  <a
-                    href={`/admin/restaurants/${formData.restaurant_id}/categories/new`}
-                    className="underline hover:text-orange-700"
-                    target="_blank"
-                  >
-                    kategoriya qo'shing
-                  </a>
-                  .
-                </p>
-              )}
             </div>
 
             <div>
@@ -268,7 +207,7 @@ export default function NewProductPage() {
             <div className="flex space-x-4">
               <button
                 type="submit"
-                disabled={loading || !formData.restaurant_id || !formData.category_id}
+                disabled={loading || !formData.restaurant_id}
                 className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
                 {loading ? 'Saqlanmoqda...' : 'Saqlash'}

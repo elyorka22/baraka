@@ -27,12 +27,18 @@ export default async function HomePage() {
     }
   }
 
-  // Загружаем склады для главной страницы
-  const { data: warehouses } = await supabase
-    .from('restaurants')
-    .select('*')
-    .eq('is_active', true)
-    .order('name')
+  // Загружаем все доступные товары для главной страницы
+  const { data: products } = await supabase
+    .from('dishes')
+    .select(`
+      *,
+      restaurants (
+        id,
+        name
+      )
+    `)
+    .eq('is_available', true)
+    .order('created_at', { ascending: false })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -40,68 +46,65 @@ export default async function HomePage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Mahsulotlar yetkazib berish</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Mahsulotlar</h1>
           <p className="text-gray-600">Eng yaxshi mahsulotlarni uyingizga yetkazib beramiz</p>
         </div>
 
-        {!warehouses || warehouses.length === 0 ? (
+        {!products || products.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-lg shadow">
             <div className="text-6xl mb-4">📦</div>
-            <p className="text-gray-500 text-lg">Hozircha omborlar yo'q</p>
+            <p className="text-gray-500 text-lg">Hozircha mahsulotlar yo'q</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {warehouses.map((warehouse) => (
-              <Link
-                key={warehouse.id}
-                href={`/customer/restaurant/${warehouse.id}`}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product: any) => (
+              <div
+                key={product.id}
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 group"
               >
                 <div className="relative">
-                  {warehouse.image_url ? (
+                  {product.image_url ? (
                     <img
-                      src={warehouse.image_url}
-                      alt={warehouse.name}
-                      className="w-full h-56 object-cover"
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
-                    <div className="w-full h-56 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                      <span className="text-6xl">🏪</span>
+                    <div className="w-full h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+                      <span className="text-6xl">📦</span>
                     </div>
                   )}
-                  <div className="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    Faol
+                  <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Mavjud
                   </div>
                 </div>
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {warehouse.name}
-                    </h3>
-                    <span className="text-2xl">🛒</span>
-                  </div>
-                  {warehouse.description && (
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {warehouse.description}
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                    {product.name}
+                  </h3>
+                  {product.description && (
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                      {product.description}
                     </p>
                   )}
-                  {warehouse.address && (
-                    <div className="flex items-center text-gray-500 text-sm">
-                      <span className="mr-2">📍</span>
-                      <span>{warehouse.address}</span>
-                    </div>
+                  {product.restaurants && (
+                    <p className="text-xs text-gray-500 mb-3">
+                      Ombor: {product.restaurants.name}
+                    </p>
                   )}
-                  {warehouse.phone && (
-                    <div className="flex items-center text-gray-500 text-sm mt-2">
-                      <span className="mr-2">📞</span>
-                      <span>{warehouse.phone}</span>
-                    </div>
-                  )}
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <span className="text-green-600 font-semibold text-sm">Mahsulotlarni ko'rish →</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-2xl font-bold text-green-600">
+                      {product.price} ₽
+                    </span>
+                    <Link
+                      href={`/customer/product/${product.id}`}
+                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-semibold"
+                    >
+                      Batafsil
+                    </Link>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}
