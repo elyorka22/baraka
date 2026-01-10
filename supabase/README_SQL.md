@@ -74,6 +74,7 @@ DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
 5. ✅ `05_auto_confirm_email.sql` - автоматическое подтверждение email (опционально, для разработки)
 6. ✅ `07_allow_anonymous_orders.sql` - разрешить анонимные заказы
 7. ✅ `08_update_rls_for_anonymous_orders.sql` - обновление RLS для анонимных заказов
+8. ✅ `10_storage_policies.sql` - политики доступа для Storage (после создания buckets в Dashboard)
 
 ### Для существующей установки (миграция с доставки еды на продукты):
 
