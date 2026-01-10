@@ -49,25 +49,28 @@ export default async function RestaurantDishesPage({
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <a href="/admin/restaurants" className="text-orange-500 hover:text-orange-600 mb-2 inline-block">
-              ← Назад к ресторанам
+            <a href="/admin/restaurants" className="text-green-600 hover:text-green-700 mb-2 inline-flex items-center gap-2 font-medium transition-colors">
+              <span>←</span> Omborlarga qaytish
             </a>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Блюда: {restaurant.name}
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Mahsulotlar: {restaurant.name}
             </h1>
+            <p className="text-gray-600">Ombor mahsulotlarini boshqaring</p>
           </div>
           <div className="flex space-x-4">
             <a
               href={`/admin/restaurants/${id}/categories/new`}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center gap-2"
             >
-              + Категория
+              <span>+</span>
+              <span>Kategoriya</span>
             </a>
             <a
               href={`/admin/restaurants/${id}/dishes/new`}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center gap-2"
             >
-              + Блюдо
+              <span>+</span>
+              <span>Mahsulot</span>
             </a>
           </div>
         </div>

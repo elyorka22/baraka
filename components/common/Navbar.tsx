@@ -28,8 +28,7 @@ export function Navbar({ role, userName }: NavbarProps) {
         return [
           { href: '/admin/dashboard', label: 'Boshqaruv paneli' },
           { href: '/admin/users', label: 'Foydalanuvchilar' },
-          { href: '/admin/restaurants', label: 'Restoranlar' },
-          { href: '/admin/banners', label: 'Bannerlar' },
+          { href: '/admin/restaurants', label: 'Omborlar' },
           { href: '/admin/orders', label: 'Buyurtmalar' },
         ]
       case 'manager':
@@ -57,7 +56,8 @@ export function Navbar({ role, userName }: NavbarProps) {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
-            <Link href="/" className="text-2xl font-bold text-orange-500">
+            <Link href="/" className="text-2xl font-bold text-green-600 flex items-center gap-2">
+              <span className="text-3xl">🛒</span>
               Baraka
             </Link>
             <div className="flex space-x-4">
@@ -65,7 +65,7 @@ export function Navbar({ role, userName }: NavbarProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-gray-700 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   {link.label}
                 </Link>

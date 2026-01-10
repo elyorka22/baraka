@@ -67,7 +67,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-6">
+    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-100">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error}
@@ -83,7 +83,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
           value={formData.category_id}
           onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         >
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -101,7 +101,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -114,7 +114,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -130,7 +130,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
           value={formData.price}
           onChange={(e) => setFormData({ ...formData, price: e.target.value })}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -140,7 +140,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
             type="checkbox"
             checked={formData.is_available}
             onChange={(e) => setFormData({ ...formData, is_available: e.target.checked })}
-            className="rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+            className="rounded border-gray-300 text-green-600 focus:ring-green-500"
           />
           <span className="text-sm font-medium text-gray-700">Доступно</span>
         </label>
@@ -157,7 +157,7 @@ export function EditDishForm({ dish, categories, restaurantId }: EditDishFormPro
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+          className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
         >
           {loading ? 'Сохранение...' : 'Сохранить'}
         </button>

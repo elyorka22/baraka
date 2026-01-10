@@ -34,14 +34,18 @@ export default async function AdminRestaurantsPage() {
       
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Restoranlarni boshqarish
-          </h1>
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Omborlarni boshqarish
+            </h1>
+            <p className="text-gray-600">Mahsulotlar omborlarini qo'shing va tahrirlang</p>
+          </div>
           <a
             href="/admin/restaurants/new"
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center gap-2"
           >
-            + Restoran qo'shish
+            <span>+</span>
+            <span>Ombor qo'shish</span>
           </a>
         </div>
 

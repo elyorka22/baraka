@@ -23,11 +23,10 @@ export default async function AdminDashboardPage() {
   }
 
   // Получаем статистику
-  const [restaurantsCount, ordersCount, usersCount, bannersCount] = await Promise.all([
+  const [warehousesCount, ordersCount, usersCount] = await Promise.all([
     supabase.from('restaurants').select('id', { count: 'exact', head: true }),
     supabase.from('orders').select('id', { count: 'exact', head: true }),
     supabase.from('profiles').select('id', { count: 'exact', head: true }),
-    supabase.from('banners').select('id', { count: 'exact', head: true }),
   ])
 
   return (
@@ -39,57 +38,65 @@ export default async function AdminDashboardPage() {
           Панель управления
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Рестораны</h3>
-            <p className="text-3xl font-bold text-gray-900">
-              {restaurantsCount.count || 0}
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-green-100 rounded-full p-3">
+                <span className="text-2xl">🏪</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Склады</h3>
+                <p className="text-3xl font-bold text-gray-900">
+                  {warehousesCount.count || 0}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Заказы</h3>
-            <p className="text-3xl font-bold text-gray-900">
-              {ordersCount.count || 0}
-            </p>
+          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-blue-100 rounded-full p-3">
+                <span className="text-2xl">📦</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Заказы</h3>
+                <p className="text-3xl font-bold text-gray-900">
+                  {ordersCount.count || 0}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Пользователи</h3>
-            <p className="text-3xl font-bold text-gray-900">
-              {usersCount.count || 0}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Баннеры</h3>
-            <p className="text-3xl font-bold text-gray-900">
-              {bannersCount.count || 0}
-            </p>
+          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-purple-100 rounded-full p-3">
+                <span className="text-2xl">👥</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Пользователи</h3>
+                <p className="text-3xl font-bold text-gray-900">
+                  {usersCount.count || 0}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Быстрые действия</h2>
             <div className="space-y-3">
               <a
                 href="/admin/restaurants"
-                className="block w-full text-left px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+                className="block w-full text-left px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
               >
-                Управление ресторанами
-              </a>
-              <a
-                href="/admin/banners"
-                className="block w-full text-left px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
-              >
-                Управление баннерами
+                🏪 Управление складами
               </a>
               <a
                 href="/admin/users"
-                className="block w-full text-left px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                className="block w-full text-left px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
               >
-                Управление пользователями
+                👥 Управление пользователями
               </a>
             </div>
           </div>

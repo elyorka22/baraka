@@ -49,7 +49,7 @@ export function EditCategoryForm({ category, restaurantId }: EditCategoryFormPro
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-6">
+    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-100">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error}
@@ -66,7 +66,7 @@ export function EditCategoryForm({ category, restaurantId }: EditCategoryFormPro
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -81,7 +81,7 @@ export function EditCategoryForm({ category, restaurantId }: EditCategoryFormPro
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+          className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
         >
           {loading ? 'Сохранение...' : 'Сохранить'}
         </button>
