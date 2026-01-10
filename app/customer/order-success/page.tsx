@@ -13,7 +13,8 @@ function OrderSuccessContent() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow">
         <div className="container mx-auto px-4 py-4">
-          <Link href="/customer" className="text-2xl font-bold text-orange-500">
+          <Link href="/customer" className="text-2xl font-bold text-green-600 flex items-center gap-2">
+            <span className="text-3xl">🛒</span>
             Baraka
           </Link>
         </div>
@@ -42,15 +43,15 @@ function OrderSuccessContent() {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Keyin nima bo'ladi?</h2>
             <ul className="text-left space-y-3 text-gray-600">
               <li className="flex items-start">
-                <span className="text-orange-500 mr-2">•</span>
+                <span className="text-green-600 mr-2">•</span>
                 <span>Menejer buyurtmangizni tekshiradi va yig'uvchini tayinlaydi</span>
               </li>
               <li className="flex items-start">
-                <span className="text-orange-500 mr-2">•</span>
+                <span className="text-green-600 mr-2">•</span>
                 <span>Buyurtma yig'ilgandan keyin kuryer uni ko'rsatilgan manzilga yetkazadi</span>
               </li>
               <li className="flex items-start">
-                <span className="text-orange-500 mr-2">•</span>
+                <span className="text-green-600 mr-2">•</span>
                 <span>Siz ko'rsatilgan email yoki telefon raqamiga xabarnoma olasiz</span>
               </li>
             </ul>
@@ -59,7 +60,7 @@ function OrderSuccessContent() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/customer"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Restoranlarga qaytish
             </Link>

@@ -155,7 +155,7 @@ export default function CustomerOrdersPage() {
             <p className="text-gray-500 text-lg mb-4">Hozircha buyurtmalaringiz yo'q</p>
             <Link
               href="/customer"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
               Restoranlarga o'tish
             </Link>
