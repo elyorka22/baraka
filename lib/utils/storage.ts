@@ -7,15 +7,28 @@ export async function uploadImage(
 ): Promise<string | null> {
   const supabase = createSupabaseClient()
   
+  // Очищаем путь от специальных символов и пробелов
+  const cleanPath = path.replace(/[^a-zA-Z0-9._-]/g, '_')
+  
   const { data, error } = await supabase.storage
     .from(bucket)
-    .upload(path, file, {
+    .upload(cleanPath, file, {
       cacheControl: '3600',
-      upsert: false
+      upsert: false,
+      contentType: file.type
     })
 
   if (error) {
     console.error('Error uploading image:', error)
+    console.error('Bucket:', bucket)
+    console.error('Path:', cleanPath)
+    console.error('File type:', file.type)
+    console.error('File size:', file.size)
+    return null
+  }
+
+  if (!data) {
+    console.error('No data returned from upload')
     return null
   }
 
