@@ -113,68 +113,71 @@ export default function HomePage() {
                   key={product.id}
                   className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 group"
                 >
-                  <div className="relative">
-                    {product.image_url ? (
-                      <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-full h-32 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="w-full h-32 md:h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
-                        <span className="text-4xl md:text-6xl">📦</span>
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
-                      Mavjud
+                <div className="relative">
+                  {product.image_url ? (
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-full h-32 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-32 md:h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+                      <span className="text-4xl md:text-6xl">📦</span>
                     </div>
+                  )}
+                  <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
+                    Mavjud
                   </div>
-                  <div className="p-3 md:p-5">
-                    <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 line-clamp-2">
-                      {product.name}
-                    </h3>
-                    {product.description && (
-                      <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 hidden md:block">
-                        {product.description}
-                      </p>
-                    )}
-                    {product.restaurants && (
-                      <p className="text-xs text-gray-500 mb-2 md:mb-3 line-clamp-1">
-                        {product.restaurants.name}
-                      </p>
-                    )}
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg md:text-2xl font-bold text-green-600">
-                        {product.price} ₽
-                      </span>
-                      {quantity > 0 ? (
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => removeFromCart(product.id)}
-                            className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center font-semibold text-lg transition-colors"
-                          >
-                            −
-                          </button>
-                          <span className="font-bold text-gray-900 w-6 md:w-8 text-center text-sm md:text-base">
-                            {quantity}
-                          </span>
-                          <button
-                            onClick={() => addToCart(product.id, restaurantId)}
-                            className="bg-green-600 hover:bg-green-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center font-semibold text-lg transition-colors"
-                          >
-                            +
-                          </button>
-                        </div>
-                      ) : (
+                  {/* Кнопки управления корзиной на изображении */}
+                  <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
+                    {quantity > 0 ? (
+                      <div className="flex items-center space-x-1.5 md:space-x-2 bg-white rounded-lg shadow-lg p-1">
+                        <button
+                          onClick={() => removeFromCart(product.id)}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-6 h-6 md:w-8 md:h-8 rounded flex items-center justify-center font-semibold text-sm md:text-base transition-colors"
+                        >
+                          −
+                        </button>
+                        <span className="font-bold text-gray-900 w-5 md:w-7 text-center text-xs md:text-sm">
+                          {quantity}
+                        </span>
                         <button
                           onClick={() => addToCart(product.id, restaurantId)}
-                          className="bg-green-600 hover:bg-green-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center font-semibold text-lg transition-colors"
+                          className="bg-green-600 hover:bg-green-700 text-white w-6 h-6 md:w-8 md:h-8 rounded flex items-center justify-center font-semibold text-sm md:text-base transition-colors"
                         >
                           +
                         </button>
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => addToCart(product.id, restaurantId)}
+                        className="bg-green-600 hover:bg-green-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-semibold text-lg md:text-xl shadow-lg transition-colors"
+                      >
+                        +
+                      </button>
+                    )}
                   </div>
+                </div>
+                <div className="p-3 md:p-5">
+                  <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 line-clamp-2">
+                    {product.name}
+                  </h3>
+                  {product.description && (
+                    <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 hidden md:block">
+                      {product.description}
+                    </p>
+                  )}
+                  {product.restaurants && (
+                    <p className="text-xs text-gray-500 mb-2 md:mb-3 line-clamp-1">
+                      {product.restaurants.name}
+                    </p>
+                  )}
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg md:text-2xl font-bold text-green-600">
+                      {product.price} ₽
+                    </span>
+                  </div>
+                </div>
                 </div>
               )
             })}
