@@ -29,6 +29,7 @@ export function Navbar({ role, userName }: NavbarProps) {
           { href: '/admin/dashboard', label: 'Boshqaruv paneli' },
           { href: '/admin/users', label: 'Foydalanuvchilar' },
           { href: '/admin/restaurants', label: 'Omborlar' },
+          { href: '/admin/products', label: 'Mahsulotlar' },
           { href: '/admin/banners', label: 'Bannerlar' },
           { href: '/admin/orders', label: 'Buyurtmalar' },
         ]
