@@ -1,44 +1,87 @@
-import Link from 'next/link'
-import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { createSupabaseClient } from '@/lib/supabase/client'
 import { Header } from '@/components/common/Header'
 
-export const dynamic = 'force-dynamic'
+export default function HomePage() {
+  const [products, setProducts] = useState<any[]>([])
+  const [cart, setCart] = useState<Record<string, { quantity: number; restaurantId: string }>>({})
+  const [loading, setLoading] = useState(true)
 
-export default async function HomePage() {
-  const supabase = await createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  useEffect(() => {
+    const loadData = async () => {
+      const supabase = createSupabaseClient()
+      
+      // Загружаем все доступные товары
+      const { data: productsData } = await supabase
+        .from('dishes')
+        .select(`
+          *,
+          restaurants (
+            id,
+            name
+          )
+        `)
+        .eq('is_available', true)
+        .order('created_at', { ascending: false })
 
-  // Редиректим авторизованных пользователей с ролями на их страницы
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
+      if (productsData) {
+        setProducts(productsData)
+      }
 
-    if (profile) {
-      const role = profile.role
-      if (role === 'super_admin') redirect('/admin/dashboard')
-      if (role === 'manager') redirect('/manager/dashboard')
-      if (role === 'collector') redirect('/collector/orders')
-      if (role === 'courier') redirect('/courier/orders')
-      // Для клиентов и неавторизованных - показываем меню ресторанов
+      // Загружаем корзину из localStorage
+      const savedCart = localStorage.getItem('cart')
+      if (savedCart) {
+        const cartData = JSON.parse(savedCart)
+        setCart(cartData)
+      }
+
+      setLoading(false)
     }
+
+    loadData()
+  }, [])
+
+  const addToCart = (productId: string, restaurantId: string) => {
+    const newCart = { ...cart }
+    if (!newCart[productId]) {
+      newCart[productId] = { quantity: 0, restaurantId }
+    }
+    newCart[productId].quantity += 1
+    
+    setCart(newCart)
+    localStorage.setItem('cart', JSON.stringify(newCart))
   }
 
-  // Загружаем все доступные товары для главной страницы
-  const { data: products } = await supabase
-    .from('dishes')
-    .select(`
-      *,
-      restaurants (
-        id,
-        name
-      )
-    `)
-    .eq('is_available', true)
-    .order('created_at', { ascending: false })
+  const removeFromCart = (productId: string) => {
+    const newCart = { ...cart }
+    if (newCart[productId] && newCart[productId].quantity > 1) {
+      newCart[productId].quantity -= 1
+    } else {
+      delete newCart[productId]
+    }
+    
+    setCart(newCart)
+    localStorage.setItem('cart', JSON.stringify(newCart))
+  }
+
+  const getQuantity = (productId: string) => {
+    return cart[productId]?.quantity || 0
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center py-16">
+            <div className="text-gray-500">Yuklanmoqda...</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -57,55 +100,80 @@ export default async function HomePage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {products.map((product: any) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 group"
-              >
-                <div className="relative">
-                  {product.image_url ? (
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="w-full h-32 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-32 md:h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
-                      <span className="text-4xl md:text-6xl">📦</span>
+            {products.map((product: any) => {
+              const quantity = getQuantity(product.id)
+              const restaurantId = product.restaurant_id || product.restaurants?.id
+
+              return (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 group"
+                >
+                  <div className="relative">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="w-full h-32 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-32 md:h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+                        <span className="text-4xl md:text-6xl">📦</span>
+                      </div>
+                    )}
+                    <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
+                      Mavjud
                     </div>
-                  )}
-                  <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
-                    Mavjud
+                  </div>
+                  <div className="p-3 md:p-5">
+                    <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    {product.description && (
+                      <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 hidden md:block">
+                        {product.description}
+                      </p>
+                    )}
+                    {product.restaurants && (
+                      <p className="text-xs text-gray-500 mb-2 md:mb-3 line-clamp-1">
+                        {product.restaurants.name}
+                      </p>
+                    )}
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg md:text-2xl font-bold text-green-600">
+                        {product.price} ₽
+                      </span>
+                      {quantity > 0 ? (
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => removeFromCart(product.id)}
+                            className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center font-semibold text-lg transition-colors"
+                          >
+                            −
+                          </button>
+                          <span className="font-bold text-gray-900 w-6 md:w-8 text-center text-sm md:text-base">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => addToCart(product.id, restaurantId)}
+                            className="bg-green-600 hover:bg-green-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center font-semibold text-lg transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => addToCart(product.id, restaurantId)}
+                          className="bg-green-600 hover:bg-green-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center font-semibold text-lg transition-colors"
+                        >
+                          +
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="p-3 md:p-5">
-                  <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 line-clamp-2">
-                    {product.name}
-                  </h3>
-                  {product.description && (
-                    <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 hidden md:block">
-                      {product.description}
-                    </p>
-                  )}
-                  {product.restaurants && (
-                    <p className="text-xs text-gray-500 mb-2 md:mb-3 line-clamp-1">
-                      {product.restaurants.name}
-                    </p>
-                  )}
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                    <span className="text-lg md:text-2xl font-bold text-green-600">
-                      {product.price} ₽
-                    </span>
-                    <Link
-                      href={`/customer/product/${product.id}`}
-                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg transition-colors text-xs md:text-sm font-semibold text-center"
-                    >
-                      Batafsil
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
