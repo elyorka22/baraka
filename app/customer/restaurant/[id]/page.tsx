@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { LogoutButton } from '@/components/common/LogoutButton'
 
 export default function RestaurantMenuPage() {
   const params = useParams()
@@ -155,6 +156,7 @@ export default function RestaurantMenuPage() {
                   </span>
                 )}
               </Link>
+              <LogoutButton />
             </div>
           </div>
         </div>

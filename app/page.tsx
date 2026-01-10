@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { LogoutButton } from '@/components/common/LogoutButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -47,7 +48,7 @@ export default async function HomePage() {
             <Link href="/" className="text-2xl font-bold text-orange-500">
               Baraka
             </Link>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 items-center">
               {user ? (
                 <>
                   <Link
@@ -62,6 +63,7 @@ export default async function HomePage() {
                   >
                     Savat
                   </Link>
+                  <LogoutButton />
                 </>
               ) : (
                 <>

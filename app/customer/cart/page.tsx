@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { LogoutButton } from '@/components/common/LogoutButton'
 
 export default function CartPage() {
   const router = useRouter()
@@ -119,9 +120,12 @@ export default function CartPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow">
         <div className="container mx-auto px-4 py-4">
-          <Link href="/customer" className="text-2xl font-bold text-orange-500">
-            Baraka
-          </Link>
+          <div className="flex justify-between items-center">
+            <Link href="/customer" className="text-2xl font-bold text-orange-500">
+              Baraka
+            </Link>
+            <LogoutButton />
+          </div>
         </div>
       </div>
 

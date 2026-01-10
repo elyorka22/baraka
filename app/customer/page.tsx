@@ -4,16 +4,24 @@ import { useEffect, useState } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { LogoutButton } from '@/components/common/LogoutButton'
 
 export default function CustomerMenuPage() {
   const router = useRouter()
   const [restaurants, setRestaurants] = useState<any[]>([])
   const [banners, setBanners] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
     const loadData = async () => {
       const supabase = createSupabaseClient()
+      
+      // Проверяем авторизацию
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      if (currentUser) {
+        setUser(currentUser)
+      }
       
       // Загружаем активные рестораны
       const { data: restaurantsData } = await supabase
@@ -59,19 +67,39 @@ export default function CustomerMenuPage() {
             <Link href="/" className="text-2xl font-bold text-orange-500">
               Baraka
             </Link>
-            <div className="flex space-x-4">
-              <Link
-                href="/customer/orders"
-                className="text-gray-700 hover:text-orange-500"
-              >
-                Мои заказы
-              </Link>
-              <Link
-                href="/customer/cart"
-                className="text-gray-700 hover:text-orange-500"
-              >
-                Savat
-              </Link>
+            <div className="flex space-x-4 items-center">
+              {user ? (
+                <>
+                  <Link
+                    href="/customer/orders"
+                    className="text-gray-700 hover:text-orange-500"
+                  >
+                    Mening buyurtmalarim
+                  </Link>
+                  <Link
+                    href="/customer/cart"
+                    className="text-gray-700 hover:text-orange-500"
+                  >
+                    Savat
+                  </Link>
+                  <LogoutButton />
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="text-gray-700 hover:text-orange-500"
+                  >
+                    Kirish
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="text-gray-700 hover:text-orange-500"
+                  >
+                    Ro'yxatdan o'tish
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

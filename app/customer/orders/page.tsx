@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { LogoutButton } from '@/components/common/LogoutButton'
 
 export default function CustomerOrdersPage() {
   const router = useRouter()
@@ -133,12 +134,15 @@ export default function CustomerOrdersPage() {
             <Link href="/customer" className="text-2xl font-bold text-orange-500">
               Baraka
             </Link>
-            <Link
-              href="/customer"
-              className="text-gray-700 hover:text-orange-500"
-            >
-              Menyu
-            </Link>
+            <div className="flex space-x-4 items-center">
+              <Link
+                href="/customer"
+                className="text-gray-700 hover:text-orange-500"
+              >
+                Menyu
+              </Link>
+              <LogoutButton />
+            </div>
           </div>
         </div>
       </div>
