@@ -172,7 +172,7 @@ export default function ProductDetailPage() {
 
             <div className="mb-8">
               <p className="text-sm text-gray-500 mb-2">Narxi</p>
-              <p className="text-4xl font-bold text-green-600">{product.price} ₽</p>
+              <p className="text-4xl font-bold text-green-600">{product.price} so'm</p>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -202,7 +202,7 @@ export default function ProductDetailPage() {
                   Savatda: <span className="font-semibold">{cart[product.id]}</span> dona
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                  Jami: {product.price * cart[product.id]} ₽
+                  Jami: {product.price * cart[product.id]} so'm
                 </p>
               </div>
             )}

@@ -190,7 +190,7 @@ export default function CustomerOrdersPage() {
                     {order.order_items?.map((item: any) => (
                       <div key={item.id} className="flex justify-between text-sm">
                         <span>{item.dishes?.name} × {item.quantity}</span>
-                        <span>{item.price * item.quantity} ₽</span>
+                        <span>{item.price * item.quantity} so'm</span>
                       </div>
                     ))}
                   </div>
@@ -198,7 +198,7 @@ export default function CustomerOrdersPage() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-900">
-                    Jami: {order.total_price} ₽
+                    Jami: {order.total_price} so'm
                   </span>
                 </div>
               </div>

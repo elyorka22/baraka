@@ -299,7 +299,7 @@ function CheckoutContent() {
                   return (
                     <div key={dish.id} className="flex justify-between text-sm">
                       <span>{dish.name} × {quantity}</span>
-                      <span>{dish.price * quantity} ₽</span>
+                      <span>{dish.price * quantity} so'm</span>
                     </div>
                   )
                 })}
@@ -307,7 +307,7 @@ function CheckoutContent() {
               <div className="border-t-2 border-gray-200 pt-4">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold text-gray-700">Jami:</span>
-                  <span className="text-2xl font-bold text-green-600">{getTotal()} ₽</span>
+                  <span className="text-2xl font-bold text-green-600">{getTotal()} so'm</span>
                 </div>
               </div>
             </div>

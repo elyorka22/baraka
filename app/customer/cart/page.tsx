@@ -158,7 +158,7 @@ export default function CartPage() {
                     <h3 className="font-bold text-gray-900 text-lg">{dish.name}</h3>
                     <p className="text-sm text-gray-500">{dish.restaurants?.name}</p>
                     <p className="text-xl font-bold text-green-600 mt-2">
-                      {dish.price} <span className="text-sm text-gray-500">₽</span>
+                      {dish.price} <span className="text-sm text-gray-500">so'm</span>
                     </p>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -204,7 +204,7 @@ export default function CartPage() {
                   return (
                     <div key={dish.id} className="flex justify-between text-sm text-gray-600">
                       <span>{dish.name} × {quantity}</span>
-                      <span className="font-semibold">{dish.price * quantity} ₽</span>
+                      <span className="font-semibold">{dish.price * quantity} so'm</span>
                     </div>
                   )
                 })}
@@ -212,7 +212,7 @@ export default function CartPage() {
               <div className="border-t-2 border-gray-200 pt-4 mb-6">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold text-gray-700">Jami:</span>
-                  <span className="text-2xl font-bold text-green-600">{getTotal()} ₽</span>
+                  <span className="text-2xl font-bold text-green-600">{getTotal()} so'm</span>
                 </div>
               </div>
               <Link

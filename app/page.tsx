@@ -167,14 +167,9 @@ export default function HomePage() {
                       {product.description}
                     </p>
                   )}
-                  {product.restaurants && (
-                    <p className="text-xs text-gray-500 mb-2 md:mb-3 line-clamp-1">
-                      {product.restaurants.name}
-                    </p>
-                  )}
                   <div className="flex justify-between items-center">
                     <span className="text-lg md:text-2xl font-bold text-green-600">
-                      {product.price} ₽
+                      {product.price} so'm
                     </span>
                   </div>
                 </div>

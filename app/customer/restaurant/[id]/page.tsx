@@ -221,7 +221,7 @@ export default function RestaurantMenuPage() {
                     <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                       <div>
                         <span className="text-2xl font-bold text-green-600">{dish.price}</span>
-                        <span className="text-gray-500 text-sm ml-1">₽</span>
+                        <span className="text-gray-500 text-sm ml-1">so'm</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         {cart[dish.id] > 0 && (
@@ -271,7 +271,7 @@ export default function RestaurantMenuPage() {
                   <p className="text-2xl font-bold text-gray-900">
                     {getCartCount()} <span className="text-lg text-gray-500">ta</span>
                   </p>
-                  <p className="text-lg font-semibold text-green-600">Jami: {getCartTotal()} ₽</p>
+                  <p className="text-lg font-semibold text-green-600">Jami: {getCartTotal()} so'm</p>
                 </div>
               </div>
               <Link
