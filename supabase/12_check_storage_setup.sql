@@ -29,7 +29,8 @@ ORDER BY policyname;
 SELECT 
   policyname,
   cmd,
-  bucket_id
+  qual,
+  with_check
 FROM pg_policies 
 WHERE schemaname = 'storage' 
   AND tablename = 'objects'
