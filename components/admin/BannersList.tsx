@@ -56,66 +56,70 @@ export function BannersList({ banners: initialBanners }: BannersListProps) {
   return (
     <div className="space-y-4">
       {banners.map((banner) => (
-        <div key={banner.id} className="bg-white rounded-lg shadow-lg overflow-hidden flex">
-          <div className="w-48 h-32 flex-shrink-0">
-            <img
-              src={banner.image_url}
-              alt={banner.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex-1 p-6 flex justify-between items-center">
-            <div>
-              <div className="flex items-center space-x-3 mb-2">
-                <h3 className="text-xl font-bold text-gray-900">{banner.title}</h3>
-                <span className={`px-2 py-1 rounded text-xs font-medium ${
-                  banner.is_active 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-gray-100 text-gray-800'
-                }`}>
-                  {banner.is_active ? 'Активен' : 'Неактивен'}
-                </span>
-                <span className="text-sm text-gray-500">
-                  Позиция: {banner.position}
-                </span>
-              </div>
-              {banner.link_url && (
-                <p className="text-sm text-gray-600">
-                  Ссылка: <a href={banner.link_url} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">{banner.link_url}</a>
-                </p>
-              )}
+        <div key={banner.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition-all">
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-64 h-48 md:h-auto flex-shrink-0">
+              <img
+                src={banner.image_url}
+                alt={banner.title}
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => router.push(`/admin/banners/${banner.id}`)}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
-              >
-                Редактировать
-              </button>
-              <button
-                onClick={() => handleToggleActive(banner.id, banner.is_active)}
-                className={`px-4 py-2 rounded transition-colors ${
-                  banner.is_active
-                    ? 'bg-yellow-500 hover:bg-yellow-600'
-                    : 'bg-green-500 hover:bg-green-600'
-                } text-white`}
-              >
-                {banner.is_active ? 'Деактивировать' : 'Активировать'}
-              </button>
-              <button
-                onClick={() => handleDelete(banner.id)}
-                disabled={deleting === banner.id}
-                className="bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white px-4 py-2 rounded transition-colors"
-              >
-                {deleting === banner.id ? '...' : 'Удалить'}
-              </button>
+            <div className="flex-1 p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="flex-1">
+                <div className="flex items-center flex-wrap gap-3 mb-3">
+                  <h3 className="text-xl font-bold text-gray-900">{banner.title}</h3>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    banner.is_active 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {banner.is_active ? 'Faol' : 'Nofaol'}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    Pozitsiya: {banner.position}
+                  </span>
+                </div>
+                {banner.link_url && (
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>🔗</span>
+                    <a href={banner.link_url} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 hover:underline font-medium">{banner.link_url}</a>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => router.push(`/admin/banners/${banner.id}`)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                >
+                  ✏️ Tahrirlash
+                </button>
+                <button
+                  onClick={() => handleToggleActive(banner.id, banner.is_active)}
+                  className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                    banner.is_active
+                      ? 'bg-yellow-500 hover:bg-yellow-600'
+                      : 'bg-green-600 hover:bg-green-700'
+                  } text-white`}
+                >
+                  {banner.is_active ? '❌ Deaktiv' : '✅ Aktiv'}
+                </button>
+                <button
+                  onClick={() => handleDelete(banner.id)}
+                  disabled={deleting === banner.id}
+                  className="bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                >
+                  {deleting === banner.id ? '...' : '🗑️ O\'chirish'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       ))}
       {banners.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <p className="text-gray-500 text-lg">Баннеров пока нет</p>
+        <div className="text-center py-16 bg-white rounded-xl shadow border border-gray-100">
+          <div className="text-6xl mb-4">🎯</div>
+          <p className="text-gray-500 text-lg">Hozircha bannerlar yo'q</p>
         </div>
       )}
     </div>

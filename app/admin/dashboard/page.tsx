@@ -23,10 +23,11 @@ export default async function AdminDashboardPage() {
   }
 
   // Получаем статистику
-  const [warehousesCount, ordersCount, usersCount] = await Promise.all([
+  const [warehousesCount, ordersCount, usersCount, bannersCount] = await Promise.all([
     supabase.from('restaurants').select('id', { count: 'exact', head: true }),
     supabase.from('orders').select('id', { count: 'exact', head: true }),
     supabase.from('profiles').select('id', { count: 'exact', head: true }),
+    supabase.from('banners').select('id', { count: 'exact', head: true }).catch(() => ({ count: 0 })),
   ])
 
   return (
@@ -38,7 +39,7 @@ export default async function AdminDashboardPage() {
           Панель управления
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-green-100 rounded-full p-3">
@@ -80,6 +81,20 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
           </div>
+
+          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-yellow-100 rounded-full p-3">
+                <span className="text-2xl">🎯</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Баннеры</h3>
+                <p className="text-3xl font-bold text-gray-900">
+                  {bannersCount?.count || 0}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -91,6 +106,12 @@ export default async function AdminDashboardPage() {
                 className="block w-full text-left px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
               >
                 🏪 Управление складами
+              </a>
+              <a
+                href="/admin/banners"
+                className="block w-full text-left px-4 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors font-medium"
+              >
+                🎯 Управление баннерами
               </a>
               <a
                 href="/admin/users"

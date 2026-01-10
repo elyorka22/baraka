@@ -57,7 +57,7 @@ export function EditBannerForm({ banner }: EditBannerFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8 space-y-6">
+    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-100">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error}
@@ -74,7 +74,7 @@ export function EditBannerForm({ banner }: EditBannerFormProps) {
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -88,7 +88,7 @@ export function EditBannerForm({ banner }: EditBannerFormProps) {
           value={formData.position}
           onChange={(e) => setFormData({ ...formData, position: parseInt(e.target.value) || 0 })}
           min="0"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -102,7 +102,7 @@ export function EditBannerForm({ banner }: EditBannerFormProps) {
           value={formData.link_url}
           onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
           placeholder="https://example.com"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -112,7 +112,7 @@ export function EditBannerForm({ banner }: EditBannerFormProps) {
             type="checkbox"
             checked={formData.is_active}
             onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-            className="rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+            className="rounded border-gray-300 text-green-600 focus:ring-green-500"
           />
           <span className="text-sm font-medium text-gray-700">Активен</span>
         </label>
@@ -129,7 +129,7 @@ export function EditBannerForm({ banner }: EditBannerFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+          className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
         >
           {loading ? 'Сохранение...' : 'Сохранить'}
         </button>
