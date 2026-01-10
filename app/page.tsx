@@ -52,6 +52,8 @@ export default function HomePage() {
     
     setCart(newCart)
     localStorage.setItem('cart', JSON.stringify(newCart))
+    // Отправляем событие для обновления корзины в Header
+    window.dispatchEvent(new Event('cartUpdated'))
   }
 
   const removeFromCart = (productId: string) => {
@@ -64,6 +66,8 @@ export default function HomePage() {
     
     setCart(newCart)
     localStorage.setItem('cart', JSON.stringify(newCart))
+    // Отправляем событие для обновления корзины в Header
+    window.dispatchEvent(new Event('cartUpdated'))
   }
 
   const getQuantity = (productId: string) => {
