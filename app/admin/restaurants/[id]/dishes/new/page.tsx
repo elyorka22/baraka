@@ -16,6 +16,7 @@ export default function NewDishPage() {
     price: '',
     category_id: '',
     image_url: '',
+    badge_text: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -48,6 +49,7 @@ export default function NewDishPage() {
         category_id: formData.category_id,
         restaurant_id: restaurantId,
         image_url: formData.image_url || null,
+        badge_text: formData.badge_text || null,
         is_available: true,
       }])
 
@@ -125,7 +127,7 @@ export default function NewDishPage() {
 
             <div>
               <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                Цена (₽) *
+                Цена (so'm) *
               </label>
               <input
                 id="price"
@@ -137,6 +139,23 @@ export default function NewDishPage() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
               />
+            </div>
+
+            <div>
+              <label htmlFor="badge_text" className="block text-sm font-medium text-gray-700 mb-2">
+                Текст бейджа
+              </label>
+              <input
+                id="badge_text"
+                type="text"
+                value={formData.badge_text}
+                onChange={(e) => setFormData({ ...formData, badge_text: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                placeholder="Например: Mavjud, -15%, Top, Новый"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Если оставить пустым, бейдж не будет отображаться
+              </p>
             </div>
 
             <ImageUpload

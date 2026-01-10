@@ -207,9 +207,9 @@ export default function RestaurantMenuPage() {
                         <span className="text-6xl">📦</span>
                       </div>
                     )}
-                    {dish.is_available && (
+                    {dish.badge_text && (
                       <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        Mavjud
+                        {dish.badge_text}
                       </div>
                     )}
                   </div>

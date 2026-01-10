@@ -125,9 +125,11 @@ export default function HomePage() {
                       <span className="text-4xl md:text-6xl">📦</span>
                     </div>
                   )}
-                  <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
-                    Mavjud
-                  </div>
+                  {product.badge_text && (
+                    <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
+                      {product.badge_text}
+                    </div>
+                  )}
                   {/* Кнопки управления корзиной на изображении */}
                   <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
                     {quantity > 0 ? (
