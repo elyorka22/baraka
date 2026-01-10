@@ -171,9 +171,9 @@ function CheckoutContent() {
             <p className="text-gray-500 text-lg mb-4">Savat bo'sh</p>
             <Link
               href="/customer"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Restoranlarga o'tish
+              Omborlarga o'tish
             </Link>
           </div>
         </div>
@@ -185,18 +185,22 @@ function CheckoutContent() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow">
         <div className="container mx-auto px-4 py-4">
-          <Link href="/customer" className="text-2xl font-bold text-orange-500">
+          <Link href="/customer" className="text-2xl font-bold text-green-600 flex items-center gap-2">
+            <span className="text-3xl">🛒</span>
             Baraka
           </Link>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Buyurtma berish</h1>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Buyurtma berish</h1>
+          <p className="text-gray-600">Ma'lumotlaringizni to'ldiring</p>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6 space-y-6 border border-gray-100">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                   {error}
@@ -213,7 +217,7 @@ function CheckoutContent() {
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   placeholder="Ko'cha, uy, kvartira"
                 />
               </div>
@@ -228,7 +232,7 @@ function CheckoutContent() {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   placeholder="+998 (99) 123-45-67"
                 />
               </div>
@@ -243,7 +247,7 @@ function CheckoutContent() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required={!user}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   placeholder="your@email.com"
                 />
                 {!user && (
@@ -262,7 +266,7 @@ function CheckoutContent() {
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   placeholder="Kuryer uchun qo'shimcha ma'lumot"
                 />
               </div>
@@ -270,7 +274,7 @@ function CheckoutContent() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
                 {submitting ? 'Buyurtma berilmoqda...' : 'Buyurtma berish'}
               </button>
@@ -278,8 +282,13 @@ function CheckoutContent() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Sizning buyurtmangiz</h2>
+            <div className="bg-white rounded-xl shadow-md p-6 sticky top-4 border border-gray-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-green-100 rounded-full p-2">
+                  <span className="text-xl">🛒</span>
+                </div>
+                <h2 className="text-xl font-bold text-gray-900">Sizning buyurtmangiz</h2>
+              </div>
               {restaurant && (
                 <p className="text-sm text-gray-500 mb-4">{restaurant.name}</p>
               )}
@@ -295,10 +304,10 @@ function CheckoutContent() {
                   )
                 })}
               </div>
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-xl font-bold">
-                  <span>Jami:</span>
-                  <span className="text-orange-500">{getTotal()} ₽</span>
+              <div className="border-t-2 border-gray-200 pt-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-semibold text-gray-700">Jami:</span>
+                  <span className="text-2xl font-bold text-green-600">{getTotal()} ₽</span>
                 </div>
               </div>
             </div>

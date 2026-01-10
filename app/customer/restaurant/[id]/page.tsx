@@ -164,52 +164,91 @@ export default function RestaurantMenuPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <Link href="/customer" className="text-orange-500 hover:text-orange-600 mb-4 inline-block">
-            ← Omborlarga qaytish
+          <Link href="/customer" className="text-green-600 hover:text-green-700 mb-4 inline-flex items-center gap-2 font-medium transition-colors">
+            <span>←</span> Omborlarga qaytish
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">{restaurant.name}</h1>
-          {restaurant.description && (
-            <p className="text-gray-600 mt-2">{restaurant.description}</p>
-          )}
+          <div className="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-100">
+            <div className="flex items-start gap-4">
+              <div className="text-5xl">🏪</div>
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{restaurant.name}</h1>
+                {restaurant.description && (
+                  <p className="text-gray-600">{restaurant.description}</p>
+                )}
+                {restaurant.address && (
+                  <div className="flex items-center text-gray-500 text-sm mt-3">
+                    <span className="mr-2">📍</span>
+                    <span>{restaurant.address}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         {dishesByCategory.map(({ category, dishes: categoryDishes }) => (
           <div key={category.id} className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">{category.name}</h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-8 bg-green-600 rounded-full"></div>
+              <h2 className="text-2xl font-bold text-gray-900">{category.name}</h2>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categoryDishes.map((dish) => (
-                <div key={dish.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  {dish.image_url && (
-                    <img
-                      src={dish.image_url}
-                      alt={dish.name}
-                      className="w-full h-48 object-cover"
-                    />
-                  )}
-                  <div className="p-6">
+                <div key={dish.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+                  <div className="relative">
+                    {dish.image_url ? (
+                      <img
+                        src={dish.image_url}
+                        alt={dish.name}
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
+                        <span className="text-6xl">📦</span>
+                      </div>
+                    )}
+                    {dish.is_available && (
+                      <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        Mavjud
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{dish.name}</h3>
                     {dish.description && (
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2">{dish.description}</p>
                     )}
-                    <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-orange-500">{dish.price} ₽</span>
+                    <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                      <div>
+                        <span className="text-2xl font-bold text-green-600">{dish.price}</span>
+                        <span className="text-gray-500 text-sm ml-1">₽</span>
+                      </div>
                       <div className="flex items-center space-x-2">
                         {cart[dish.id] > 0 && (
                           <>
                             <button
                               onClick={() => removeFromCart(dish.id)}
-                              className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center"
+                              className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-9 h-9 rounded-lg flex items-center justify-center font-semibold transition-colors"
                             >
-                              -
+                              −
                             </button>
-                            <span className="font-semibold">{cart[dish.id]}</span>
+                            <span className="font-bold text-gray-900 w-8 text-center">{cart[dish.id]}</span>
                           </>
                         )}
                         <button
                           onClick={() => addToCart(dish.id)}
-                          className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors"
+                          className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition-colors font-semibold text-sm flex items-center gap-2"
                         >
-                          {cart[dish.id] > 0 ? '+' : 'Savatga qo\'shish'}
+                          {cart[dish.id] > 0 ? (
+                            <>
+                              <span>+</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>🛒</span>
+                              <span>Qo'shish</span>
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>
@@ -221,17 +260,26 @@ export default function RestaurantMenuPage() {
         ))}
 
         {getCartCount() > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t p-4">
+          <div className="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t-2 border-green-600 p-4 z-50">
             <div className="container mx-auto flex justify-between items-center">
-              <div>
-                <p className="text-sm text-gray-500">Savatdagi mahsulotlar: {getCartCount()}</p>
-                <p className="text-xl font-bold text-gray-900">Jami: {getCartTotal()} ₽</p>
+              <div className="flex items-center gap-4">
+                <div className="bg-green-100 rounded-full p-3">
+                  <span className="text-2xl">🛒</span>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Savatdagi mahsulotlar</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {getCartCount()} <span className="text-lg text-gray-500">ta</span>
+                  </p>
+                  <p className="text-lg font-semibold text-green-600">Jami: {getCartTotal()} ₽</p>
+                </div>
               </div>
               <Link
                 href="/customer/cart"
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold transition-colors shadow-lg flex items-center gap-2"
               >
-                Buyurtma berishga o'tish
+                <span>Buyurtma berish</span>
+                <span>→</span>
               </Link>
             </div>
           </div>
