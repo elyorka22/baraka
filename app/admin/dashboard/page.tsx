@@ -23,13 +23,23 @@ export default async function AdminDashboardPage() {
   }
 
   // Получаем статистику
-  const [warehousesCount, ordersCount, usersCount, bannersCount, productsCount] = await Promise.all([
+  const [warehousesCount, ordersCount, usersCount, productsCount] = await Promise.all([
     supabase.from('restaurants').select('id', { count: 'exact', head: true }),
     supabase.from('orders').select('id', { count: 'exact', head: true }),
     supabase.from('profiles').select('id', { count: 'exact', head: true }),
-    supabase.from('banners').select('id', { count: 'exact', head: true }).catch(() => ({ count: 0 })),
     supabase.from('dishes').select('id', { count: 'exact', head: true }),
   ])
+
+  // Получаем количество баннеров с обработкой ошибок
+  let bannersCount = { count: 0 }
+  try {
+    const bannersResult = await supabase.from('banners').select('id', { count: 'exact', head: true })
+    if (bannersResult.count !== null) {
+      bannersCount = { count: bannersResult.count }
+    }
+  } catch {
+    bannersCount = { count: 0 }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
