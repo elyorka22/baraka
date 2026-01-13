@@ -9,7 +9,7 @@ function CheckoutContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const restaurantId = searchParams.get('restaurant')
-  const [cart, setCart] = useState<Record<string, number>>({})
+  const [cart, setCart] = useState<Record<string, { quantity: number; restaurantId: string }>>({})
   const [dishes, setDishes] = useState<any[]>([])
   const [restaurant, setRestaurant] = useState<any>(null)
   const [user, setUser] = useState<any>(null)
@@ -79,7 +79,7 @@ function CheckoutContent() {
 
   const getTotal = () => {
     return dishes.reduce((total, dish) => {
-      const quantity = cart[dish.id] || 0
+      const quantity = cart[dish.id]?.quantity || 0
       return total + dish.price * quantity
     }, 0)
   }
@@ -129,9 +129,9 @@ function CheckoutContent() {
     const orderItems = dishes.map(dish => ({
       order_id: order.id,
       dish_id: dish.id,
-      quantity: cart[dish.id] || 0,
+      quantity: cart[dish.id]?.quantity || 0,
       price: dish.price,
-    }))
+    })).filter(item => item.quantity > 0)
 
     const { error: itemsError } = await supabase
       .from('order_items')
@@ -294,12 +294,12 @@ function CheckoutContent() {
               )}
               <div className="space-y-2 mb-6">
                 {dishes.map((dish) => {
-                  const quantity = cart[dish.id] || 0
+                  const quantity = cart[dish.id]?.quantity || 0
                   if (quantity === 0) return null
                   return (
                     <div key={dish.id} className="flex justify-between text-sm">
                       <span>{dish.name} × {quantity}</span>
-                      <span>{dish.price * quantity} so'm</span>
+                      <span>{Number(dish.price * quantity).toLocaleString('ru-RU')} so'm</span>
                     </div>
                   )
                 })}
@@ -307,7 +307,7 @@ function CheckoutContent() {
               <div className="border-t-2 border-gray-200 pt-4">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold text-gray-700">Jami:</span>
-                  <span className="text-2xl font-bold text-green-600">{getTotal()} so'm</span>
+                  <span className="text-2xl font-bold text-green-600">{Number(getTotal()).toLocaleString('ru-RU')} so'm</span>
                 </div>
               </div>
             </div>
