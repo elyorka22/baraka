@@ -17,7 +17,6 @@ function CheckoutContent() {
   const [formData, setFormData] = useState({
     address: '',
     phone: '',
-    email: '',
     notes: '',
   })
   const [loading, setLoading] = useState(true)
@@ -43,7 +42,6 @@ function CheckoutContent() {
           setFormData({
             address: '',
             phone: profileData.phone || '',
-            email: currentUser.email || '',
             notes: '',
           })
         }
@@ -127,7 +125,7 @@ function CheckoutContent() {
         total_price: getTotal(),
         address: formData.address,
         phone: formData.phone,
-        customer_email: formData.email || null,
+        customer_email: user?.email || null,
         notes: formData.notes || null,
       }])
       .select()
@@ -249,26 +247,6 @@ function CheckoutContent() {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   placeholder="+998 (99) 123-45-67"
                 />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email {!user && '*'}
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required={!user}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
-                  placeholder="your@email.com"
-                />
-                {!user && (
-                  <p className="mt-1 text-sm text-gray-500">
-                    Email buyurtma holati haqida xabarnoma olish uchun kerak
-                  </p>
-                )}
               </div>
 
               <div>
