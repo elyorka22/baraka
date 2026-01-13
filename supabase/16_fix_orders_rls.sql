@@ -30,16 +30,22 @@ CREATE POLICY "Customers can view own orders"
 
 -- Обновляем политику создания order_items - разрешаем создание для всех заказов
 DROP POLICY IF EXISTS "Customers can create order items" ON order_items;
-CREATE POLICY "Customers can create order items"
-  ON order_items FOR INSERT
-  WITH CHECK (
-    -- Разрешаем создание для всех заказов (проверка будет на уровне заказа)
-    true
-  );
-
--- Также разрешаем создание order_items для анонимных заказов
 DROP POLICY IF EXISTS "Anyone can create order items" ON order_items;
+
+-- Разрешаем создание order_items для всех заказов (проверка будет на уровне заказа)
 CREATE POLICY "Anyone can create order items"
   ON order_items FOR INSERT
-  WITH CHECK (true);
+  WITH CHECK (
+    -- Проверяем, что заказ существует и соответствует политике создания заказов
+    EXISTS (
+      SELECT 1 FROM orders
+      WHERE orders.id = order_items.order_id
+      AND (
+        -- Для авторизованных пользователей
+        (auth.uid() IS NOT NULL AND orders.user_id = auth.uid()) OR
+        -- Для анонимных заказов
+        (auth.uid() IS NULL AND orders.user_id IS NULL)
+      )
+    )
+  );
 
