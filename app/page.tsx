@@ -102,7 +102,7 @@ export default function HomePage() {
             <p className="text-gray-500 text-lg">Hozircha mahsulotlar yo'q</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
             {products.map((product: any) => {
               const quantity = getQuantity(product.id)
               const restaurantId = product.restaurant_id || product.restaurants?.id
@@ -123,17 +123,17 @@ export default function HomePage() {
               return (
                 <div
                   key={product.id}
-                  className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100"
+                  className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col"
                 >
-                  <div className="relative">
+                  <div className="relative w-full aspect-square">
                     {product.image_url ? (
                       <img
                         src={product.image_url}
                         alt={product.name}
-                        className="w-full h-40 object-cover"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-40 bg-gray-100 flex items-center justify-center">
+                      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                         <span className="text-4xl">📦</span>
                       </div>
                     )}
@@ -167,7 +167,7 @@ export default function HomePage() {
                       )}
                     </div>
                   </div>
-                  <div className="p-3">
+                  <div className="p-3 flex-1 flex flex-col">
                     <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
                       {product.name}
                     </h3>
@@ -176,7 +176,7 @@ export default function HomePage() {
                         {product.description}
                       </p>
                     )}
-                    <div className="mt-2">
+                    <div className="mt-auto">
                       <span className="text-sm font-bold text-gray-900">
                         {Number(product.price).toLocaleString('ru-RU')} so'm / {unit}
                       </span>
