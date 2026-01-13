@@ -111,22 +111,22 @@ export default function NewProductPage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar role="super_admin" userName={profile.full_name || user.email || undefined} />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
             <a
               href="/admin/products"
-              className="text-green-600 hover:text-green-700 mb-4 inline-flex items-center gap-2 font-medium transition-colors"
+              className="text-gray-900 hover:text-gray-700 mb-4 inline-flex items-center gap-2 font-medium transition-colors"
             >
               <span>←</span> Mahsulotlarga qaytish
             </a>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Yangi mahsulot qo'shish
             </h1>
             <p className="text-gray-600">Yangi mahsulot kartasini yarating</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-100">
+          <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8 space-y-6 border border-gray-100">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                 {error}
@@ -142,7 +142,7 @@ export default function NewProductPage() {
                 value={formData.restaurant_id}
                 onChange={(e) => setFormData({ ...formData, restaurant_id: e.target.value })}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
               >
                 <option value="">Omborni tanlang</option>
                 {warehouses.map((warehouse) => (
@@ -163,7 +163,7 @@ export default function NewProductPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                 placeholder="Mahsulot nomi"
               />
             </div>
@@ -177,7 +177,7 @@ export default function NewProductPage() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                 placeholder="Mahsulot haqida batafsil ma'lumot"
               />
             </div>
@@ -194,7 +194,7 @@ export default function NewProductPage() {
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                 placeholder="0.00"
               />
             </div>
@@ -208,7 +208,7 @@ export default function NewProductPage() {
                 type="text"
                 value={formData.badge_text}
                 onChange={(e) => setFormData({ ...formData, badge_text: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                 placeholder="Masalan: Mavjud, -15%, Top, Yangi"
               />
               <p className="mt-1 text-xs text-gray-500">
@@ -227,7 +227,7 @@ export default function NewProductPage() {
               <button
                 type="submit"
                 disabled={loading || !formData.restaurant_id}
-                className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                className="flex-1 bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
                 {loading ? 'Saqlanmoqda...' : 'Saqlash'}
               </button>

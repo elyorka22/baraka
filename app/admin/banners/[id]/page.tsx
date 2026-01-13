@@ -39,10 +39,10 @@ export default async function EditBannerPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Bannerni tahrirlash
             </h1>
             <p className="text-gray-600">Banner ma'lumotlarini o'zgartiring</p>

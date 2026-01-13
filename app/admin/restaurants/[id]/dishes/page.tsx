@@ -46,13 +46,13 @@ export default async function RestaurantDishesPage({
     <div className="min-h-screen bg-gray-50">
       <Navbar role="super_admin" userName={profile.full_name || user.email || undefined} />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <a href="/admin/restaurants" className="text-green-600 hover:text-green-700 mb-2 inline-flex items-center gap-2 font-medium transition-colors">
+            <a href="/admin/restaurants" className="text-gray-900 hover:text-gray-700 mb-2 inline-flex items-center gap-2 font-medium transition-colors">
               <span>←</span> Omborlarga qaytish
             </a>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               Mahsulotlar: {restaurant.name}
             </h1>
             <p className="text-gray-600">Ombor mahsulotlarini boshqaring</p>
@@ -67,7 +67,7 @@ export default async function RestaurantDishesPage({
             </a>
             <a
               href={`/admin/restaurants/${id}/dishes/new`}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center gap-2"
+              className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg flex items-center gap-2"
             >
               <span>+</span>
               <span>Mahsulot</span>
