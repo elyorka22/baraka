@@ -22,29 +22,35 @@ Bu bot orqali siz:
 
 Quyidagi tugmalardan birini tanlang:`
 
-  // Создаем инлайн кнопки (в одну строку под полем ввода)
+  // Создаем reply keyboard (постоянная клавиатура под полем ввода)
   const options = {
     reply_markup: {
-      inline_keyboard: [
+      keyboard: [
         [
-          { text: 'ℹ️ Bot haqida', callback_data: 'bot_info' },
-          { text: '🏪 Sotuvchi bo\'lish', callback_data: 'become_seller' }
+          { text: 'ℹ️ Bot haqida' },
+          { text: '🏪 Sotuvchi bo\'lish' }
         ]
-      ]
+      ],
+      resize_keyboard: true, // Кнопки подстраиваются под размер экрана
+      one_time_keyboard: false // Клавиатура остается видимой
     }
   }
 
   bot.sendMessage(chatId, welcomeMessage, options)
 })
 
-// Обработка нажатий на инлайн кнопки
-bot.on('callback_query', (query) => {
-  const chatId = query.message?.chat.id
-  const data = query.data
+// Обработка нажатий на кнопки reply keyboard
+bot.on('message', (msg) => {
+  const chatId = msg.chat.id
+  const text = msg.text
 
-  if (!chatId) return
+  // Игнорируем команды
+  if (text?.startsWith('/')) {
+    return
+  }
 
-  if (data === 'bot_info') {
+  // Обработка нажатий на кнопки
+  if (text === 'ℹ️ Bot haqida') {
     const infoMessage = `📱 **Baraka Bot haqida**
 
 Bu bot Baraka mahsulotlar yetkazib berish xizmati uchun yaratilgan.
@@ -59,11 +65,26 @@ Bu bot Baraka mahsulotlar yetkazib berish xizmati uchun yaratilgan.
 
 Savollaringiz bo'lsa, bizga yozing! 💬`
 
-    bot.sendMessage(chatId, infoMessage, { parse_mode: 'Markdown' })
-    
-    // Отвечаем на callback query
-    bot.answerCallbackQuery(query.id)
-  } else if (data === 'become_seller') {
+    // Отправляем сообщение с той же клавиатурой
+    const options = {
+      reply_markup: {
+        keyboard: [
+          [
+            { text: 'ℹ️ Bot haqida' },
+            { text: '🏪 Sotuvchi bo\'lish' }
+          ]
+        ],
+        resize_keyboard: true,
+        one_time_keyboard: false
+      }
+    }
+
+    bot.sendMessage(chatId, infoMessage, { 
+      parse_mode: 'Markdown',
+      reply_markup: options.reply_markup
+    })
+    return
+  } else if (text === '🏪 Sotuvchi bo\'lish') {
     const sellerMessage = `🏪 **Sotuvchi bo'lish**
 
 Sotuvchi bo'lish uchun quyidagi qadamlarni bajaring:
@@ -79,11 +100,46 @@ Sotuvchi bo'lish uchun quyidagi qadamlarni bajaring:
 
 Qo'shimcha ma'lumot uchun admin bilan bog'laning! 📞`
 
-    bot.sendMessage(chatId, sellerMessage, { parse_mode: 'Markdown' })
-    
-    // Отвечаем на callback query
-    bot.answerCallbackQuery(query.id)
+    // Отправляем сообщение с той же клавиатурой
+    const options = {
+      reply_markup: {
+        keyboard: [
+          [
+            { text: 'ℹ️ Bot haqida' },
+            { text: '🏪 Sotuvchi bo\'lish' }
+          ]
+        ],
+        resize_keyboard: true,
+        one_time_keyboard: false
+      }
+    }
+
+    bot.sendMessage(chatId, sellerMessage, { 
+      parse_mode: 'Markdown',
+      reply_markup: options.reply_markup
+    })
+    return
   }
+
+  // Обработка неизвестных сообщений
+  const response = `Kechirasiz, men hali bunday buyruqni tushunmayman. 😅
+
+Yordam olish uchun /help buyrug'ini yuboring yoki quyidagi tugmalardan foydalaning.`
+
+  const options = {
+    reply_markup: {
+      keyboard: [
+        [
+          { text: 'ℹ️ Bot haqida' },
+          { text: '🏪 Sotuvchi bo\'lish' }
+        ]
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: false
+    }
+  }
+
+  bot.sendMessage(chatId, response, options)
 })
 
 // Обработка команды /help
@@ -103,7 +159,23 @@ bot.onText(/\/help/, (msg) => {
 
 Savollaringiz bo'lsa, bizga yozing! 💬`
 
-  bot.sendMessage(chatId, helpMessage, { parse_mode: 'Markdown' })
+  const options = {
+    reply_markup: {
+      keyboard: [
+        [
+          { text: 'ℹ️ Bot haqida' },
+          { text: '🏪 Sotuvchi bo\'lish' }
+        ]
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: false
+    }
+  }
+
+  bot.sendMessage(chatId, helpMessage, { 
+    parse_mode: 'Markdown',
+    reply_markup: options.reply_markup
+  })
 })
 
 // Обработка команды /info
@@ -124,40 +196,28 @@ Baraka - mahsulotlar yetkazib berish xizmati.
 
 Biz bilan bog'lanish: @baraka_support`
 
-  bot.sendMessage(chatId, infoMessage, { parse_mode: 'Markdown' })
+  const options = {
+    reply_markup: {
+      keyboard: [
+        [
+          { text: 'ℹ️ Bot haqida' },
+          { text: '🏪 Sotuvchi bo\'lish' }
+        ]
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: false
+    }
+  }
+
+  bot.sendMessage(chatId, infoMessage, { 
+    parse_mode: 'Markdown',
+    reply_markup: options.reply_markup
+  })
 })
 
 // Обработка ошибок
 bot.on('polling_error', (error) => {
   console.error('Polling error:', error)
-})
-
-// Обработка неизвестных сообщений
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id
-  
-  // Игнорируем команды
-  if (msg.text?.startsWith('/')) {
-    return
-  }
-  
-  // Отвечаем на обычные сообщения
-  const response = `Kechirasiz, men hali bunday buyruqni tushunmayman. 😅
-
-Yordam olish uchun /help buyrug'ini yuboring yoki quyidagi tugmalardan foydalaning.`
-
-  const options = {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: 'ℹ️ Bot haqida', callback_data: 'bot_info' },
-          { text: '🏪 Sotuvchi bo\'lish', callback_data: 'become_seller' }
-        ]
-      ]
-    }
-  }
-
-  bot.sendMessage(chatId, response, options)
 })
 
 console.log('🤖 Baraka Telegram bot ishga tushdi!')
