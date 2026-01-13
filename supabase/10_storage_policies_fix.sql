@@ -65,3 +65,4 @@ DROP POLICY IF EXISTS "Authenticated users can upload to categories" ON storage.
 DROP POLICY IF EXISTS "Authenticated users can update categories" ON storage.objects;
 DROP POLICY IF EXISTS "Authenticated users can delete categories" ON storage.objects;
 
+

@@ -291,3 +291,4 @@ CREATE POLICY "Users can update own notifications"
 -- Система может создавать уведомления (через service role)
 -- Это будет делаться через Edge Functions или серверные вызовы
 
+

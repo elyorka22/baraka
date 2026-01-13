@@ -250,3 +250,4 @@ export function ProductsList({ products: initialProducts, warehouses }: Products
   )
 }
 
+

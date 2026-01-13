@@ -91,10 +91,9 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Mahsulotlar</h1>
-          <p className="text-gray-600">Eng yaxshi mahsulotlarni uyingizga yetkazib beramiz</p>
+      <div className="container mx-auto px-4 py-6">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Bizning mahsulotlarimiz</h1>
         </div>
 
         {!products || products.length === 0 ? (
@@ -103,78 +102,86 @@ export default function HomePage() {
             <p className="text-gray-500 text-lg">Hozircha mahsulotlar yo'q</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             {products.map((product: any) => {
               const quantity = getQuantity(product.id)
               const restaurantId = product.restaurant_id || product.restaurants?.id
+              
+              // Определяем единицу измерения из описания или используем по умолчанию
+              const getUnit = () => {
+                if (product.description?.toLowerCase().includes('kg') || product.description?.toLowerCase().includes('килограмм')) {
+                  return 'kg'
+                }
+                if (product.description?.toLowerCase().includes('dona') || product.description?.toLowerCase().includes('шт')) {
+                  return 'dona'
+                }
+                // По умолчанию используем 'dona'
+                return 'dona'
+              }
+              const unit = getUnit()
 
               return (
                 <div
                   key={product.id}
-                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 group"
+                  className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100"
                 >
-                <div className="relative">
-                  {product.image_url ? (
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="w-full h-32 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-32 md:h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
-                      <span className="text-4xl md:text-6xl">📦</span>
-                    </div>
-                  )}
-                  {product.badge_text && (
-                    <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs font-semibold">
-                      {product.badge_text}
-                    </div>
-                  )}
-                  {/* Кнопки управления корзиной на изображении */}
-                  <div className="absolute bottom-2 right-2 md:bottom-3 md:right-3">
-                    {quantity > 0 ? (
-                      <div className="flex items-center space-x-1.5 md:space-x-2 bg-white rounded-lg shadow-lg p-1">
-                        <button
-                          onClick={() => removeFromCart(product.id)}
-                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-6 h-6 md:w-8 md:h-8 rounded flex items-center justify-center font-semibold text-sm md:text-base transition-colors"
-                        >
-                          −
-                        </button>
-                        <span className="font-bold text-gray-900 w-5 md:w-7 text-center text-xs md:text-sm">
-                          {quantity}
-                        </span>
+                  <div className="relative">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="w-full h-40 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-40 bg-gray-100 flex items-center justify-center">
+                        <span className="text-4xl">📦</span>
+                      </div>
+                    )}
+                    {/* Кнопка добавления в корзину */}
+                    <div className="absolute bottom-2 right-2">
+                      {quantity > 0 ? (
+                        <div className="flex items-center space-x-1 bg-white rounded-lg shadow-md px-1.5 py-1">
+                          <button
+                            onClick={() => removeFromCart(product.id)}
+                            className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                          >
+                            −
+                          </button>
+                          <span className="font-bold text-gray-900 w-5 text-center text-xs">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => addToCart(product.id, restaurantId)}
+                            className="bg-black hover:bg-gray-800 text-white w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
                         <button
                           onClick={() => addToCart(product.id, restaurantId)}
-                          className="bg-green-600 hover:bg-green-700 text-white w-6 h-6 md:w-8 md:h-8 rounded flex items-center justify-center font-semibold text-sm md:text-base transition-colors"
+                          className="bg-black hover:bg-gray-800 text-white w-8 h-8 rounded-full flex items-center justify-center font-semibold text-base shadow-md transition-colors"
                         >
                           +
                         </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => addToCart(product.id, restaurantId)}
-                        className="bg-green-600 hover:bg-green-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-semibold text-lg md:text-xl shadow-lg transition-colors"
-                      >
-                        +
-                      </button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    {product.description && (
+                      <p className="text-gray-500 text-xs mb-2 line-clamp-2">
+                        {product.description}
+                      </p>
                     )}
+                    <div className="mt-2">
+                      <span className="text-sm font-bold text-gray-900">
+                        {Number(product.price).toLocaleString('ru-RU')} so'm / {unit}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-3 md:p-5">
-                  <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 line-clamp-2">
-                    {product.name}
-                  </h3>
-                  {product.description && (
-                    <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 hidden md:block">
-                      {product.description}
-                    </p>
-                  )}
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg md:text-2xl font-bold text-green-600">
-                      {product.price} so'm
-                    </span>
-                  </div>
-                </div>
                 </div>
               )
             })}

@@ -24,3 +24,4 @@ SELECT id, email, created_at FROM auth.users ORDER BY created_at DESC;
 -- SET role = 'super_admin'
 -- WHERE id = '123e4567-e89b-12d3-a456-426614174000';
 
+

@@ -123,3 +123,4 @@ ON CONFLICT (id) DO NOTHING;
 2. Попробуйте загрузить изображение
 3. Если ошибка сохраняется, проверьте логи в Supabase Dashboard → **Logs** → **Storage**
 
+

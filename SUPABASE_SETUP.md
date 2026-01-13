@@ -262,3 +262,4 @@ WHERE id = 'ваш-user-id-из-выше-запроса';
 3. Проверьте логи в Supabase Dashboard → Logs
 4. Проверьте логи в Vercel Dashboard → Deployments → Logs
 
+

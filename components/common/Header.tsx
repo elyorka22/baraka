@@ -74,8 +74,7 @@ export function Header() {
       <div className="bg-white shadow">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-green-600 flex items-center gap-2">
-              <span className="text-3xl">🛒</span>
+            <Link href="/" className="text-xl font-bold text-gray-900">
               Baraka
             </Link>
             <div className="flex space-x-4 items-center">
@@ -88,55 +87,44 @@ export function Header() {
   }
 
   return (
-    <div className="bg-white shadow">
-      <div className="container mx-auto px-4 py-4">
+    <div className="bg-white border-b border-gray-200">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-green-600 flex items-center gap-2">
-            <span className="text-3xl">🛒</span>
+          <Link href="/" className="text-xl font-bold text-gray-900">
             Baraka
           </Link>
           <div className="flex space-x-4 items-center">
+            <Link
+              href="/customer/cart"
+              className="relative text-gray-900 hover:text-gray-700 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
+            </Link>
             {user ? (
-              <>
-                <Link
-                  href="/customer/orders"
-                  className="text-gray-700 hover:text-green-600 font-medium transition-colors"
-                >
-                  Mening buyurtmalarim
-                </Link>
-                <Link
-                  href="/customer/cart"
-                  className="relative text-gray-700 hover:text-green-600 transition-colors"
-                >
-                  <span className="text-2xl">🛒</span>
-                  {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">
-                      {cartCount > 99 ? '99+' : cartCount}
-                    </span>
-                  )}
-                </Link>
-                <LogoutButton />
-              </>
+              <Link
+                href="/customer/orders"
+                className="text-gray-900 hover:text-gray-700 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </Link>
             ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="text-gray-700 hover:text-green-600 font-medium transition-colors"
-                >
-                  Kirish
-                </Link>
-                <Link
-                  href="/customer/cart"
-                  className="relative text-gray-700 hover:text-green-600 transition-colors"
-                >
-                  <span className="text-2xl">🛒</span>
-                  {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">
-                      {cartCount > 99 ? '99+' : cartCount}
-                    </span>
-                  )}
-                </Link>
-              </>
+              <Link
+                href="/auth/login"
+                className="text-gray-900 hover:text-gray-700 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </Link>
             )}
           </div>
         </div>
