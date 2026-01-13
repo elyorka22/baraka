@@ -134,7 +134,83 @@ export default function HomePage() {
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                     {categoryProducts.map((product: any) => {
-                      return renderProductCard(product)
+                      const quantity = getQuantity(product.id)
+                      const restaurantId = product.restaurant_id || product.restaurants?.id
+                      
+                      const getUnit = () => {
+                        if (product.description?.toLowerCase().includes('kg') || product.description?.toLowerCase().includes('килограмм')) {
+                          return 'kg'
+                        }
+                        if (product.description?.toLowerCase().includes('dona') || product.description?.toLowerCase().includes('шт')) {
+                          return 'dona'
+                        }
+                        return 'dona'
+                      }
+                      const unit = getUnit()
+
+                      return (
+                        <div
+                          key={product.id}
+                          className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col"
+                        >
+                          <div className="relative w-full aspect-square bg-white overflow-hidden">
+                            {product.image_url ? (
+                              <img
+                                src={product.image_url}
+                                alt={product.name}
+                                className="w-full h-full object-contain"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                                <span className="text-4xl">📦</span>
+                              </div>
+                            )}
+                            <div className="absolute bottom-2 right-2">
+                              {quantity > 0 ? (
+                                <div className="flex items-center space-x-1 bg-white rounded-lg shadow-md px-1.5 py-1">
+                                  <button
+                                    onClick={() => removeFromCart(product.id)}
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                                  >
+                                    −
+                                  </button>
+                                  <span className="font-bold text-gray-900 w-5 text-center text-xs">
+                                    {quantity}
+                                  </span>
+                                  <button
+                                    onClick={() => addToCart(product.id, restaurantId)}
+                                    className="bg-black hover:bg-gray-800 text-white w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => addToCart(product.id, restaurantId)}
+                                  className="bg-black hover:bg-gray-800 text-white w-8 h-8 rounded-full flex items-center justify-center font-semibold text-base shadow-md transition-colors"
+                                >
+                                  +
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="p-3 flex-1 flex flex-col">
+                            <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
+                              {product.name}
+                            </h3>
+                            {product.description && (
+                              <p className="text-gray-500 text-xs mb-2 line-clamp-2">
+                                {product.description}
+                              </p>
+                            )}
+                            <div className="mt-auto">
+                              <span className="text-sm font-bold text-gray-900">
+                                {Number(product.price).toLocaleString('ru-RU')} so'm / {unit}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )
                     })}
                   </div>
                 </div>
@@ -156,7 +232,83 @@ export default function HomePage() {
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
                     {uncategorizedProducts.map((product: any) => {
-                      return renderProductCard(product)
+                      const quantity = getQuantity(product.id)
+                      const restaurantId = product.restaurant_id || product.restaurants?.id
+                      
+                      const getUnit = () => {
+                        if (product.description?.toLowerCase().includes('kg') || product.description?.toLowerCase().includes('килограмм')) {
+                          return 'kg'
+                        }
+                        if (product.description?.toLowerCase().includes('dona') || product.description?.toLowerCase().includes('шт')) {
+                          return 'dona'
+                        }
+                        return 'dona'
+                      }
+                      const unit = getUnit()
+
+                      return (
+                        <div
+                          key={product.id}
+                          className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col"
+                        >
+                          <div className="relative w-full aspect-square bg-white overflow-hidden">
+                            {product.image_url ? (
+                              <img
+                                src={product.image_url}
+                                alt={product.name}
+                                className="w-full h-full object-contain"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                                <span className="text-4xl">📦</span>
+                              </div>
+                            )}
+                            <div className="absolute bottom-2 right-2">
+                              {quantity > 0 ? (
+                                <div className="flex items-center space-x-1 bg-white rounded-lg shadow-md px-1.5 py-1">
+                                  <button
+                                    onClick={() => removeFromCart(product.id)}
+                                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                                  >
+                                    −
+                                  </button>
+                                  <span className="font-bold text-gray-900 w-5 text-center text-xs">
+                                    {quantity}
+                                  </span>
+                                  <button
+                                    onClick={() => addToCart(product.id, restaurantId)}
+                                    className="bg-black hover:bg-gray-800 text-white w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => addToCart(product.id, restaurantId)}
+                                  className="bg-black hover:bg-gray-800 text-white w-8 h-8 rounded-full flex items-center justify-center font-semibold text-base shadow-md transition-colors"
+                                >
+                                  +
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="p-3 flex-1 flex flex-col">
+                            <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
+                              {product.name}
+                            </h3>
+                            {product.description && (
+                              <p className="text-gray-500 text-xs mb-2 line-clamp-2">
+                                {product.description}
+                              </p>
+                            )}
+                            <div className="mt-auto">
+                              <span className="text-sm font-bold text-gray-900">
+                                {Number(product.price).toLocaleString('ru-RU')} so'm / {unit}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )
                     })}
                   </div>
                 </div>
@@ -167,8 +319,6 @@ export default function HomePage() {
       </div>
     </div>
   )
-
-  function renderProductCard(product: any) {
     const quantity = getQuantity(product.id)
     const restaurantId = product.restaurant_id || product.restaurants?.id
     
