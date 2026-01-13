@@ -7,20 +7,15 @@ DROP POLICY IF EXISTS "Customers can create orders" ON orders;
 CREATE POLICY "Customers can create orders"
   ON orders FOR INSERT
   WITH CHECK (
-    -- Разрешаем создание заказов авторизованными пользователями
+    -- Разрешаем создание заказов авторизованными пользователями (user_id должен совпадать с auth.uid())
     (
       auth.uid() IS NOT NULL AND
       auth.uid() = user_id
     ) OR
-    -- Разрешаем создание заказов без авторизации (user_id = NULL)
+    -- Разрешаем создание заказов без авторизации (user_id = NULL и auth.uid() = NULL)
     (
       auth.uid() IS NULL AND
       user_id IS NULL
-    ) OR
-    -- Разрешаем создание заказов авторизованными пользователями с любой ролью
-    (
-      auth.uid() IS NOT NULL AND
-      auth.uid() = user_id
     )
   );
 
