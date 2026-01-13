@@ -6,6 +6,7 @@ import { Header } from '@/components/common/Header'
 
 export default function HomePage() {
   const [products, setProducts] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
   const [cart, setCart] = useState<Record<string, { quantity: number; restaurantId: string }>>({})
   const [loading, setLoading] = useState(true)
 
@@ -13,12 +14,23 @@ export default function HomePage() {
     const loadData = async () => {
       const supabase = createSupabaseClient()
       
-      // Загружаем все доступные товары
+      // Загружаем активные категории
+      const { data: categoriesData } = await supabase
+        .from('global_categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('name')
+
+      // Загружаем все доступные товары с категориями
       const { data: productsData } = await supabase
         .from('dishes')
         .select(`
           *,
           restaurants (
+            id,
+            name
+          ),
+          global_categories (
             id,
             name
           )
@@ -28,6 +40,10 @@ export default function HomePage() {
 
       if (productsData) {
         setProducts(productsData)
+      }
+
+      if (categoriesData) {
+        setCategories(categoriesData)
       }
 
       // Загружаем корзину из localStorage
@@ -97,30 +113,79 @@ export default function HomePage() {
         </div>
 
         {!products || products.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-lg shadow">
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
             <div className="text-6xl mb-4">📦</div>
             <p className="text-gray-500 text-lg">Hozircha mahsulotlar yo'q</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
-            {products.map((product: any) => {
-              const quantity = getQuantity(product.id)
-              const restaurantId = product.restaurant_id || product.restaurants?.id
+          <>
+            {/* Группируем товары по категориям */}
+            {categories.map((category) => {
+              const categoryProducts = products.filter((p: any) => 
+                p.global_category_id === category.id || p.global_categories?.id === category.id
+              )
               
-              // Определяем единицу измерения из описания или используем по умолчанию
-              const getUnit = () => {
-                if (product.description?.toLowerCase().includes('kg') || product.description?.toLowerCase().includes('килограмм')) {
-                  return 'kg'
-                }
-                if (product.description?.toLowerCase().includes('dona') || product.description?.toLowerCase().includes('шт')) {
-                  return 'dona'
-                }
-                // По умолчанию используем 'dona'
-                return 'dona'
-              }
-              const unit = getUnit()
+              if (categoryProducts.length === 0) return null
 
               return (
+                <div key={category.id} className="mb-8">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                    {category.name}
+                  </h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    {categoryProducts.map((product: any) => {
+                      return renderProductCard(product)
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+            
+            {/* Товары без категории */}
+            {(() => {
+              const uncategorizedProducts = products.filter((p: any) => 
+                !p.global_category_id && !p.global_categories?.id
+              )
+              
+              if (uncategorizedProducts.length === 0) return null
+
+              return (
+                <div className="mb-8">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                    Boshqa mahsulotlar
+                  </h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+                    {uncategorizedProducts.map((product: any) => {
+                      return renderProductCard(product)
+                    })}
+                  </div>
+                </div>
+              )
+            })()}
+          </>
+        )}
+      </div>
+    </div>
+  )
+
+  function renderProductCard(product: any) {
+    const quantity = getQuantity(product.id)
+    const restaurantId = product.restaurant_id || product.restaurants?.id
+    
+    // Определяем единицу измерения из описания или используем по умолчанию
+    const getUnit = () => {
+      if (product.description?.toLowerCase().includes('kg') || product.description?.toLowerCase().includes('килограмм')) {
+        return 'kg'
+      }
+      if (product.description?.toLowerCase().includes('dona') || product.description?.toLowerCase().includes('шт')) {
+        return 'dona'
+      }
+      // По умолчанию используем 'dona'
+      return 'dona'
+    }
+    const unit = getUnit()
+
+    return (
                 <div
                   key={product.id}
                   className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col"

@@ -12,6 +12,7 @@ export default function NewProductPage() {
   const [profile, setProfile] = useState<any>(null)
   const [userLoading, setUserLoading] = useState(true)
   const [warehouses, setWarehouses] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -19,6 +20,7 @@ export default function NewProductPage() {
     restaurant_id: '',
     image_url: '',
     badge_text: '',
+    global_category_id: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -56,6 +58,14 @@ export default function NewProductPage() {
         .eq('is_active', true)
         .order('name')
       if (warehousesData) setWarehouses(warehousesData)
+
+      // Загружаем активные категории
+      const { data: categoriesData } = await supabase
+        .from('global_categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('name')
+      if (categoriesData) setCategories(categoriesData)
     }
 
     loadUser()
@@ -81,6 +91,7 @@ export default function NewProductPage() {
         price: parseFloat(formData.price),
         category_id: null,
         restaurant_id: formData.restaurant_id,
+        global_category_id: formData.global_category_id || null,
         image_url: formData.image_url || null,
         badge_text: formData.badge_text || null,
         is_available: true,
@@ -197,6 +208,28 @@ export default function NewProductPage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                 placeholder="0.00"
               />
+            </div>
+
+            <div>
+              <label htmlFor="global_category_id" className="block text-sm font-medium text-gray-700 mb-2">
+                Kategoriya
+              </label>
+              <select
+                id="global_category_id"
+                value={formData.global_category_id}
+                onChange={(e) => setFormData({ ...formData, global_category_id: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
+              >
+                <option value="">Kategoriyani tanlang (ixtiyoriy)</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-xs text-gray-500">
+                Faol kategoriyalardan birini tanlang
+              </p>
             </div>
 
             <div>

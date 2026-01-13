@@ -58,13 +58,23 @@ export default async function AdminProductsPage() {
               Mahsulotlarni boshqarish
             </h1>
           </div>
-          <a
-            href="/admin/products/new"
-            className="bg-black hover:bg-gray-800 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2"
-          >
-            <span>+</span>
-            <span>Yangi mahsulot</span>
-          </a>
+          <div className="flex gap-2 md:gap-3">
+            <a
+              href="/admin/products/categories"
+              className="bg-gray-900 hover:bg-gray-800 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2"
+            >
+              <span>📂</span>
+              <span className="hidden md:inline">Faol kategoriyalar</span>
+              <span className="md:hidden">Kategoriyalar</span>
+            </a>
+            <a
+              href="/admin/products/new"
+              className="bg-black hover:bg-gray-800 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors shadow-sm flex items-center gap-2"
+            >
+              <span>+</span>
+              <span>Yangi mahsulot</span>
+            </a>
+          </div>
         </div>
 
         <ProductsList 
