@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import { Header } from '@/components/common/Header'
 
 function CheckoutContent() {
   const router = useRouter()
@@ -169,8 +170,13 @@ function CheckoutContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Yuklanmoqda...</div>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center py-16">
+            <div className="text-gray-500">Yuklanmoqda...</div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -178,14 +184,16 @@ function CheckoutContent() {
   if (dishes.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
+        <Header />
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center py-12">
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
+            <div className="text-6xl mb-4">🛒</div>
             <p className="text-gray-500 text-lg mb-4">Savat bo'sh</p>
             <Link
-              href="/customer"
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+              href="/"
+              className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Omborlarga o'tish
+              Mahsulotlarga o'tish
             </Link>
           </div>
         </div>
@@ -195,24 +203,16 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/customer" className="text-2xl font-bold text-green-600 flex items-center gap-2">
-            <span className="text-3xl">🛒</span>
-            Baraka
-          </Link>
-        </div>
-      </div>
+      <Header />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Buyurtma berish</h1>
-          <p className="text-gray-600">Ma'lumotlaringizni to'ldiring</p>
+      <div className="container mx-auto px-4 py-6">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Buyurtma berish</h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6 space-y-6 border border-gray-100">
+            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4 md:space-y-6 border border-gray-100">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                   {error}
@@ -229,7 +229,7 @@ function CheckoutContent() {
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                   placeholder="Ko'cha, uy, kvartira"
                 />
               </div>
@@ -244,7 +244,7 @@ function CheckoutContent() {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                   placeholder="+998 (99) 123-45-67"
                 />
               </div>
@@ -258,7 +258,7 @@ function CheckoutContent() {
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
                   placeholder="Kuryer uchun qo'shimcha ma'lumot"
                 />
               </div>
@@ -266,7 +266,7 @@ function CheckoutContent() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
                 {submitting ? 'Buyurtma berilmoqda...' : 'Buyurtma berish'}
               </button>
@@ -274,32 +274,29 @@ function CheckoutContent() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-4 border border-gray-100">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-green-100 rounded-full p-2">
-                  <span className="text-xl">🛒</span>
-                </div>
-                <h2 className="text-xl font-bold text-gray-900">Sizning buyurtmangiz</h2>
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 sticky top-4 border border-gray-100">
+              <div className="mb-4 md:mb-6">
+                <h2 className="text-lg md:text-xl font-bold text-gray-900">Sizning buyurtmangiz</h2>
               </div>
               {restaurant && (
-                <p className="text-sm text-gray-500 mb-4">{restaurant.name}</p>
+                <p className="text-xs md:text-sm text-gray-500 mb-4">{restaurant.name}</p>
               )}
-              <div className="space-y-2 mb-6">
+              <div className="space-y-2 mb-4 md:mb-6">
                 {dishes.map((dish) => {
                   const quantity = cart[dish.id]?.quantity || 0
                   if (quantity === 0) return null
                   return (
-                    <div key={dish.id} className="flex justify-between text-sm">
-                      <span>{dish.name} × {quantity}</span>
-                      <span>{Number(dish.price * quantity).toLocaleString('ru-RU')} so'm</span>
+                    <div key={dish.id} className="flex justify-between text-xs md:text-sm text-gray-600">
+                      <span className="truncate mr-2 flex-1">{dish.name} × {quantity}</span>
+                      <span className="font-semibold whitespace-nowrap text-gray-900">{Number(dish.price * quantity).toLocaleString('ru-RU')} so'm</span>
                     </div>
                   )
                 })}
               </div>
-              <div className="border-t-2 border-gray-200 pt-4">
+              <div className="border-t border-gray-200 pt-3 md:pt-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-gray-700">Jami:</span>
-                  <span className="text-2xl font-bold text-green-600">{Number(getTotal()).toLocaleString('ru-RU')} so'm</span>
+                  <span className="text-sm md:text-base font-semibold text-gray-900">Jami:</span>
+                  <span className="text-xl md:text-2xl font-bold text-gray-900">{Number(getTotal()).toLocaleString('ru-RU')} so'm</span>
                 </div>
               </div>
             </div>
