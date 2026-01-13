@@ -263,3 +263,4 @@ WHERE id = 'ваш-user-id-из-выше-запроса';
 4. Проверьте логи в Vercel Dashboard → Deployments → Logs
 
 
+

@@ -20,3 +20,4 @@ WHERE badge_text IS NULL AND is_available = false;
 COMMENT ON COLUMN dishes.badge_text IS 'Текст бейджа на карточке товара (например: "Mavjud", "-15%", "Top"). Если NULL, бейдж не отображается.';
 
 
+

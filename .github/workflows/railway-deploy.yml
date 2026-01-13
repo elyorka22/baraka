@@ -1,0 +1,21 @@
+name: Railway Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Notify Railway
+        run: |
+          echo "Changes pushed to ${{ github.ref }}, Railway should auto-deploy"
+
+

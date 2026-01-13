@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Копируем package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем все зависимости (включая tsx)
+RUN npm ci
+
+# Копируем код бота
+COPY bot/ ./bot/
+COPY tsconfig.json ./
+
+# Запускаем бота
+CMD ["npm", "run", "bot:start"]
+

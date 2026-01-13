@@ -124,3 +124,4 @@ ON CONFLICT (id) DO NOTHING;
 3. Если ошибка сохраняется, проверьте логи в Supabase Dashboard → **Logs** → **Storage**
 
 
+

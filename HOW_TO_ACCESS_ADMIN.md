@@ -181,3 +181,4 @@ ORDER BY u.created_at DESC;
 - Основная документация: `README.md`
 - Настройка Supabase: `SUPABASE_SETUP.md`
 
+

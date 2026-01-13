@@ -25,3 +25,4 @@ DROP TABLE IF EXISTS banners CASCADE;
 -- не забудьте удалить bucket 'banners' вручную через Supabase Dashboard.
 
 
+

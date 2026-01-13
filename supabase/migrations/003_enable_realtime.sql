@@ -8,3 +8,4 @@ ALTER PUBLICATION supabase_realtime ADD TABLE order_assignments;
 ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
 
 
+

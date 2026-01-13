@@ -292,3 +292,4 @@ CREATE POLICY "Users can update own notifications"
 -- Это будет делаться через Edge Functions или серверные вызовы
 
 
+

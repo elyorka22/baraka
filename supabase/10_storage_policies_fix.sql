@@ -66,3 +66,4 @@ DROP POLICY IF EXISTS "Authenticated users can update categories" ON storage.obj
 DROP POLICY IF EXISTS "Authenticated users can delete categories" ON storage.objects;
 
 
+

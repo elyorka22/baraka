@@ -31,3 +31,4 @@ WHERE id IN ('banners', 'restaurants', 'dishes', 'categories')
 ORDER BY id;
 
 
+
