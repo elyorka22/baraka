@@ -13,6 +13,7 @@ interface Restaurant {
   phone: string | null
   image_url: string | null
   is_active: boolean
+  telegram_chat_id: string | null
 }
 
 interface Dish {
@@ -50,7 +51,7 @@ interface RestaurantTabsProps {
 }
 
 export function RestaurantTabs({ restaurant, dishes, categories, stats }: RestaurantTabsProps) {
-  const [activeTab, setActiveTab] = useState<'dishes' | 'stats' | 'settings'>('dishes')
+  const [activeTab, setActiveTab] = useState<'dishes' | 'stats' | 'settings' | 'bot'>('dishes')
   const router = useRouter()
 
   // Группируем товары по категориям для отображения
@@ -96,6 +97,16 @@ export function RestaurantTabs({ restaurant, dishes, categories, stats }: Restau
             }`}
           >
             Sozlamalar
+          </button>
+          <button
+            onClick={() => setActiveTab('bot')}
+            className={`px-4 md:px-6 py-3 md:py-4 text-sm md:text-base font-medium border-b-2 transition-colors ${
+              activeTab === 'bot'
+                ? 'border-gray-900 text-gray-900'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Bot sozlamalari
           </button>
         </nav>
       </div>
@@ -313,8 +324,108 @@ export function RestaurantTabs({ restaurant, dishes, categories, stats }: Restau
             <EditRestaurantForm restaurant={restaurant} />
           </div>
         )}
+
+        {activeTab === 'bot' && (
+          <div className="space-y-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Bot sozlamalari</h2>
+            <BotSettingsForm restaurant={restaurant} />
+          </div>
+        )}
       </div>
     </div>
+  )
+}
+
+// Компонент для настройки бота
+function BotSettingsForm({ restaurant }: { restaurant: Restaurant }) {
+  const [chatId, setChatId] = useState(restaurant.telegram_chat_id || '')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setSuccess(false)
+    setLoading(true)
+
+    try {
+      const response = await fetch(`/api/restaurants/${restaurant.id}/telegram-chat-id`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ telegram_chat_id: chatId || null }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Xatolik yuz berdi')
+      }
+
+      setSuccess(true)
+      setTimeout(() => {
+        setSuccess(false)
+      }, 3000)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4 md:space-y-6 border border-gray-100">
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          Chat ID muvaffaqiyatli saqlandi
+        </div>
+      )}
+
+      <div>
+        <label htmlFor="telegram_chat_id" className="block text-sm font-medium text-gray-700 mb-2">
+          Telegram Chat ID
+        </label>
+        <input
+          id="telegram_chat_id"
+          type="text"
+          value={chatId}
+          onChange={(e) => setChatId(e.target.value)}
+          placeholder="Masalan: 123456789"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
+        />
+        <p className="mt-2 text-sm text-gray-500">
+          Chat ID ni olish uchun: @userinfobot ga yozing yoki @getidsbot dan oling
+        </p>
+        <p className="mt-1 text-xs text-gray-400">
+          Agar Chat ID ko'rsatilsa, yangi buyurtmalar haqida Telegram orqali xabar yuboriladi
+        </p>
+      </div>
+
+      <div className="flex space-x-4">
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex-1 bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+        >
+          {loading ? 'Saqlanmoqda...' : 'Saqlash'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setChatId('')}
+          className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Tozalash
+        </button>
+      </div>
+    </form>
   )
 }
 

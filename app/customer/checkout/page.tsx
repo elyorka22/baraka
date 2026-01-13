@@ -156,6 +156,20 @@ function CheckoutContent() {
       return
     }
 
+    // Отправляем уведомление в Telegram (не блокируем процесс, если не удалось)
+    try {
+      await fetch('/api/orders/notify-telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId: order.id }),
+      })
+    } catch (error) {
+      console.error('Failed to send Telegram notification:', error)
+      // Не показываем ошибку пользователю, если не удалось отправить уведомление
+    }
+
     // Очищаем корзину
     localStorage.removeItem('cart')
 
