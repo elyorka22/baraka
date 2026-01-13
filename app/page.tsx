@@ -15,14 +15,18 @@ export default function HomePage() {
       const supabase = createSupabaseClient()
       
       // Загружаем активные категории
-      const { data: categoriesData } = await supabase
+      const { data: categoriesData, error: categoriesError } = await supabase
         .from('global_categories')
         .select('*')
         .eq('is_active', true)
         .order('name')
 
+      if (categoriesError) {
+        console.error('Error loading categories:', categoriesError)
+      }
+
       // Загружаем все доступные товары с категориями
-      const { data: productsData } = await supabase
+      const { data: productsData, error: productsError } = await supabase
         .from('dishes')
         .select(`
           *,
@@ -37,6 +41,10 @@ export default function HomePage() {
         `)
         .eq('is_available', true)
         .order('created_at', { ascending: false })
+
+      if (productsError) {
+        console.error('Error loading products:', productsError)
+      }
 
       if (productsData) {
         setProducts(productsData)
@@ -117,7 +125,7 @@ export default function HomePage() {
             <div className="text-6xl mb-4">📦</div>
             <p className="text-gray-500 text-lg">Hozircha mahsulotlar yo'q</p>
           </div>
-        ) : (
+        ) : categories.length > 0 ? (
           <>
             {/* Группируем товары по категориям */}
             {categories.map((category) => {
@@ -315,6 +323,89 @@ export default function HomePage() {
               )
             })()}
           </>
+        ) : (
+          /* Если категорий нет, показываем все товары без группировки */
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+            {products.map((product: any) => {
+              const quantity = getQuantity(product.id)
+              const restaurantId = product.restaurant_id || product.restaurants?.id
+              
+              const getUnit = () => {
+                if (product.description?.toLowerCase().includes('kg') || product.description?.toLowerCase().includes('килограмм')) {
+                  return 'kg'
+                }
+                if (product.description?.toLowerCase().includes('dona') || product.description?.toLowerCase().includes('шт')) {
+                  return 'dona'
+                }
+                return 'dona'
+              }
+              const unit = getUnit()
+
+              return (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col"
+                >
+                  <div className="relative w-full aspect-square bg-white overflow-hidden">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                        <span className="text-4xl">📦</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-2 right-2">
+                      {quantity > 0 ? (
+                        <div className="flex items-center space-x-1 bg-white rounded-lg shadow-md px-1.5 py-1">
+                          <button
+                            onClick={() => removeFromCart(product.id)}
+                            className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                          >
+                            −
+                          </button>
+                          <span className="font-bold text-gray-900 w-5 text-center text-xs">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => addToCart(product.id, restaurantId)}
+                            className="bg-black hover:bg-gray-800 text-white w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => addToCart(product.id, restaurantId)}
+                          className="bg-black hover:bg-gray-800 text-white w-8 h-8 rounded-full flex items-center justify-center font-semibold text-base shadow-md transition-colors"
+                        >
+                          +
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p-3 flex-1 flex flex-col">
+                    <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    {product.description && (
+                      <p className="text-gray-500 text-xs mb-2 line-clamp-2">
+                        {product.description}
+                      </p>
+                    )}
+                    <div className="mt-auto">
+                      <span className="text-sm font-bold text-gray-900">
+                        {Number(product.price).toLocaleString('ru-RU')} so'm / {unit}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         )}
       </div>
     </div>
