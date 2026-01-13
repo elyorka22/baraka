@@ -125,12 +125,12 @@ export default function HomePage() {
                   key={product.id}
                   className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col"
                 >
-                  <div className="relative w-full aspect-square">
+                  <div className="relative w-full aspect-square bg-gray-50 overflow-hidden">
                     {product.image_url ? (
                       <img
                         src={product.image_url}
                         alt={product.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-100 flex items-center justify-center">
