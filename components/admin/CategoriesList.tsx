@@ -72,10 +72,10 @@ export function CategoriesList({ categories: initialCategories }: CategoriesList
                 } disabled:bg-gray-400`}
               >
                 {updating === category.id
-                  ? '...'
+                  ? 'Yuklanmoqda...'
                   : category.is_active
-                  ? '❌ Yashirish'
-                  : '✅ Ko\'rsatish'}
+                  ? 'Yashirish'
+                  : 'Ko\'rsatish'}
               </button>
             </div>
           </div>
@@ -83,7 +83,7 @@ export function CategoriesList({ categories: initialCategories }: CategoriesList
       </div>
       {categories.length === 0 && (
         <div className="text-center py-16">
-          <div className="text-6xl mb-4">📂</div>
+          <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4"></div>
           <p className="text-gray-500 text-lg">Hozircha kategoriyalar yo'q</p>
         </div>
       )}

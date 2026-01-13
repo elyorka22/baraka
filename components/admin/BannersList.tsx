@@ -82,34 +82,33 @@ export function BannersList({ banners: initialBanners }: BannersListProps) {
                 </div>
                 {banner.link_url && (
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>🔗</span>
-                    <a href={banner.link_url} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-700 hover:underline font-medium">{banner.link_url}</a>
+                    <a href={banner.link_url} target="_blank" rel="noopener noreferrer" className="text-gray-900 hover:text-gray-700 hover:underline font-medium">{banner.link_url}</a>
                   </div>
                 )}
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => router.push(`/admin/banners/${banner.id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                  className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                 >
-                  ✏️ Tahrirlash
+                  Tahrirlash
                 </button>
                 <button
                   onClick={() => handleToggleActive(banner.id, banner.is_active)}
                   className={`px-4 py-2 rounded-lg transition-colors font-medium ${
                     banner.is_active
-                      ? 'bg-yellow-500 hover:bg-yellow-600'
-                      : 'bg-green-600 hover:bg-green-700'
+                      ? 'bg-gray-700 hover:bg-gray-600'
+                      : 'bg-black hover:bg-gray-800'
                   } text-white`}
                 >
-                  {banner.is_active ? '❌ Deaktiv' : '✅ Aktiv'}
+                  {banner.is_active ? 'Deaktiv' : 'Aktiv'}
                 </button>
                 <button
                   onClick={() => handleDelete(banner.id)}
                   disabled={deleting === banner.id}
-                  className="bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+                  className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors font-medium"
                 >
-                  {deleting === banner.id ? '...' : '🗑️ O\'chirish'}
+                  {deleting === banner.id ? 'O\'chirilmoqda...' : 'O\'chirish'}
                 </button>
               </div>
             </div>
@@ -117,8 +116,8 @@ export function BannersList({ banners: initialBanners }: BannersListProps) {
         </div>
       ))}
       {banners.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-xl shadow border border-gray-100">
-          <div className="text-6xl mb-4">🎯</div>
+        <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4"></div>
           <p className="text-gray-500 text-lg">Hozircha bannerlar yo'q</p>
         </div>
       )}

@@ -78,14 +78,14 @@ export function DishesManagement({ restaurantId, categories, dishes: initialDish
             </div>
             <a
               href={`/admin/restaurants/${restaurantId}/categories/${category.id}`}
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              className="text-gray-900 hover:text-gray-700 text-sm font-medium"
             >
-              ✏️ Tahrirlash
+              Tahrirlash
             </a>
           </div>
           {categoryDishes.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-4xl mb-2">📦</div>
+              <div className="w-12 h-12 bg-gray-200 rounded-lg mx-auto mb-2"></div>
               <p className="text-gray-500">Bu kategoriyada mahsulotlar yo'q</p>
             </div>
           ) : (
@@ -99,8 +99,8 @@ export function DishesManagement({ restaurantId, categories, dishes: initialDish
                       className="w-full h-40 object-cover rounded-lg mb-3"
                     />
                   ) : (
-                    <div className="w-full h-40 bg-gradient-to-br from-green-50 to-green-100 rounded-lg mb-3 flex items-center justify-center">
-                      <span className="text-4xl">📦</span>
+                    <div className="w-full h-40 bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gray-300 rounded-lg"></div>
                     </div>
                   )}
                   <h3 className="font-bold text-gray-900 mb-1">{dish.name}</h3>
@@ -123,26 +123,26 @@ export function DishesManagement({ restaurantId, categories, dishes: initialDish
                   <div className="flex space-x-2">
                     <button
                       onClick={() => router.push(`/admin/restaurants/${restaurantId}/dishes/${dish.id}`)}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium"
+                      className="flex-1 bg-black hover:bg-gray-800 text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium"
                     >
-                      ✏️ Tahrirlash
+                      Tahrirlash
                     </button>
                     <button
                       onClick={() => handleToggleAvailable(dish.id, dish.is_available)}
                       className={`px-3 py-2 rounded-lg text-sm transition-colors font-medium ${
                         dish.is_available
-                          ? 'bg-yellow-500 hover:bg-yellow-600'
-                          : 'bg-green-600 hover:bg-green-700'
+                          ? 'bg-gray-700 hover:bg-gray-600'
+                          : 'bg-black hover:bg-gray-800'
                       } text-white`}
                     >
-                      {dish.is_available ? '❌ Yashirish' : '✅ Ko\'rsatish'}
+                      {dish.is_available ? 'Yashirish' : 'Ko\'rsatish'}
                     </button>
                     <button
                       onClick={() => handleDelete(dish.id)}
                       disabled={deleting === dish.id}
-                      className="bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium"
+                      className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium"
                     >
-                      {deleting === dish.id ? '...' : '🗑️'}
+                      {deleting === dish.id ? 'O\'chirilmoqda...' : 'O\'chirish'}
                     </button>
                   </div>
                 </div>

@@ -67,7 +67,7 @@ export function RestaurantsList({ restaurants: initialRestaurants }: Restaurants
               />
             ) : (
               <div className="w-full h-40 md:h-48 bg-gray-100 flex items-center justify-center">
-                <span className="text-4xl md:text-6xl">🏪</span>
+                <div className="w-16 h-16 bg-gray-300 rounded-lg"></div>
               </div>
             )}
             <span className={`absolute top-2 right-2 px-2 py-1 rounded text-xs font-semibold ${
@@ -89,13 +89,11 @@ export function RestaurantsList({ restaurants: initialRestaurants }: Restaurants
             )}
             {restaurant.address && (
               <div className="flex items-center text-gray-500 text-xs md:text-sm mb-1">
-                <span className="mr-1">📍</span>
                 <span className="truncate">{restaurant.address}</span>
               </div>
             )}
             {restaurant.phone && (
               <div className="flex items-center text-gray-500 text-xs md:text-sm mb-3">
-                <span className="mr-1">📞</span>
                 <span>{restaurant.phone}</span>
               </div>
             )}
@@ -104,13 +102,13 @@ export function RestaurantsList({ restaurants: initialRestaurants }: Restaurants
                 onClick={() => router.push(`/admin/restaurants/${restaurant.id}/dishes`)}
                 className="bg-black hover:bg-gray-800 text-white px-2 md:px-3 py-2 rounded-lg transition-colors font-medium text-xs md:text-sm"
               >
-                📦 Mahsulotlar
+                Mahsulotlar
               </button>
               <button
                 onClick={() => router.push(`/admin/restaurants/${restaurant.id}`)}
                 className="bg-gray-900 hover:bg-gray-800 text-white px-2 md:px-3 py-2 rounded-lg transition-colors font-medium text-xs md:text-sm"
               >
-                ✏️ Tahrirlash
+                Tahrirlash
               </button>
               <button
                 onClick={() => handleToggleActive(restaurant.id, restaurant.is_active)}
@@ -120,14 +118,14 @@ export function RestaurantsList({ restaurants: initialRestaurants }: Restaurants
                     : 'bg-gray-900 hover:bg-gray-800'
                 } text-white`}
               >
-                {restaurant.is_active ? '❌ Deaktiv' : '✅ Aktiv'}
+                {restaurant.is_active ? 'Deaktiv' : 'Aktiv'}
               </button>
               <button
                 onClick={() => handleDelete(restaurant.id)}
                 disabled={deleting === restaurant.id}
                 className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white px-2 md:px-3 py-2 rounded-lg transition-colors font-medium text-xs md:text-sm"
               >
-                {deleting === restaurant.id ? '...' : '🗑️ O\'chirish'}
+                {deleting === restaurant.id ? 'O\'chirilmoqda...' : 'O\'chirish'}
               </button>
             </div>
           </div>
@@ -135,7 +133,7 @@ export function RestaurantsList({ restaurants: initialRestaurants }: Restaurants
       ))}
       {restaurants.length === 0 && (
         <div className="col-span-full text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
-          <div className="text-6xl mb-4">🏪</div>
+          <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4"></div>
           <p className="text-gray-500 text-lg">Hozircha omborlar yo'q</p>
         </div>
       )}

@@ -54,72 +54,62 @@ export default async function AdminDashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-gray-100 rounded-full p-3">
-                <span className="text-2xl">🏪</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Склады</h3>
-                <p className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {warehousesCount.count || 0}
-                </p>
-              </div>
+            <div className="mb-2">
+              <h3 className="text-sm font-medium text-gray-500 mb-1">Склады</h3>
+              <p className="text-2xl md:text-3xl font-bold text-gray-900">
+                {warehousesCount.count || 0}
+              </p>
+            </div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-gray-900" style={{ width: '100%' }}></div>
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-gray-100 rounded-full p-3">
-                <span className="text-2xl">📦</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Продукты</h3>
-                <p className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {productsCount.count || 0}
-                </p>
-              </div>
+            <div className="mb-2">
+              <h3 className="text-sm font-medium text-gray-500 mb-1">Продукты</h3>
+              <p className="text-2xl md:text-3xl font-bold text-gray-900">
+                {productsCount.count || 0}
+              </p>
+            </div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-gray-900" style={{ width: '100%' }}></div>
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-gray-100 rounded-full p-3">
-                <span className="text-2xl">🛒</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Заказы</h3>
-                <p className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {ordersCount.count || 0}
-                </p>
-              </div>
+            <div className="mb-2">
+              <h3 className="text-sm font-medium text-gray-500 mb-1">Заказы</h3>
+              <p className="text-2xl md:text-3xl font-bold text-gray-900">
+                {ordersCount.count || 0}
+              </p>
+            </div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-gray-900" style={{ width: '100%' }}></div>
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-gray-100 rounded-full p-3">
-                <span className="text-2xl">👥</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Пользователи</h3>
-                <p className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {usersCount.count || 0}
-                </p>
-              </div>
+            <div className="mb-2">
+              <h3 className="text-sm font-medium text-gray-500 mb-1">Пользователи</h3>
+              <p className="text-2xl md:text-3xl font-bold text-gray-900">
+                {usersCount.count || 0}
+              </p>
+            </div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-gray-900" style={{ width: '100%' }}></div>
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-gray-100 rounded-full p-3">
-                <span className="text-2xl">🎯</span>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-1">Баннеры</h3>
-                <p className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {bannersCount?.count || 0}
-                </p>
-              </div>
+            <div className="mb-2">
+              <h3 className="text-sm font-medium text-gray-500 mb-1">Баннеры</h3>
+              <p className="text-2xl md:text-3xl font-bold text-gray-900">
+                {bannersCount?.count || 0}
+              </p>
+            </div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-gray-900" style={{ width: '100%' }}></div>
             </div>
           </div>
         </div>
@@ -132,25 +122,25 @@ export default async function AdminDashboardPage() {
                 href="/admin/restaurants"
                 className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
               >
-                🏪 Управление складами
+                Управление складами
               </a>
               <a
                 href="/admin/products"
                 className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
               >
-                📦 Управление продуктами
+                Управление продуктами
               </a>
               <a
                 href="/admin/banners"
                 className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
               >
-                🎯 Управление баннерами
+                Управление баннерами
               </a>
               <a
                 href="/admin/users"
                 className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
               >
-                👥 Управление пользователями
+                Управление пользователями
               </a>
             </div>
           </div>

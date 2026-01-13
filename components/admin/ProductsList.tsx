@@ -174,8 +174,8 @@ export function ProductsList({ products: initialProducts, warehouses }: Products
                   className="w-full h-48 object-cover"
                 />
               ) : (
-                <div className="w-full h-48 bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center">
-                  <span className="text-5xl">📦</span>
+                <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                  <div className="w-16 h-16 bg-gray-300 rounded-lg"></div>
                 </div>
               )}
               <div className="p-6">
