@@ -54,36 +54,35 @@ export function Navbar({ role, userName }: NavbarProps) {
   }
 
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-white border-b border-gray-200">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8">
-            <Link href="/" className="text-2xl font-bold text-green-600 flex items-center gap-2">
-              <span className="text-3xl">🛒</span>
+        <div className="flex justify-between items-center h-14 md:h-16">
+          <div className="flex items-center space-x-4 md:space-x-8">
+            <Link href="/" className="text-xl font-bold text-gray-900">
               Baraka
             </Link>
-            <div className="flex space-x-4">
+            <div className="flex space-x-2 md:space-x-4">
               {getNavLinks().map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="text-gray-700 hover:text-gray-900 px-2 md:px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             {userName && (
-              <span className="text-gray-700 text-sm">
+              <span className="text-gray-700 text-xs md:text-sm hidden md:inline">
                 {userName}
               </span>
             )}
             <button
               onClick={handleLogout}
               disabled={loading}
-              className="bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-colors"
             >
               {loading ? 'Chiqilmoqda...' : 'Chiqish'}
             </button>
