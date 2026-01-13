@@ -127,7 +127,7 @@ export default function CartPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4 border border-gray-100">
+            <div className="bg-white rounded-lg shadow-sm p-3 md:p-4 space-y-3 md:space-y-4 border border-gray-100">
               {dishes.map((dish) => {
                 // Определяем единицу измерения
                 const getUnit = () => {
@@ -140,10 +140,12 @@ export default function CartPage() {
                   return 'dona'
                 }
                 const unit = getUnit()
+                const quantity = cart[dish.id]?.quantity || 0
                 
                 return (
-                  <div key={dish.id} className="flex items-center space-x-3 md:space-x-4 pb-4 border-b border-gray-100 last:border-0">
-                    <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-100">
+                  <div key={dish.id} className="bg-white rounded-lg border border-gray-100 overflow-hidden flex flex-col md:flex-row">
+                    {/* Изображение товара */}
+                    <div className="relative w-full md:w-32 h-32 md:h-32 bg-white flex-shrink-0 border-b md:border-b-0 md:border-r border-gray-100">
                       {dish.image_url ? (
                         <img
                           src={dish.image_url}
@@ -152,40 +154,54 @@ export default function CartPage() {
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                          <span className="text-2xl md:text-3xl">📦</span>
+                          <span className="text-3xl">📦</span>
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-gray-900 text-sm md:text-base mb-1">{dish.name}</h3>
-                      <p className="text-xs md:text-sm text-gray-500 mb-1">{dish.restaurants?.name}</p>
-                      <p className="text-sm md:text-base font-bold text-gray-900">
-                        {Number(dish.price).toLocaleString('ru-RU')} so'm / {unit}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => updateQuantity(dish.id, -1)}
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-8 h-8 md:w-10 md:h-10 rounded flex items-center justify-center font-semibold text-sm transition-colors"
-                      >
-                        −
-                      </button>
-                      <span className="font-bold text-gray-900 w-6 md:w-10 text-center text-sm md:text-base">
-                        {cart[dish.id]?.quantity || 0}
-                      </span>
-                      <button
-                        onClick={() => updateQuantity(dish.id, 1)}
-                        className="bg-black hover:bg-gray-800 text-white w-8 h-8 md:w-10 md:h-10 rounded flex items-center justify-center font-semibold text-sm transition-colors"
-                      >
-                        +
-                      </button>
-                      <button
-                        onClick={() => removeItem(dish.id)}
-                        className="text-gray-400 hover:text-gray-600 ml-2 text-xl font-bold transition-colors"
-                        title="O'chirish"
-                      >
-                        ×
-                      </button>
+                    
+                    {/* Информация о товаре */}
+                    <div className="flex-1 p-3 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2">
+                          {dish.name}
+                        </h3>
+                        {dish.description && (
+                          <p className="text-gray-500 text-xs mb-2 line-clamp-1">
+                            {dish.description}
+                          </p>
+                        )}
+                        <p className="text-sm font-bold text-gray-900">
+                          {Number(dish.price).toLocaleString('ru-RU')} so'm / {unit}
+                        </p>
+                      </div>
+                      
+                      {/* Кнопки управления количеством */}
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center space-x-1 bg-white rounded-lg shadow-sm px-1.5 py-1 border border-gray-100">
+                          <button
+                            onClick={() => updateQuantity(dish.id, -1)}
+                            className="bg-gray-100 hover:bg-gray-200 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                          >
+                            −
+                          </button>
+                          <span className="font-bold text-gray-900 w-5 text-center text-xs">
+                            {quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(dish.id, 1)}
+                            className="bg-black hover:bg-gray-800 text-white w-6 h-6 rounded flex items-center justify-center font-semibold text-sm transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <button
+                          onClick={() => removeItem(dish.id)}
+                          className="text-gray-400 hover:text-gray-600 text-lg font-bold transition-colors"
+                          title="O'chirish"
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )
@@ -195,24 +211,24 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 sticky top-4 border border-gray-100">
-              <div className="mb-6">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900">Jami</h2>
+              <div className="mb-4 md:mb-6">
+                <h2 className="text-lg md:text-xl font-bold text-gray-900">Jami</h2>
               </div>
-              <div className="space-y-2 md:space-y-3 mb-6">
+              <div className="space-y-2 mb-4 md:mb-6">
                 {dishes.map((dish) => {
                   const quantity = cart[dish.id]?.quantity || 0
                   return (
                     <div key={dish.id} className="flex justify-between text-xs md:text-sm text-gray-600">
-                      <span className="truncate mr-2">{dish.name} × {quantity}</span>
-                      <span className="font-semibold whitespace-nowrap">{Number(dish.price * quantity).toLocaleString('ru-RU')} so'm</span>
+                      <span className="truncate mr-2 flex-1">{dish.name} × {quantity}</span>
+                      <span className="font-semibold whitespace-nowrap text-gray-900">{Number(dish.price * quantity).toLocaleString('ru-RU')} so'm</span>
                     </div>
                   )
                 })}
               </div>
-              <div className="border-t border-gray-200 pt-4 mb-6">
+              <div className="border-t border-gray-200 pt-3 md:pt-4 mb-4 md:mb-6">
                 <div className="flex justify-between items-center">
-                  <span className="text-base md:text-lg font-semibold text-gray-900">Jami:</span>
-                  <span className="text-xl md:text-2xl font-bold text-gray-900">{Number(getTotal()).toLocaleString('ru-RU')} so'm</span>
+                  <span className="text-sm md:text-base font-semibold text-gray-900">Jami:</span>
+                  <span className="text-lg md:text-xl font-bold text-gray-900">{Number(getTotal()).toLocaleString('ru-RU')} so'm</span>
                 </div>
               </div>
               <Link
