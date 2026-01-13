@@ -37,10 +37,11 @@ export default async function EditDishPage({
     redirect(`/admin/restaurants/${id}/dishes`)
   }
 
+  // Загружаем активные глобальные категории
   const { data: categories } = await supabase
-    .from('categories')
+    .from('global_categories')
     .select('*')
-    .eq('restaurant_id', id)
+    .eq('is_active', true)
     .order('name')
 
   return (
