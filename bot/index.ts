@@ -22,14 +22,12 @@ Bu bot orqali siz:
 
 Quyidagi tugmalardan birini tanlang:`
 
-  // Создаем инлайн кнопки
+  // Создаем инлайн кнопки (в одну строку под полем ввода)
   const options = {
     reply_markup: {
       inline_keyboard: [
         [
-          { text: 'ℹ️ Bot haqida', callback_data: 'bot_info' }
-        ],
-        [
+          { text: 'ℹ️ Bot haqida', callback_data: 'bot_info' },
           { text: '🏪 Sotuvchi bo\'lish', callback_data: 'become_seller' }
         ]
       ]
@@ -152,9 +150,7 @@ Yordam olish uchun /help buyrug'ini yuboring yoki quyidagi tugmalardan foydalani
     reply_markup: {
       inline_keyboard: [
         [
-          { text: 'ℹ️ Bot haqida', callback_data: 'bot_info' }
-        ],
-        [
+          { text: 'ℹ️ Bot haqida', callback_data: 'bot_info' },
           { text: '🏪 Sotuvchi bo\'lish', callback_data: 'become_seller' }
         ]
       ]
