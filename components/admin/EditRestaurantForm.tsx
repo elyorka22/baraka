@@ -56,7 +56,9 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
       return
     }
 
-    router.push('/admin/restaurants')
+    // Обновляем страницу для отображения изменений
+    router.refresh()
+    setError(null)
   }
 
   return (
