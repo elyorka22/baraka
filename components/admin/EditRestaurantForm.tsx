@@ -31,6 +31,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,9 +57,18 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
       return
     }
 
+    // Показываем сообщение об успехе
+    setSuccess(true)
+    setError(null)
+    setLoading(false)
+    
+    // Скрываем сообщение через 3 секунды
+    setTimeout(() => {
+      setSuccess(false)
+    }, 3000)
+    
     // Обновляем страницу для отображения изменений
     router.refresh()
-    setError(null)
   }
 
   return (
@@ -66,6 +76,12 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          Ma'lumotlar muvaffaqiyatli saqlandi
         </div>
       )}
 
