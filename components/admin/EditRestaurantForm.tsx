@@ -60,7 +60,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-100">
+    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-4 md:p-6 space-y-4 md:space-y-6 border border-gray-100">
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error}
@@ -77,7 +77,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -90,7 +90,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           rows={4}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -103,7 +103,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
           type="text"
           value={formData.address}
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -116,7 +116,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
           type="tel"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
         />
       </div>
 
@@ -126,7 +126,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
             type="checkbox"
             checked={formData.is_active}
             onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-            className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+            className="rounded border-gray-300 text-gray-900 focus:ring-gray-500"
           />
           <span className="text-sm font-medium text-gray-700">Активен</span>
         </label>
@@ -143,7 +143,7 @@ export function EditRestaurantForm({ restaurant }: EditRestaurantFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+          className="flex-1 bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
         >
           {loading ? 'Сохранение...' : 'Сохранить'}
         </button>
