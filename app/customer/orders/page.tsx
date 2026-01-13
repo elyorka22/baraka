@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { LogoutButton } from '@/components/common/LogoutButton'
+import { Header } from '@/components/common/Header'
 
 export default function CustomerOrdersPage() {
   const router = useRouter()
@@ -128,43 +128,28 @@ export default function CustomerOrdersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/customer" className="text-2xl font-bold text-green-600 flex items-center gap-2">
-              <span className="text-3xl">🛒</span>
-              Baraka
-            </Link>
-            <div className="flex space-x-4 items-center">
-              <Link
-                href="/customer"
-                className="text-gray-700 hover:text-green-600 font-medium transition-colors"
-              >
-                Menyu
-              </Link>
-              <LogoutButton />
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header />
 
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Mening buyurtmalarim</h1>
+      <div className="container mx-auto px-4 py-6">
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Mening buyurtmalarim</h1>
+        </div>
 
         {orders.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
+            <div className="text-6xl mb-4">📦</div>
             <p className="text-gray-500 text-lg mb-4">Hozircha buyurtmalaringiz yo'q</p>
             <Link
-              href="/customer"
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
+              href="/"
+              className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Restoranlarga o'tish
+              Mahsulotlarga o'tish
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {orders.map((order) => (
-              <div key={order.id} className="bg-white rounded-lg shadow-lg p-6">
+              <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 md:p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -174,7 +159,7 @@ export default function CustomerOrdersPage() {
                       {order.restaurants?.name} • {new Date(order.created_at).toLocaleString('ru-RU')}
                     </p>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                  <span className={`px-2 md:px-3 py-1 rounded text-xs md:text-sm font-medium ${getStatusColor(order.status)}`}>
                     {getStatusLabel(order.status)}
                   </span>
                 </div>
@@ -197,8 +182,8 @@ export default function CustomerOrdersPage() {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold text-gray-900">
-                    Jami: {order.total_price} so'm
+                  <span className="text-base md:text-lg font-bold text-gray-900">
+                    Jami: {Number(order.total_price).toLocaleString('ru-RU')} so'm
                   </span>
                 </div>
               </div>

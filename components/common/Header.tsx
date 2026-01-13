@@ -7,6 +7,7 @@ import { LogoutButton } from './LogoutButton'
 
 export function Header() {
   const [user, setUser] = useState<any>(null)
+  const [userRole, setUserRole] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [cartCount, setCartCount] = useState(0)
 
@@ -16,6 +17,17 @@ export function Header() {
       const { data: { user: currentUser } } = await supabase.auth.getUser()
       if (currentUser) {
         setUser(currentUser)
+        
+        // Загружаем роль пользователя
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', currentUser.id)
+          .single()
+        
+        if (profile) {
+          setUserRole(profile.role)
+        }
       }
       setLoading(false)
     }
@@ -109,7 +121,13 @@ export function Header() {
             </Link>
             {user ? (
               <Link
-                href="/customer/orders"
+                href={
+                  userRole === 'super_admin' ? '/admin/dashboard' :
+                  userRole === 'manager' ? '/manager/dashboard' :
+                  userRole === 'collector' ? '/collector/orders' :
+                  userRole === 'courier' ? '/courier/orders' :
+                  '/customer/orders'
+                }
                 className="text-gray-900 hover:text-gray-700 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
