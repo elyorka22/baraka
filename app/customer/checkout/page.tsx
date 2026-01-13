@@ -67,6 +67,17 @@ function CheckoutContent() {
             if (dishesData[0]?.restaurants) {
               setRestaurant(dishesData[0].restaurants)
             }
+            // Определяем restaurantId из корзины, если не передан в URL
+            if (!restaurantId && dishesData.length > 0) {
+              const firstDish = dishesData[0]
+              const cartItem = cartData[firstDish.id]
+              if (cartItem?.restaurantId) {
+                // Обновляем URL с restaurantId
+                router.replace(`/customer/checkout?restaurant=${cartItem.restaurantId}`)
+              } else if (firstDish.restaurant_id) {
+                router.replace(`/customer/checkout?restaurant=${firstDish.restaurant_id}`)
+              }
+            }
           }
         }
       }
@@ -89,7 +100,10 @@ function CheckoutContent() {
     setError(null)
     setSubmitting(true)
 
-    if (!restaurantId || !restaurant) {
+    // Определяем restaurantId из корзины или из URL
+    const finalRestaurantId = restaurantId || dishes[0]?.restaurant_id || cart[Object.keys(cart)[0]]?.restaurantId
+    
+    if (!finalRestaurantId || !restaurant) {
       setError('Xatolik: ombor topilmadi')
       setSubmitting(false)
       return
@@ -108,7 +122,7 @@ function CheckoutContent() {
       .from('orders')
       .insert([{
         user_id: user?.id || null,
-        restaurant_id: restaurantId,
+        restaurant_id: finalRestaurantId,
         status: 'pending',
         total_price: getTotal(),
         address: formData.address,
