@@ -176,6 +176,8 @@ export default function HomePage() {
                                 src={product.image_url}
                                 alt={product.name}
                                 className="w-full h-full object-contain"
+                                loading="lazy"
+                                decoding="async"
                               />
                             ) : (
                               <div className="w-full h-full bg-gray-100 flex items-center justify-center">
@@ -274,6 +276,8 @@ export default function HomePage() {
                                 src={product.image_url}
                                 alt={product.name}
                                 className="w-full h-full object-contain"
+                                loading="lazy"
+                                decoding="async"
                               />
                             ) : (
                               <div className="w-full h-full bg-gray-100 flex items-center justify-center">
