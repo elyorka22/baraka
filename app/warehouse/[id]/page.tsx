@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/common/Navbar'
 import { WarehouseTabs } from '@/components/warehouse/WarehouseTabs'
 
-// Кешируем страницу на 30 секунд для улучшения производительности
-export const revalidate = 30
+// Отключаем кеширование для этой страницы, чтобы изменения были видны сразу
+export const dynamic = 'force-dynamic'
 
 export default async function WarehousePage({
   params,
