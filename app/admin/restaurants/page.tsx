@@ -25,7 +25,7 @@ export default async function AdminRestaurantsPage() {
 
   const { data: restaurants } = await supabase
     .from('restaurants')
-    .select('*')
+    .select('*, profiles!restaurants_manager_id_fkey(id, full_name, email)')
     .order('created_at', { ascending: false })
 
   return (

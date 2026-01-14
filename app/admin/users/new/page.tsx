@@ -23,6 +23,12 @@ export default async function CreateUserPage() {
     redirect('/')
   }
 
+  // Загружаем список складов для выбора
+  const { data: restaurants } = await supabase
+    .from('restaurants')
+    .select('id, name')
+    .order('name')
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar role="super_admin" userName={profile.full_name || user.email || undefined} />
@@ -43,7 +49,7 @@ export default async function CreateUserPage() {
           </p>
         </div>
 
-        <CreateUserForm />
+        <CreateUserForm restaurants={restaurants || []} />
       </div>
     </div>
   )

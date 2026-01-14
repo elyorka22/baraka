@@ -12,7 +12,13 @@ interface Restaurant {
   phone: string | null
   image_url: string | null
   is_active: boolean
+  manager_id: string | null
   created_at: string
+  profiles?: {
+    id: string
+    full_name: string | null
+    email: string | null
+  } | null
 }
 
 interface RestaurantsListProps {
@@ -51,16 +57,29 @@ export function RestaurantsList({ restaurants: initialRestaurants }: Restaurants
               </div>
             )}
             {restaurant.phone && (
-              <div className="text-gray-500 text-sm mb-4">
+              <div className="text-gray-500 text-sm mb-2">
                 <span>{restaurant.phone}</span>
               </div>
             )}
-            <button
-              onClick={() => router.push(`/admin/restaurants/${restaurant.id}`)}
-              className="w-full bg-black hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition-colors font-medium text-sm md:text-base mt-auto"
-            >
-              Tahrirlash
-            </button>
+            {restaurant.profiles && (
+              <div className="text-gray-500 text-sm mb-4">
+                <span className="font-medium">Menejer:</span> {restaurant.profiles.full_name || restaurant.profiles.email || 'Ko\'rsatilmagan'}
+              </div>
+            )}
+            <div className="flex gap-2 mt-auto">
+              <button
+                onClick={() => router.push(`/warehouse/${restaurant.id}`)}
+                className="flex-1 bg-black hover:bg-gray-800 text-white px-4 py-3 rounded-lg transition-colors font-medium text-sm md:text-base"
+              >
+                Boshqarish
+              </button>
+              <button
+                onClick={() => router.push(`/admin/restaurants/${restaurant.id}`)}
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition-colors font-medium text-sm md:text-base"
+              >
+                Tahrirlash
+              </button>
+            </div>
           </div>
         </div>
       ))}

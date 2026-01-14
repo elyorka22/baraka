@@ -3,7 +3,16 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export function CreateUserForm() {
+interface Restaurant {
+  id: string
+  name: string
+}
+
+interface CreateUserFormProps {
+  restaurants: Restaurant[]
+}
+
+export function CreateUserForm({ restaurants }: CreateUserFormProps) {
   const router = useRouter()
   const [formData, setFormData] = useState({
     email: '',
@@ -11,7 +20,8 @@ export function CreateUserForm() {
     confirmPassword: '',
     full_name: '',
     phone: '',
-    role: 'manager' as 'manager' | 'collector' | 'courier' | 'customer'
+    role: 'manager' as 'manager' | 'collector' | 'courier' | 'customer',
+    restaurant_id: '' as string | ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +57,12 @@ export function CreateUserForm() {
       return
     }
 
+    // Для менеджеров склад обязателен
+    if (formData.role === 'manager' && !formData.restaurant_id) {
+      setError('Menejer uchun ombor tanlash majburiy')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -61,6 +77,7 @@ export function CreateUserForm() {
           full_name: formData.full_name || null,
           phone: formData.phone || null,
           role: formData.role,
+          restaurant_id: formData.role === 'manager' ? formData.restaurant_id : null,
         }),
       })
 
@@ -166,6 +183,32 @@ export function CreateUserForm() {
           Menejerlar buyurtmalarni boshqarish va yig'uvchilar va kuryerlarni tayinlash huquqiga ega
         </p>
       </div>
+
+      {formData.role === 'manager' && (
+        <div>
+          <label htmlFor="restaurant_id" className="block text-sm font-medium text-gray-700 mb-2">
+            Ombor <span className="text-red-500">*</span>
+          </label>
+          <select
+            id="restaurant_id"
+            name="restaurant_id"
+            required={formData.role === 'manager'}
+            value={formData.restaurant_id}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
+          >
+            <option value="">Omborni tanlang</option>
+            {restaurants.map((restaurant) => (
+              <option key={restaurant.id} value={restaurant.id}>
+                {restaurant.name}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Menejer ushbu omborga bog'lanadi va faqat uning ma'lumotlarini ko'ra oladi
+          </p>
+        </div>
+      )}
 
       <div>
         <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const { email, password, full_name, phone, role = 'manager' } = await request.json()
+    const { email, password, full_name, phone, role = 'manager', restaurant_id } = await request.json()
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 })
@@ -94,6 +94,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ 
         error: profileError.message || 'Failed to create profile' 
       }, { status: 500 })
+    }
+
+    // Если это менеджер и указан склад, прикрепляем менеджера к складу
+    if (role === 'manager' && restaurant_id) {
+      const { error: restaurantError } = await supabaseAdmin
+        .from('restaurants')
+        .update({ manager_id: authData.user.id })
+        .eq('id', restaurant_id)
+
+      if (restaurantError) {
+        console.error('Error assigning manager to restaurant:', restaurantError)
+        // Не удаляем пользователя, так как профиль уже создан
+        // Просто возвращаем предупреждение
+        return NextResponse.json({ 
+          success: true,
+          warning: 'User created but failed to assign to restaurant',
+          user: {
+            id: authData.user.id,
+            email: authData.user.email,
+            role: role,
+            full_name: full_name || null,
+            phone: phone || null,
+          }
+        })
+      }
     }
 
     return NextResponse.json({ 

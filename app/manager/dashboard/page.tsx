@@ -22,6 +22,17 @@ export default async function ManagerDashboardPage() {
     redirect('/')
   }
 
+  // Получаем склад менеджера (если это менеджер)
+  let managerWarehouse = null
+  if (profile.role === 'manager') {
+    const { data: warehouse } = await supabase
+      .from('restaurants')
+      .select('id, name')
+      .eq('manager_id', user.id)
+      .single()
+    managerWarehouse = warehouse
+  }
+
   // Получаем статистику заказов
   const { data: pendingOrders } = await supabase
     .from('orders')
@@ -73,6 +84,14 @@ export default async function ManagerDashboardPage() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Быстрые действия</h2>
           <div className="space-y-3">
+            {managerWarehouse && (
+              <a
+                href={`/warehouse/${managerWarehouse.id}`}
+                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors"
+              >
+                Ombor boshqaruvi: {managerWarehouse.name}
+              </a>
+            )}
             <a
               href="/manager/orders"
               className="block w-full text-left px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
