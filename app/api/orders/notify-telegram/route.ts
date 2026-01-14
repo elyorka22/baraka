@@ -4,11 +4,14 @@ import { sendOrderNotification } from '@/lib/telegram'
 
 export async function POST(request: NextRequest) {
   try {
-    const { orderId } = await request.json()
+    const { orderId, chatId } = await request.json()
 
     if (!orderId) {
       return NextResponse.json({ error: 'Order ID is required' }, { status: 400 })
     }
+
+    // Если передан chatId, используем его вместо chat_id из склада
+    const targetChatId = chatId
 
     const supabase = await createSupabaseServerClient()
 
@@ -40,16 +43,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
 
-    // Проверяем, есть ли telegram_chat_id у склада
+    // Определяем chat_id для отправки
     const restaurant = order.restaurants
-    if (!restaurant?.telegram_chat_id) {
-      return NextResponse.json({ success: true, message: 'No Telegram chat ID configured' })
+    const finalChatId = targetChatId || restaurant?.telegram_chat_id
+
+    if (!finalChatId) {
+      return NextResponse.json({ error: 'Telegram chat ID is required' }, { status: 400 })
     }
 
     // Формируем данные для уведомления
     const notification: Parameters<typeof sendOrderNotification>[1] = {
       orderId: order.id,
-      restaurantName: restaurant.name,
+      restaurantName: restaurant?.name || 'Noma\'lum ombor',
       customerName: order.profiles?.full_name || order.phone || 'Noma\'lum mijoz',
       address: order.address,
       totalPrice: order.total_price,
@@ -61,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Отправляем уведомление
-    await sendOrderNotification(restaurant.telegram_chat_id, notification)
+    await sendOrderNotification(finalChatId, notification)
 
     return NextResponse.json({ success: true })
   } catch (error: any) {

@@ -31,13 +31,22 @@ interface Order {
   }>
 }
 
-interface AdminOrdersListProps {
-  orders: Order[]
+interface RestaurantWithBot {
+  id: string
+  name: string
+  telegram_chat_id: string
 }
 
-export function AdminOrdersList({ orders: initialOrders }: AdminOrdersListProps) {
+interface AdminOrdersListProps {
+  orders: Order[]
+  restaurantsWithBots: RestaurantWithBot[]
+}
+
+export function AdminOrdersList({ orders: initialOrders, restaurantsWithBots }: AdminOrdersListProps) {
   const [orders, setOrders] = useState(initialOrders)
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [showDistributeModal, setShowDistributeModal] = useState<string | null>(null)
+  const [sending, setSending] = useState<string | null>(null)
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
@@ -70,6 +79,32 @@ export function AdminOrdersList({ orders: initialOrders }: AdminOrdersListProps)
   const filteredOrders = filterStatus === 'all' 
     ? orders 
     : orders.filter(order => order.status === filterStatus)
+
+  const handleDistributeToBot = async (orderId: string, chatId: string) => {
+    setSending(orderId)
+    try {
+      const response = await fetch('/api/orders/notify-telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderId, chatId }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        alert('Xatolik: ' + (data.error || 'Xabar yuborilmadi'))
+      } else {
+        alert('Buyurtma botga muvaffaqiyatli yuborildi!')
+        setShowDistributeModal(null)
+      }
+    } catch (error: any) {
+      alert('Xatolik: ' + error.message)
+    } finally {
+      setSending(null)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -118,68 +153,90 @@ export function AdminOrdersList({ orders: initialOrders }: AdminOrdersListProps)
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
           {filteredOrders.map((order) => (
-            <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 md:p-6">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg md:text-xl font-bold text-gray-900">
-                      Buyurtma #{order.id.slice(0, 8)}
-                    </h3>
-                    <span className={`px-2 md:px-3 py-1 rounded text-xs md:text-sm font-medium ${getStatusColor(order.status)}`}>
-                      {getStatusLabel(order.status)}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-500 mb-1">
-                    {order.restaurants?.name || 'Noma\'lum ombor'} • {new Date(order.created_at).toLocaleString('ru-RU')}
-                  </p>
-                  {order.profiles?.full_name && (
-                    <p className="text-sm text-gray-600">
-                      Mijoz: {order.profiles.full_name}
-                    </p>
-                  )}
+            <div key={order.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-3 md:p-4 flex flex-col">
+              <div className="mb-3">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-base md:text-lg font-bold text-gray-900">
+                    #{order.id.slice(0, 8)}
+                  </h3>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(order.status)}`}>
+                    {getStatusLabel(order.status)}
+                  </span>
                 </div>
+                <p className="text-sm text-gray-500">
+                  {new Date(order.created_at).toLocaleDateString('ru-RU')}
+                </p>
               </div>
 
-              <div className="mb-4">
-                <p className="text-sm text-gray-500 mb-1">Yetkazib berish manzili</p>
-                <p className="text-sm font-medium text-gray-900">{order.address}</p>
-                {order.phone && (
-                  <p className="text-sm text-gray-600 mt-1">Telefon: {order.phone}</p>
-                )}
-              </div>
-
-              {order.notes && (
-                <div className="mb-4">
-                  <p className="text-sm text-gray-500 mb-1">Izoh</p>
-                  <p className="text-sm text-gray-900">{order.notes}</p>
+              <div className="mt-auto">
+                <div className="mb-3">
+                  <span className="text-lg md:text-xl font-bold text-gray-900">
+                    {Number(order.total_price).toLocaleString('ru-RU')} so'm
+                  </span>
                 </div>
-              )}
-
-              <div className="border-t pt-4 mb-4">
-                <h4 className="font-semibold text-gray-900 mb-2">Buyurtma tarkibi:</h4>
-                <div className="space-y-1">
-                  {order.order_items?.map((item) => (
-                    <div key={item.id} className="flex justify-between text-sm">
-                      <span>
-                        {item.dishes?.name || 'Noma\'lum mahsulot'} × {item.quantity}
-                      </span>
-                      <span className="font-medium">
-                        {Number(item.price * item.quantity).toLocaleString('ru-RU')} so'm
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center border-t pt-4">
-                <span className="text-lg md:text-xl font-bold text-gray-900">
-                  Jami: {Number(order.total_price).toLocaleString('ru-RU')} so'm
-                </span>
+                <button
+                  onClick={() => setShowDistributeModal(order.id)}
+                  className="w-full bg-black hover:bg-gray-800 text-white px-3 py-2 rounded-lg transition-colors font-medium text-sm"
+                >
+                  Botlarga tarqatish
+                </button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Модальное окно для выбора бота */}
+      {showDistributeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-4 md:p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900">
+                  Botni tanlang
+                </h3>
+                <button
+                  onClick={() => setShowDistributeModal(null)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              {restaurantsWithBots.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500 mb-4">Sozlangan botlar yo'q</p>
+                  <p className="text-sm text-gray-400">
+                    Botlarni sozlash uchun ombor sozlamalariga o'ting
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {restaurantsWithBots.map((restaurant) => (
+                    <button
+                      key={restaurant.id}
+                      onClick={() => handleDistributeToBot(showDistributeModal, restaurant.telegram_chat_id)}
+                      disabled={sending === showDistributeModal}
+                      className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+                    >
+                      <div className="font-medium text-gray-900">{restaurant.name}</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Chat ID: {restaurant.telegram_chat_id}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {sending === showDistributeModal && (
+                <div className="mt-4 text-center text-gray-500 text-sm">
+                  Yuborilmoqda...
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

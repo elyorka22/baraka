@@ -46,6 +46,14 @@ export default async function AdminOrdersPage() {
     `)
     .order('created_at', { ascending: false })
 
+  // Загружаем склады с настроенными Telegram ботами
+  const { data: restaurantsWithBots } = await supabase
+    .from('restaurants')
+    .select('id, name, telegram_chat_id')
+    .not('telegram_chat_id', 'is', null)
+    .eq('is_active', true)
+    .order('name')
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar role="super_admin" userName={profile.full_name || user.email || undefined} />
@@ -60,7 +68,10 @@ export default async function AdminOrdersPage() {
           </p>
         </div>
 
-        <AdminOrdersList orders={orders || []} />
+        <AdminOrdersList 
+          orders={orders || []} 
+          restaurantsWithBots={restaurantsWithBots || []}
+        />
       </div>
     </div>
   )
