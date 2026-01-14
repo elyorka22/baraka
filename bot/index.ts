@@ -32,7 +32,7 @@ bot.onText(/\/start/, (msg) => {
   
   const welcomeMessage = `Assalomu alaykum, ${firstName}! 👋
 
-Baraka - mahsulotlar yetkazib berish xizmati botiga xush kelibsiz! 🛒
+Bazar + - mahsulotlar yetkazib berish xizmati botiga xush kelibsiz! 🛒
 
 Bu bot orqali siz:
 • Mahsulotlar haqida ma'lumot olishingiz mumkin
@@ -70,9 +70,9 @@ bot.on('message', (msg) => {
 
   // Обработка нажатий на кнопки
   if (text === 'ℹ️ Bot haqida') {
-    const infoMessage = `📱 **Baraka Bot haqida**
+    const infoMessage = `📱 **Bazar + Bot haqida**
 
-Bu bot Baraka mahsulotlar yetkazib berish xizmati uchun yaratilgan.
+Bu bot Bazar + mahsulotlar yetkazib berish xizmati uchun yaratilgan.
 
 **Xizmatlar:**
 • Mahsulotlar katalogini ko'rish
@@ -80,7 +80,7 @@ Bu bot Baraka mahsulotlar yetkazib berish xizmati uchun yaratilgan.
 • Buyurtma holatini kuzatish
 • Sotuvchi bo'lish
 
-**Veb-sayt:** [Baraka](https://baraka.vercel.app)
+**Veb-sayt:** [Bazar +](https://baraka.vercel.app)
 
 Savollaringiz bo'lsa, bizga yozing! 💬`
 
@@ -108,7 +108,7 @@ Savollaringiz bo'lsa, bizga yozing! 💬`
 
 Sotuvchi bo'lish uchun quyidagi qadamlarni bajaring:
 
-1. Veb-saytimizga kiring: [Baraka](https://baraka.vercel.app)
+1. Veb-saytimizga kiring: [Bazar +](https://baraka.vercel.app)
 2. Ro'yxatdan o'ting yoki tizimga kiring
 3. Admin bilan bog'laning va sotuvchi bo'lish uchun ariza bering
 
@@ -201,11 +201,11 @@ Savollaringiz bo'lsa, bizga yozing! 💬`
 bot.onText(/\/info/, (msg) => {
   const chatId = msg.chat.id
   
-  const infoMessage = `📱 **Baraka Bot**
+  const infoMessage = `📱 **Bazar + Bot**
 
-Baraka - mahsulotlar yetkazib berish xizmati.
+Bazar + - mahsulotlar yetkazib berish xizmati.
 
-**Veb-sayt:** [Baraka](https://baraka.vercel.app)
+**Veb-sayt:** [Bazar +](https://baraka.vercel.app)
 
 **Xizmatlar:**
 • Mahsulotlar katalogi
@@ -345,6 +345,6 @@ bot.on('polling_error', (error) => {
   console.error('Polling error:', error)
 })
 
-console.log('🤖 Baraka Telegram bot ishga tushdi!')
+console.log('🤖 Bazar + Telegram bot ishga tushdi!')
 console.log('Bot is running and waiting for messages...')
 

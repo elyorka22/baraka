@@ -87,7 +87,7 @@ export function Header() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="text-xl font-bold text-gray-900">
-              Baraka
+              Bazar +
             </Link>
             <div className="flex space-x-4 items-center">
               <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>

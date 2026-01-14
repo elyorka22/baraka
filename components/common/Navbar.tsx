@@ -59,7 +59,7 @@ export function Navbar({ role, userName }: NavbarProps) {
         <div className="flex justify-between items-center h-14 md:h-16">
           <div className="flex items-center space-x-4 md:space-x-8">
             <Link href="/" className="text-xl font-bold text-gray-900">
-              Baraka
+              Bazar +
             </Link>
             <div className="flex space-x-2 md:space-x-4">
               {getNavLinks().map((link) => (

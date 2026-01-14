@@ -15,7 +15,7 @@ function OrderSuccessContent() {
         <div className="container mx-auto px-4 py-4">
           <Link href="/customer" className="text-2xl font-bold text-green-600 flex items-center gap-2">
             <span className="text-3xl">🛒</span>
-            Baraka
+            Bazar +
           </Link>
         </div>
       </div>

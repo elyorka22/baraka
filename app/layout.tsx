@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Baraka - Доставка еды",
+  title: "Bazar + - Доставка еды",
   description: "Система управления доставкой еды",
 };
 

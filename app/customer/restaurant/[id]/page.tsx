@@ -142,7 +142,7 @@ export default function RestaurantMenuPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <Link href="/customer" className="text-2xl font-bold text-orange-500">
-              Baraka
+              Bazar +
             </Link>
             <div className="flex space-x-4 items-center">
               <Link

@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
           <div className="container mx-auto px-4 py-4">
             <Link href="/" className="text-2xl font-bold text-green-600 flex items-center gap-2">
               <span className="text-3xl">🛒</span>
-              Baraka
+              Bazar +
             </Link>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
           <div className="flex justify-between items-center">
             <Link href="/" className="text-2xl font-bold text-green-600 flex items-center gap-2">
               <span className="text-3xl">🛒</span>
-              Baraka
+              Bazar +
             </Link>
             <div className="flex space-x-4 items-center">
               {user && <LogoutButton />}
