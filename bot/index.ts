@@ -25,12 +25,51 @@ if (supabaseUrl && supabaseServiceKey) {
 // Создаем экземпляр бота
 const bot = new TelegramBot(token, { polling: true })
 
+// Функция для получения настроек бота из базы данных
+async function getBotSettings() {
+  if (!supabase) {
+    // Fallback настройки, если Supabase не настроен
+    return {
+      button_about_text: 'ℹ️ Bot haqida',
+      button_seller_text: '🏪 Sotuvchi bo\'lish',
+      welcome_message: 'Assalomu alaykum, {firstName}! 👋\n\nBazar + - mahsulotlar yetkazib berish xizmati botiga xush kelibsiz! 🛒\n\nBu bot orqali siz:\n• Mahsulotlar haqida ma\'lumot olishingiz mumkin\n• Buyurtma berishingiz mumkin\n• Sotuvchi bo\'lishingiz mumkin\n\nQuyidagi tugmalardan birini tanlang:',
+      about_message: '📱 **Bazar + Bot haqida**\n\nBu bot Bazar + mahsulotlar yetkazib berish xizmati uchun yaratilgan.\n\n**Xizmatlar:**\n• Mahsulotlar katalogini ko\'rish\n• Buyurtma berish\n• Buyurtma holatini kuzatish\n• Sotuvchi bo\'lish\n\n**Veb-sayt:** [Bazar +](https://baraka.vercel.app)\n\nSavollaringiz bo\'lsa, bizga yozing! 💬',
+      seller_message: '🏪 **Sotuvchi bo\'lish**\n\nSotuvchi bo\'lish uchun quyidagi qadamlarni bajaring:\n\n1. Veb-saytimizga kiring: [Bazar +](https://baraka.vercel.app)\n2. Ro\'yxatdan o\'ting yoki tizimga kiring\n3. Admin bilan bog\'laning va sotuvchi bo\'lish uchun ariza bering\n\n**Afzalliklari:**\n• O\'z mahsulotlaringizni qo\'shish\n• Buyurtmalarni boshqarish\n• Daromad olish\n\nQo\'shimcha ma\'lumot uchun admin bilan bog\'laning! 📞'
+    }
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('bot_settings')
+      .select('key, value')
+
+    if (error || !data) {
+      console.error('Error loading bot settings:', error)
+      return null
+    }
+
+    const settings: Record<string, string> = {}
+    data.forEach(item => {
+      settings[item.key] = item.value
+    })
+
+    return settings
+  } catch (error) {
+    console.error('Error fetching bot settings:', error)
+    return null
+  }
+}
+
 // Приветственное сообщение при команде /start
-bot.onText(/\/start/, (msg) => {
+bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id
   const firstName = msg.from?.first_name || 'Foydalanuvchi'
   
-  const welcomeMessage = `Assalomu alaykum, ${firstName}! 👋
+  const settings = await getBotSettings()
+  
+  const welcomeMessage = settings?.welcome_message 
+    ? settings.welcome_message.replace('{firstName}', firstName)
+    : `Assalomu alaykum, ${firstName}! 👋
 
 Bazar + - mahsulotlar yetkazib berish xizmati botiga xush kelibsiz! 🛒
 
@@ -41,13 +80,16 @@ Bu bot orqali siz:
 
 Quyidagi tugmalardan birini tanlang:`
 
+  const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
+  const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
+
   // Создаем reply keyboard (постоянная клавиатура под полем ввода)
   const options = {
     reply_markup: {
       keyboard: [
         [
-          { text: 'ℹ️ Bot haqida' },
-          { text: '🏪 Sotuvchi bo\'lish' }
+          { text: buttonAboutText },
+          { text: buttonSellerText }
         ]
       ],
       resize_keyboard: true, // Кнопки подстраиваются под размер экрана
@@ -68,9 +110,14 @@ bot.on('message', (msg) => {
     return
   }
 
+  // Получаем настройки бота
+  const settings = await getBotSettings()
+  const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
+  const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
+
   // Обработка нажатий на кнопки
-  if (text === 'ℹ️ Bot haqida') {
-    const infoMessage = `📱 **Bazar + Bot haqida**
+  if (text === buttonAboutText) {
+    const infoMessage = settings?.about_message || `📱 **Bazar + Bot haqida**
 
 Bu bot Bazar + mahsulotlar yetkazib berish xizmati uchun yaratilgan.
 
@@ -89,8 +136,8 @@ Savollaringiz bo'lsa, bizga yozing! 💬`
       reply_markup: {
         keyboard: [
           [
-            { text: 'ℹ️ Bot haqida' },
-            { text: '🏪 Sotuvchi bo\'lish' }
+            { text: buttonAboutText },
+            { text: buttonSellerText }
           ]
         ],
         resize_keyboard: true,
@@ -103,8 +150,8 @@ Savollaringiz bo'lsa, bizga yozing! 💬`
       reply_markup: options.reply_markup
     })
     return
-  } else if (text === '🏪 Sotuvchi bo\'lish') {
-    const sellerMessage = `🏪 **Sotuvchi bo'lish**
+  } else if (text === buttonSellerText) {
+    const sellerMessage = settings?.seller_message || `🏪 **Sotuvchi bo'lish**
 
 Sotuvchi bo'lish uchun quyidagi qadamlarni bajaring:
 
@@ -124,8 +171,8 @@ Qo'shimcha ma'lumot uchun admin bilan bog'laning! 📞`
       reply_markup: {
         keyboard: [
           [
-            { text: 'ℹ️ Bot haqida' },
-            { text: '🏪 Sotuvchi bo\'lish' }
+            { text: buttonAboutText },
+            { text: buttonSellerText }
           ]
         ],
         resize_keyboard: true,
@@ -145,12 +192,17 @@ Qo'shimcha ma'lumot uchun admin bilan bog'laning! 📞`
 
 Yordam olish uchun /help buyrug'ini yuboring yoki quyidagi tugmalardan foydalaning.`
 
+  // Получаем настройки для клавиатуры
+  const settings = await getBotSettings()
+  const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
+  const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
+
   const options = {
     reply_markup: {
       keyboard: [
         [
-          { text: 'ℹ️ Bot haqida' },
-          { text: '🏪 Sotuvchi bo\'lish' }
+          { text: buttonAboutText },
+          { text: buttonSellerText }
         ]
       ],
       resize_keyboard: true,
@@ -162,8 +214,12 @@ Yordam olish uchun /help buyrug'ini yuboring yoki quyidagi tugmalardan foydalani
 })
 
 // Обработка команды /help
-bot.onText(/\/help/, (msg) => {
+bot.onText(/\/help/, async (msg) => {
   const chatId = msg.chat.id
+  
+  const settings = await getBotSettings()
+  const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
+  const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
   
   const helpMessage = `🆘 **Yordam**
 
@@ -173,8 +229,8 @@ bot.onText(/\/help/, (msg) => {
 /info - Bot haqida ma'lumot
 
 **Tugmalar:**
-• Bot haqida - Bot haqida batafsil ma'lumot
-• Sotuvchi bo'lish - Sotuvchi bo'lish uchun ko'rsatmalar
+• ${buttonAboutText} - Bot haqida batafsil ma'lumot
+• ${buttonSellerText} - Sotuvchi bo'lish uchun ko'rsatmalar
 
 Savollaringiz bo'lsa, bizga yozing! 💬`
 
@@ -182,8 +238,8 @@ Savollaringiz bo'lsa, bizga yozing! 💬`
     reply_markup: {
       keyboard: [
         [
-          { text: 'ℹ️ Bot haqida' },
-          { text: '🏪 Sotuvchi bo\'lish' }
+          { text: buttonAboutText },
+          { text: buttonSellerText }
         ]
       ],
       resize_keyboard: true,
@@ -198,10 +254,14 @@ Savollaringiz bo'lsa, bizga yozing! 💬`
 })
 
 // Обработка команды /info
-bot.onText(/\/info/, (msg) => {
+bot.onText(/\/info/, async (msg) => {
   const chatId = msg.chat.id
   
-  const infoMessage = `📱 **Bazar + Bot**
+  const settings = await getBotSettings()
+  const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
+  const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
+  
+  const infoMessage = settings?.about_message || `📱 **Bazar + Bot**
 
 Bazar + - mahsulotlar yetkazib berish xizmati.
 
@@ -219,8 +279,8 @@ Biz bilan bog'lanish: @baraka_support`
     reply_markup: {
       keyboard: [
         [
-          { text: 'ℹ️ Bot haqida' },
-          { text: '🏪 Sotuvchi bo\'lish' }
+          { text: buttonAboutText },
+          { text: buttonSellerText }
         ]
       ],
       resize_keyboard: true,
