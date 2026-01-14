@@ -135,14 +135,14 @@ export function Navbar({ role, userName }: NavbarProps) {
       {/* Mobile Sidebar Menu */}
       {mobileMenuOpen && (
         <>
-          {/* Overlay */}
+          {/* Overlay - убран черный фон, только для закрытия */}
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
+            className="fixed inset-0 z-40 md:hidden"
             onClick={() => setMobileMenuOpen(false)}
           />
           
           {/* Sidebar */}
-          <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-50 md:hidden transform transition-transform duration-300 ease-in-out">
+          <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-50 md:hidden transform transition-transform duration-300 ease-in-out">
             <div className="flex flex-col h-full">
               {/* Header */}
               <div className="flex justify-between items-center p-4 border-b border-gray-200">
