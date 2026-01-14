@@ -37,7 +37,7 @@ CREATE POLICY "Anyone can create orders"
     -- Разрешаем создание заказов авторизованными пользователями
     (
       auth.uid() IS NOT NULL AND
-      user_id = auth.uid()
+      user_id IS NOT DISTINCT FROM auth.uid()
     ) OR
     -- Разрешаем создание заказов неавторизованными пользователями (user_id = NULL)
     (
