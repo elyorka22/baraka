@@ -115,30 +115,33 @@ export function WarehouseTabs({
     { id: 'assignments' as const, label: 'Tayinlash' },
   ]
 
-  // Отладка: проверяем наличие вкладки
-  if (typeof window !== 'undefined') {
-    console.log('WarehouseTabs tabs:', tabs)
-    console.log('Active tab:', activeTab)
-  }
-
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100">
       {/* Вкладки */}
       <div className="border-b border-gray-200 overflow-x-auto">
         <nav className="flex -mb-px min-w-max md:min-w-0">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'border-black text-gray-900'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            // Убеждаемся, что все вкладки рендерятся
+            if (tab.id === 'products') {
+              console.log('Rendering Mahsulotlar tab')
+            }
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  console.log('Tab clicked:', tab.id, tab.label)
+                  setActiveTab(tab.id)
+                }}
+                className={`px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? 'border-black text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
         </nav>
       </div>
 
