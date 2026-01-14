@@ -1,11 +1,11 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/common/Navbar'
-import { UsersList } from '@/components/admin/UsersList'
+import { CreateUserForm } from '@/components/admin/CreateUserForm'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminUsersPage() {
+export default async function CreateUserPage() {
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -23,29 +23,27 @@ export default async function AdminUsersPage() {
     redirect('/')
   }
 
-  const { data: users } = await supabase
-    .from('profiles')
-    .select('*')
-    .order('created_at', { ascending: false })
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar role="super_admin" userName={profile.full_name || user.email || undefined} />
       
       <div className="container mx-auto px-4 py-6">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Управление пользователями
-          </h1>
+        <div className="mb-6">
           <a
-            href="/admin/users/new"
-            className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-colors font-medium text-sm"
+            href="/admin/users"
+            className="text-gray-900 hover:text-gray-700 mb-4 inline-flex items-center gap-2 font-medium transition-colors"
           >
-            + Yangi foydalanuvchi
+            <span>←</span> Foydalanuvchilar ro'yxatiga qaytish
           </a>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            Yangi foydalanuvchi qo'shish
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Email va parol orqali yangi foydalanuvchi yarating
+          </p>
         </div>
 
-        <UsersList users={users || []} />
+        <CreateUserForm />
       </div>
     </div>
   )
