@@ -89,19 +89,25 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
 
-    // Создаем профиль с указанной ролью
+    // Небольшая задержка, чтобы триггер успел создать профиль
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    // Обновляем профиль (триггер уже создал его с ролью 'customer')
+    // Используем upsert для обработки случая, если триггер еще не сработал
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
-      .insert({
+      .upsert({
         id: authData.user.id,
         full_name: full_name || null,
         phone: phone || null,
         role: role,
         is_active: true,
+      }, {
+        onConflict: 'id'
       })
 
     if (profileError) {
-      console.error('Error creating profile:', {
+      console.error('Error updating profile:', {
         error: profileError,
         message: profileError.message,
         code: profileError.code,
@@ -109,14 +115,14 @@ export async function POST(request: NextRequest) {
         hint: profileError.hint,
         userId: authData.user.id
       })
-      // Пытаемся удалить созданного пользователя, если профиль не создался
+      // Пытаемся удалить созданного пользователя, если профиль не обновился
       try {
         await supabaseAdmin.auth.admin.deleteUser(authData.user.id)
       } catch (deleteError) {
-        console.error('Error deleting user after profile creation failure:', deleteError)
+        console.error('Error deleting user after profile update failure:', deleteError)
       }
       return NextResponse.json({ 
-        error: profileError.message || 'Failed to create profile',
+        error: profileError.message || 'Failed to update profile',
         details: profileError
       }, { status: 500 })
     }
