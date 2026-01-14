@@ -53,7 +53,7 @@ export default async function WarehousePage({
   const [ordersResult, dishesResult, collectorsResult, couriersResult, categoriesResult] = await Promise.all([
     supabase
       .from('orders')
-      .select('id, status, total_price, address, phone, notes, created_at, updated_at, order_items(id, quantity, price, dishes(name))')
+      .select('id, user_id, restaurant_id, status, total_price, address, phone, notes, created_at, updated_at, order_items(id, dish_id, quantity, price, dishes(name, price))')
       .eq('restaurant_id', id)
       .order('created_at', { ascending: false })
       .limit(30), // Уменьшили лимит для быстрой загрузки
