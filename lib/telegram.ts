@@ -51,9 +51,7 @@ export async function sendOrderNotification(
 **Buyurtma tarkibi:**
 ${order.items.map(item => `• ${item.name} × ${item.quantity} - ${Number(item.price * item.quantity).toLocaleString('ru-RU')} so'm`).join('\n')}
 
-**Jami:** ${Number(order.totalPrice).toLocaleString('ru-RU')} so'm
-
-Veb-saytda ko'rish: https://baraka.vercel.app/admin/orders`
+**Jami:** ${Number(order.totalPrice).toLocaleString('ru-RU')} so'm`
 
   try {
     const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
