@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { WarehouseStats } from './WarehouseStats'
 import { WarehouseOrders } from './WarehouseOrders'
 import { WarehouseAssignments } from './WarehouseAssignments'
+import { WarehouseProducts } from './WarehouseProducts'
 
 interface Restaurant {
   id: string
@@ -49,7 +50,19 @@ interface Dish {
   image_url: string | null
   restaurant_id: string
   is_available: boolean
+  badge_text: string | null
+  global_category_id: string | null
   created_at: string
+  global_categories?: {
+    id: string
+    name: string
+  } | null
+}
+
+interface Category {
+  id: string
+  name: string
+  is_active: boolean
 }
 
 interface Profile {
@@ -75,6 +88,7 @@ interface WarehouseTabsProps {
   dishes: Dish[]
   collectors: Profile[]
   couriers: Profile[]
+  categories: Category[]
   stats: Stats
   isSuperAdmin: boolean
 }
@@ -85,14 +99,16 @@ export function WarehouseTabs({
   dishes,
   collectors,
   couriers,
+  categories,
   stats,
   isSuperAdmin,
 }: WarehouseTabsProps) {
-  const [activeTab, setActiveTab] = useState<'stats' | 'orders' | 'assignments'>('stats')
+  const [activeTab, setActiveTab] = useState<'stats' | 'orders' | 'assignments' | 'products'>('stats')
 
   const tabs = [
     { id: 'stats' as const, label: 'Statistika' },
     { id: 'orders' as const, label: 'Buyurtmalar' },
+    { id: 'products' as const, label: 'Mahsulotlar' },
     { id: 'assignments' as const, label: 'Tayinlash' },
   ]
 
@@ -125,6 +141,14 @@ export function WarehouseTabs({
 
         {activeTab === 'orders' && (
           <WarehouseOrders orders={orders} restaurantId={restaurant.id} />
+        )}
+
+        {activeTab === 'products' && (
+          <WarehouseProducts
+            restaurant={restaurant}
+            dishes={dishes}
+            categories={categories}
+          />
         )}
 
         {activeTab === 'assignments' && (

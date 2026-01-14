@@ -48,7 +48,7 @@ export default async function WarehousePage({
   }
 
   // Загружаем данные для вкладок
-  const [ordersResult, dishesResult, collectorsResult, couriersResult] = await Promise.all([
+  const [ordersResult, dishesResult, collectorsResult, couriersResult, categoriesResult] = await Promise.all([
     supabase
       .from('orders')
       .select('*, order_items(*, dishes(name, price))')
@@ -57,7 +57,7 @@ export default async function WarehousePage({
       .limit(50),
     supabase
       .from('dishes')
-      .select('*')
+      .select('*, global_categories(id, name)')
       .eq('restaurant_id', id)
       .order('created_at', { ascending: false }),
     supabase
@@ -70,12 +70,18 @@ export default async function WarehousePage({
       .select('id, full_name, phone, role')
       .eq('role', 'courier')
       .eq('is_active', true),
+    supabase
+      .from('global_categories')
+      .select('*')
+      .eq('is_active', true)
+      .order('name'),
   ])
 
   const orders = ordersResult.data || []
   const dishes = dishesResult.data || []
   const collectors = collectorsResult.data || []
   const couriers = couriersResult.data || []
+  const categories = categoriesResult.data || []
 
   // Статистика
   const stats = {
@@ -125,6 +131,7 @@ export default async function WarehousePage({
           dishes={dishes}
           collectors={collectors}
           couriers={couriers}
+          categories={categories}
           stats={stats}
           isSuperAdmin={isSuperAdmin}
         />
