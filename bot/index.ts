@@ -101,7 +101,7 @@ Quyidagi tugmalardan birini tanlang:`
 })
 
 // Обработка нажатий на кнопки reply keyboard
-bot.on('message', (msg) => {
+bot.on('message', async (msg) => {
   const chatId = msg.chat.id
   const text = msg.text
 
