@@ -52,7 +52,7 @@ CREATE POLICY "Customers can view own orders"
   ON orders FOR SELECT
   USING (
     -- Авторизованные пользователи видят свои заказы
-    (auth.uid() IS NOT NULL AND auth.uid() = user_id)
+    (auth.uid() IS NOT NULL AND user_id IS NOT DISTINCT FROM auth.uid())
   );
 
 -- Удаляем все существующие политики для создания order_items
