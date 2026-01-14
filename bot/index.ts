@@ -375,13 +375,18 @@ bot.on('callback_query', async (query) => {
         }
       })
 
+      // Получаем настройки для клавиатуры
+      const settings = await getBotSettings()
+      const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
+      const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
+
       // Отправляем подтверждение
       await bot.sendMessage(chatId, '✅ Buyurtma holati "Tayyor" ga o\'zgartirildi!', {
         reply_markup: {
           keyboard: [
             [
-              { text: 'ℹ️ Bot haqida' },
-              { text: '🏪 Sotuvchi bo\'lish' }
+              { text: buttonAboutText },
+              { text: buttonSellerText }
             ]
           ],
           resize_keyboard: true,
