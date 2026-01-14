@@ -2,9 +2,32 @@
 -- МИГРАЦИЯ 21: Исправление RLS политик для анонимных заказов
 -- ============================================
 
--- Удаляем все существующие политики для создания заказов
+-- Шаг 1: Убеждаемся, что user_id может быть NULL (если миграция 07 не была выполнена)
+DO $$ 
+BEGIN
+  -- Проверяем, является ли user_id NOT NULL
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_name = 'orders' 
+    AND column_name = 'user_id' 
+    AND is_nullable = 'NO'
+  ) THEN
+    -- Делаем user_id опциональным
+    ALTER TABLE orders ALTER COLUMN user_id DROP NOT NULL;
+  END IF;
+END $$;
+
+-- Шаг 2: Убеждаемся, что RLS включен
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
+
+-- Шаг 3: Удаляем ВСЕ существующие политики для orders (чтобы избежать конфликтов)
 DROP POLICY IF EXISTS "Customers can create orders" ON orders;
 DROP POLICY IF EXISTS "Anyone can create orders" ON orders;
+DROP POLICY IF EXISTS "Super admin can manage orders" ON orders;
+DROP POLICY IF EXISTS "Managers can update orders" ON orders;
+DROP POLICY IF EXISTS "Collectors can mark orders as ready" ON orders;
+DROP POLICY IF EXISTS "Couriers can update delivery status" ON orders;
 
 -- Создаем новую политику для создания заказов
 -- Разрешаем создание заказов как авторизованным, так и неавторизованным пользователям
@@ -51,6 +74,31 @@ CREATE POLICY "Anyone can create order items"
         -- Для анонимных заказов
         (auth.uid() IS NULL AND orders.user_id IS NULL)
       )
+    )
+  );
+
+-- Шаг 4: Восстанавливаем политики для менеджеров и админов (если они нужны)
+-- Политика для просмотра всех заказов менеджерами и админами
+DROP POLICY IF EXISTS "Admins and managers can view all orders" ON orders;
+CREATE POLICY "Admins and managers can view all orders"
+  ON orders FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role IN ('super_admin', 'manager')
+    )
+  );
+
+-- Политика для обновления заказов менеджерами
+DROP POLICY IF EXISTS "Managers can update orders" ON orders;
+CREATE POLICY "Managers can update orders"
+  ON orders FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role IN ('super_admin', 'manager')
     )
   );
 
