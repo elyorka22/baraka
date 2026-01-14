@@ -192,11 +192,6 @@ Qo'shimcha ma'lumot uchun admin bilan bog'laning! 📞`
 
 Yordam olish uchun /help buyrug'ini yuboring yoki quyidagi tugmalardan foydalaning.`
 
-  // Получаем настройки для клавиатуры
-  const settings = await getBotSettings()
-  const buttonAboutText = settings?.button_about_text || 'ℹ️ Bot haqida'
-  const buttonSellerText = settings?.button_seller_text || '🏪 Sotuvchi bo\'lish'
-
   const options = {
     reply_markup: {
       keyboard: [
