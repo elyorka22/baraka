@@ -103,7 +103,7 @@ export function Header() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <Link href="/" className="text-xl font-bold text-gray-900">
-            Baraka
+            Bazar +
           </Link>
           <div className="flex space-x-4 items-center">
             <Link
