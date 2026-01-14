@@ -65,6 +65,16 @@ Veb-saytda ko'rish: https://baraka.vercel.app/admin/orders`
         chat_id: chatId,
         text: message,
         parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: '✅ Tayyor',
+                callback_data: `order_ready_${order.orderId}`
+              }
+            ]
+          ]
+        }
       }),
     })
 

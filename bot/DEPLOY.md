@@ -10,11 +10,20 @@
 
 ### 2. Настройка переменных окружения
 
-В настройках проекта Railway добавьте переменную окружения:
+В настройках проекта Railway добавьте переменные окружения:
 
 ```
 TELEGRAM_BOT_TOKEN=8393509629:AAEIogSE6Z5ltFvWYt8TPDi0EtoNBMlWzio
+SUPABASE_URL=https://ваш-проект-id.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=ваш-service-role-ключ
+API_URL=https://baraka.vercel.app
 ```
+
+**Важно:**
+- `TELEGRAM_BOT_TOKEN` - токен бота из @BotFather
+- `SUPABASE_URL` - URL вашего Supabase проекта (можно использовать `NEXT_PUBLIC_SUPABASE_URL`)
+- `SUPABASE_SERVICE_ROLE_KEY` - Service Role ключ из Supabase (для прямого доступа к БД)
+- `API_URL` - URL вашего веб-приложения (опционально, используется как fallback)
 
 ### 3. Настройка деплоя
 

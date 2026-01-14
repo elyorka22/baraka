@@ -1,7 +1,26 @@
 import TelegramBot from 'node-telegram-bot-api'
+import { createClient } from '@supabase/supabase-js'
 
 // Токен бота из переменных окружения или напрямую
 const token = process.env.TELEGRAM_BOT_TOKEN || '8393509629:AAEIogSE6Z5ltFvWYt8TPDi0EtoNBMlWzio'
+
+// Настройка Supabase для бота
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+let supabase: ReturnType<typeof createClient> | null = null
+
+if (supabaseUrl && supabaseServiceKey) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  })
+  console.log('✅ Supabase client initialized for bot')
+} else {
+  console.warn('⚠️ Supabase credentials not found. Order status updates will use API endpoint.')
+}
 
 // Создаем экземпляр бота
 const bot = new TelegramBot(token, { polling: true })
@@ -213,6 +232,112 @@ Biz bilan bog'lanish: @baraka_support`
     parse_mode: 'Markdown',
     reply_markup: options.reply_markup
   })
+})
+
+// Обработка нажатий на inline кнопки (callback_query)
+bot.on('callback_query', async (query) => {
+  const chatId = query.message?.chat.id
+  const messageId = query.message?.message_id
+  const data = query.data
+
+  if (!chatId || !messageId || !data) {
+    return
+  }
+
+  // Обработка кнопки "Готов" для заказа
+  if (data.startsWith('order_ready_')) {
+    const orderId = data.replace('order_ready_', '')
+    
+    try {
+      // Отвечаем на callback сразу, чтобы убрать индикатор загрузки
+      await bot.answerCallbackQuery(query.id, {
+        text: 'Buyurtma holati yangilanmoqda...',
+        show_alert: false
+      })
+
+      let updateSuccess = false
+
+      // Пытаемся обновить через Supabase напрямую (если настроено)
+      if (supabase) {
+        try {
+          const { error: updateError } = await supabase
+            .from('orders')
+            .update({ 
+              status: 'ready',
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', orderId)
+
+          if (!updateError) {
+            updateSuccess = true
+          } else {
+            console.error('Supabase update error:', updateError)
+          }
+        } catch (supabaseError) {
+          console.error('Supabase direct update failed:', supabaseError)
+        }
+      }
+
+      // Если прямой доступ к Supabase не сработал, используем API
+      if (!updateSuccess) {
+        const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://baraka.vercel.app'
+        const response = await fetch(`${apiUrl}/api/orders/${orderId}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: 'ready' }),
+        })
+
+        const result = await response.json()
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Xatolik yuz berdi')
+        }
+
+        updateSuccess = true
+      }
+
+      if (!updateSuccess) {
+        throw new Error('Buyurtma holatini yangilashda xatolik yuz berdi')
+      }
+
+      // Обновляем сообщение в боте
+      const originalText = query.message?.text || ''
+      const updatedText = originalText + '\n\n✅ **Holat:** Tayyor\n\nBuyurtma tayyor bo\'ldi!'
+
+      await bot.editMessageText(updatedText, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [] // Убираем кнопку после нажатия
+        }
+      })
+
+      // Отправляем подтверждение
+      await bot.sendMessage(chatId, '✅ Buyurtma holati "Tayyor" ga o\'zgartirildi!', {
+        reply_markup: {
+          keyboard: [
+            [
+              { text: 'ℹ️ Bot haqida' },
+              { text: '🏪 Sotuvchi bo\'lish' }
+            ]
+          ],
+          resize_keyboard: true,
+          one_time_keyboard: false
+        }
+      })
+    } catch (error: any) {
+      console.error('Error processing order ready callback:', error)
+      
+      // Уведомляем об ошибке
+      await bot.answerCallbackQuery(query.id, {
+        text: 'Xatolik: ' + (error.message || 'Noma\'lum xatolik'),
+        show_alert: true
+      })
+    }
+  }
 })
 
 // Обработка ошибок
