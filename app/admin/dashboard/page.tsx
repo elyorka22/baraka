@@ -114,43 +114,6 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-          <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 border border-gray-100">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Быстрые действия</h2>
-            <div className="space-y-2 md:space-y-3">
-              <a
-                href="/admin/restaurants"
-                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
-              >
-                Управление складами
-              </a>
-              <a
-                href="/admin/products"
-                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
-              >
-                Управление продуктами
-              </a>
-              <a
-                href="/admin/banners"
-                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
-              >
-                Управление баннерами
-              </a>
-              <a
-                href="/admin/users"
-                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
-              >
-                Управление пользователями
-              </a>
-              <a
-                href="/admin/bot-settings"
-                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
-              >
-                Настройки бота
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )
