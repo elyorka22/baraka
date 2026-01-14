@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/common/Navbar'
 import { WarehouseTabs } from '@/components/warehouse/WarehouseTabs'
 
-export const dynamic = 'force-dynamic'
+// Кешируем страницу на 30 секунд для улучшения производительности
+export const revalidate = 30
 
 export default async function WarehousePage({
   params,
@@ -20,7 +21,7 @@ export default async function WarehousePage({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, role')
     .eq('id', user.id)
     .single()
 
@@ -28,10 +29,10 @@ export default async function WarehousePage({
     redirect('/')
   }
 
-  // Загружаем склад
+  // Загружаем склад (только необходимые поля)
   const { data: restaurant } = await supabase
     .from('restaurants')
-    .select('*')
+    .select('id, name, description, address, phone, image_url, is_active, manager_id, telegram_chat_id, created_at')
     .eq('id', id)
     .single()
 
@@ -47,34 +48,39 @@ export default async function WarehousePage({
     redirect('/')
   }
 
-  // Загружаем данные для вкладок
+  // Загружаем данные для вкладок с оптимизацией запросов
+  // Загружаем только необходимые поля и ограничиваем количество записей
   const [ordersResult, dishesResult, collectorsResult, couriersResult, categoriesResult] = await Promise.all([
     supabase
       .from('orders')
-      .select('*, order_items(*, dishes(name, price))')
+      .select('id, status, total_price, address, phone, notes, created_at, updated_at, order_items(id, quantity, price, dishes(name))')
       .eq('restaurant_id', id)
       .order('created_at', { ascending: false })
-      .limit(50),
+      .limit(30), // Уменьшили лимит для быстрой загрузки
     supabase
       .from('dishes')
-      .select('*, global_categories(id, name)')
+      .select('id, name, description, price, image_url, is_available, badge_text, global_category_id, created_at, global_categories(id, name)')
       .eq('restaurant_id', id)
-      .order('created_at', { ascending: false }),
+      .order('created_at', { ascending: false })
+      .limit(100), // Добавили лимит для товаров
     supabase
       .from('profiles')
-      .select('id, full_name, phone, role')
+      .select('id, full_name, phone')
       .eq('role', 'collector')
-      .eq('is_active', true),
+      .eq('is_active', true)
+      .limit(50), // Добавили лимит
     supabase
       .from('profiles')
-      .select('id, full_name, phone, role')
+      .select('id, full_name, phone')
       .eq('role', 'courier')
-      .eq('is_active', true),
+      .eq('is_active', true)
+      .limit(50), // Добавили лимит
     supabase
       .from('global_categories')
-      .select('*')
+      .select('id, name, is_active')
       .eq('is_active', true)
-      .order('name'),
+      .order('name')
+      .limit(20), // Добавили лимит для категорий
   ])
 
   const orders = ordersResult.data || []
@@ -83,7 +89,7 @@ export default async function WarehousePage({
   const couriers = couriersResult.data || []
   const categories = categoriesResult.data || []
 
-  // Статистика
+  // Подсчитываем статистику из загруженных данных (быстрее чем отдельные запросы)
   const stats = {
     totalOrders: orders.length,
     pendingOrders: orders.filter(o => o.status === 'pending').length,

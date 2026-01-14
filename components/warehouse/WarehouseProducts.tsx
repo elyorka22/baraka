@@ -398,6 +398,8 @@ export function WarehouseProducts({ restaurant, dishes: initialDishes, categorie
                     src={dish.image_url}
                     alt={dish.name}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               )}

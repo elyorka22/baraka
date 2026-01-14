@@ -14,22 +14,30 @@ export default function HomePage() {
     const loadData = async () => {
       const supabase = createSupabaseClient()
       
-      // Загружаем активные категории
+      // Загружаем активные категории (только необходимые поля)
       const { data: categoriesData, error: categoriesError } = await supabase
         .from('global_categories')
-        .select('*')
+        .select('id, name, is_active')
         .eq('is_active', true)
         .order('name')
+        .limit(20) // Ограничиваем количество категорий
 
       if (categoriesError) {
         console.error('Error loading categories:', categoriesError)
       }
 
-      // Загружаем все доступные товары с категориями
+      // Загружаем доступные товары с категориями (только необходимые поля)
       const { data: productsData, error: productsError } = await supabase
         .from('dishes')
         .select(`
-          *,
+          id,
+          name,
+          description,
+          price,
+          image_url,
+          badge_text,
+          global_category_id,
+          restaurant_id,
           restaurants (
             id,
             name
@@ -41,6 +49,7 @@ export default function HomePage() {
         `)
         .eq('is_available', true)
         .order('created_at', { ascending: false })
+        .limit(200) // Ограничиваем количество товаров для быстрой загрузки
 
       if (productsError) {
         console.error('Error loading products:', productsError)
