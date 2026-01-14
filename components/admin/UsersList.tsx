@@ -31,8 +31,21 @@ export function UsersList({ users: initialUsers }: UsersListProps) {
 
     if (!error) {
       setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u))
+      // Показываем уведомление об успешном изменении
+      if (newRole === 'manager') {
+        alert('Foydalanuvchi muvaffaqiyatli menejer etib tayinlandi!')
+      }
+    } else {
+      alert('Xatolik: ' + (error.message || 'Rolni o\'zgartirishda xatolik yuz berdi'))
     }
     setUpdating(null)
+  }
+
+  const handleAssignManager = async (userId: string) => {
+    if (!confirm('Bu foydalanuvchini menejer etib tayinlamoqchimisiz?')) {
+      return
+    }
+    await handleRoleChange(userId, 'manager')
   }
 
   const handleToggleActive = async (userId: string, currentStatus: boolean) => {
@@ -109,7 +122,7 @@ export function UsersList({ users: initialUsers }: UsersListProps) {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <select
                     value={user.role}
                     onChange={(e) => handleRoleChange(user.id, e.target.value as UserRole)}
@@ -128,13 +141,18 @@ export function UsersList({ users: initialUsers }: UsersListProps) {
                   </select>
                   {user.role !== 'manager' && user.role !== 'super_admin' && (
                     <button
-                      onClick={() => handleRoleChange(user.id, 'manager')}
+                      onClick={() => handleAssignManager(user.id)}
                       disabled={updating === user.id}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors disabled:opacity-50"
-                      title="Назначить менеджером"
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-semibold transition-colors disabled:opacity-50 whitespace-nowrap"
+                      title="Menejer etib tayinlash"
                     >
-                      {updating === user.id ? '...' : 'Менеджер'}
+                      {updating === user.id ? '...' : 'Menejer qilish'}
                     </button>
+                  )}
+                  {user.role === 'manager' && (
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                      Menejer
+                    </span>
                   )}
                 </div>
               </td>
