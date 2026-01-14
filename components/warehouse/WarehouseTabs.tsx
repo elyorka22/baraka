@@ -115,6 +115,12 @@ export function WarehouseTabs({
     { id: 'assignments' as const, label: 'Tayinlash' },
   ]
 
+  // Отладка: проверяем наличие вкладки
+  if (typeof window !== 'undefined') {
+    console.log('WarehouseTabs tabs:', tabs)
+    console.log('Active tab:', activeTab)
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100">
       {/* Вкладки */}
