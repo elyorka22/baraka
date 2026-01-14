@@ -70,7 +70,7 @@ CREATE POLICY "Anyone can create order items"
       WHERE orders.id = order_items.order_id
       AND (
         -- Для авторизованных пользователей
-        (auth.uid() IS NOT NULL AND orders.user_id = auth.uid()) OR
+        (auth.uid() IS NOT NULL AND orders.user_id IS NOT DISTINCT FROM auth.uid()) OR
         -- Для анонимных заказов
         (auth.uid() IS NULL AND orders.user_id IS NULL)
       )
