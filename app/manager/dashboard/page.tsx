@@ -58,7 +58,7 @@ export default async function ManagerDashboardPage() {
           Панель менеджера
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Ожидают обработки</h3>
             <p className="text-3xl font-bold text-orange-500">
@@ -80,6 +80,22 @@ export default async function ManagerDashboardPage() {
             </p>
           </div>
         </div>
+
+        {/* Ссылка на управление складом */}
+        {managerWarehouse && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Ombor boshqaruvi</h2>
+            <a
+              href={`/warehouse/${managerWarehouse.id}`}
+              className="inline-block bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              {managerWarehouse.name} - Ombor boshqaruvi
+            </a>
+            <p className="text-sm text-gray-600 mt-2">
+              Bu yerdan ombor statistikasi, buyurtmalar, mahsulotlar va tayinlashlarni boshqarishingiz mumkin.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )
