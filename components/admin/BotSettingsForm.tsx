@@ -49,7 +49,7 @@ export function BotSettingsForm({ initialSettings }: BotSettingsFormProps) {
       const errors = results.filter(r => !r.ok)
 
       if (errors.length > 0) {
-        throw new Error('Ba''zi sozlamalarni saqlashda xatolik yuz berdi')
+        throw new Error("Ba'zi sozlamalarni saqlashda xatolik yuz berdi")
       }
 
       setSuccess(true)
