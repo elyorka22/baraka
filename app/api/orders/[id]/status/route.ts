@@ -1,9 +1,10 @@
-import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * API endpoint для обновления статуса заказа
  * Используется ботом для изменения статуса заказа на "ready"
+ * Использует service role key для обхода RLS политик
  */
 export async function PATCH(
   request: NextRequest,
@@ -33,7 +34,20 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
     }
 
-    const supabase = await createSupabaseServerClient()
+    // Используем service role key для обхода RLS
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json({ error: 'Supabase configuration missing' }, { status: 500 })
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
 
     // Обновляем статус заказа
     const { data, error } = await supabase
