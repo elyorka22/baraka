@@ -21,7 +21,7 @@ export default async function WarehousePage({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, role')
+    .select('id, role, full_name')
     .eq('id', user.id)
     .single()
 
