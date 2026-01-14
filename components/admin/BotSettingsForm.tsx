@@ -66,7 +66,13 @@ export function BotSettingsForm({ initialSettings }: BotSettingsFormProps) {
     }
   }
 
-  const settingsList = [
+  const settingsList: Array<{
+    key: string
+    label: string
+    placeholder: string
+    isTextarea?: boolean
+    description?: string
+  }> = [
     {
       key: 'button_about_text',
       label: 'Tugma matni: "Bot haqida"',
