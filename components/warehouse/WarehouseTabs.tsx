@@ -38,8 +38,11 @@ interface Order {
     dishes?: {
       name: string
       price: number
-    }
-  }>
+    } | Array<{
+      name: string
+      price: number
+    }> | null
+  }> | any
 }
 
 interface Dish {

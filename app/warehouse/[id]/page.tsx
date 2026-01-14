@@ -83,11 +83,12 @@ export default async function WarehousePage({
       .limit(20), // Добавили лимит для категорий
   ])
 
-  const orders = ordersResult.data || []
-  const dishes = dishesResult.data || []
-  const collectors = collectorsResult.data || []
-  const couriers = couriersResult.data || []
-  const categories = categoriesResult.data || []
+  // Приводим типы для совместимости с интерфейсами компонентов
+  const orders = (ordersResult.data || []) as any[]
+  const dishes = (dishesResult.data || []) as any[]
+  const collectors = (collectorsResult.data || []) as any[]
+  const couriers = (couriersResult.data || []) as any[]
+  const categories = (categoriesResult.data || []) as any[]
 
   // Подсчитываем статистику из загруженных данных (быстрее чем отдельные запросы)
   const stats = {
