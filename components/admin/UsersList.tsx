@@ -109,22 +109,34 @@ export function UsersList({ users: initialUsers }: UsersListProps) {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <select
-                  value={user.role}
-                  onChange={(e) => handleRoleChange(user.id, e.target.value as UserRole)}
-                  disabled={updating === user.id || user.role === 'super_admin'}
-                  className={`px-3 py-1 rounded text-sm font-medium ${getRoleColor(user.role)} ${
-                    updating === user.id || user.role === 'super_admin'
-                      ? 'opacity-50 cursor-not-allowed'
-                      : 'cursor-pointer'
-                  }`}
-                >
-                  <option value="super_admin">Супер-админ</option>
-                  <option value="manager">Менеджер</option>
-                  <option value="collector">Сборщик</option>
-                  <option value="courier">Курьер</option>
-                  <option value="customer">Клиент</option>
-                </select>
+                <div className="flex items-center gap-2">
+                  <select
+                    value={user.role}
+                    onChange={(e) => handleRoleChange(user.id, e.target.value as UserRole)}
+                    disabled={updating === user.id || user.role === 'super_admin'}
+                    className={`px-3 py-1 rounded text-sm font-medium border ${getRoleColor(user.role)} ${
+                      updating === user.id || user.role === 'super_admin'
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'cursor-pointer'
+                    }`}
+                  >
+                    <option value="super_admin">Супер-админ</option>
+                    <option value="manager">Менеджер</option>
+                    <option value="collector">Сборщик</option>
+                    <option value="courier">Курьер</option>
+                    <option value="customer">Клиент</option>
+                  </select>
+                  {user.role !== 'manager' && user.role !== 'super_admin' && (
+                    <button
+                      onClick={() => handleRoleChange(user.id, 'manager')}
+                      disabled={updating === user.id}
+                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition-colors disabled:opacity-50"
+                      title="Назначить менеджером"
+                    >
+                      {updating === user.id ? '...' : 'Менеджер'}
+                    </button>
+                  )}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`px-2 py-1 rounded text-xs font-medium ${
@@ -136,17 +148,19 @@ export function UsersList({ users: initialUsers }: UsersListProps) {
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm">
-                <button
-                  onClick={() => handleToggleActive(user.id, user.is_active)}
-                  disabled={updating === user.id}
-                  className={`px-3 py-1 rounded text-sm transition-colors ${
-                    user.is_active
-                      ? 'bg-yellow-500 hover:bg-yellow-600'
-                      : 'bg-green-500 hover:bg-green-600'
-                  } text-white disabled:opacity-50`}
-                >
-                  {updating === user.id ? '...' : user.is_active ? 'Деактивировать' : 'Активировать'}
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleToggleActive(user.id, user.is_active)}
+                    disabled={updating === user.id}
+                    className={`px-3 py-1 rounded text-sm transition-colors ${
+                      user.is_active
+                        ? 'bg-gray-700 hover:bg-gray-800'
+                        : 'bg-black hover:bg-gray-800'
+                    } text-white disabled:opacity-50`}
+                  >
+                    {updating === user.id ? '...' : user.is_active ? 'Deaktivlashtirish' : 'Aktivlashtirish'}
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
