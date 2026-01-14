@@ -142,6 +142,12 @@ export default async function AdminDashboardPage() {
               >
                 Управление пользователями
               </a>
+              <a
+                href="/admin/bot-settings"
+                className="block w-full text-left px-4 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors font-medium"
+              >
+                Настройки бота
+              </a>
             </div>
           </div>
         </div>

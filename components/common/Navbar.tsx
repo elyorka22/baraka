@@ -32,6 +32,7 @@ export function Navbar({ role, userName }: NavbarProps) {
           { href: '/admin/products', label: 'Mahsulotlar' },
           { href: '/admin/banners', label: 'Bannerlar' },
           { href: '/admin/orders', label: 'Buyurtmalar' },
+          { href: '/admin/bot-settings', label: 'Bot sozlamalari' },
         ]
       case 'manager':
         return [
