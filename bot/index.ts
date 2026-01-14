@@ -263,9 +263,9 @@ bot.on('callback_query', async (query) => {
           const { error: updateError } = await supabase
             .from('orders')
             .update({ 
-              status: 'ready',
+              status: 'ready' as any,
               updated_at: new Date().toISOString()
-            })
+            } as any)
             .eq('id', orderId)
 
           if (!updateError) {
