@@ -340,8 +340,46 @@ export function RestaurantTabs({ restaurant, dishes, categories, stats }: Restau
 function BotSettingsForm({ restaurant }: { restaurant: Restaurant }) {
   const [chatId, setChatId] = useState(restaurant.telegram_chat_id || '')
   const [loading, setLoading] = useState(false)
+  const [testing, setTesting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [testResult, setTestResult] = useState<string | null>(null)
+
+  const handleTest = async () => {
+    if (!chatId.trim()) {
+      setError('Chat ID ni kiriting')
+      return
+    }
+
+    setTesting(true)
+    setError(null)
+    setTestResult(null)
+
+    try {
+      const response = await fetch('/api/telegram/test-chat-id', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ chatId: chatId.trim() }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || 'Test muvaffaqiyatsiz')
+        setTestResult('❌ Test muvaffaqiyatsiz')
+      } else {
+        setTestResult('✅ Test muvaffaqiyatli! Chat ID to\'g\'ri.')
+        setError(null)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Test xatosi')
+      setTestResult('❌ Test xatosi')
+    } finally {
+      setTesting(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -355,7 +393,7 @@ function BotSettingsForm({ restaurant }: { restaurant: Restaurant }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ telegram_chat_id: chatId || null }),
+        body: JSON.stringify({ telegram_chat_id: chatId.trim() || null }),
       })
 
       const data = await response.json()
@@ -365,6 +403,7 @@ function BotSettingsForm({ restaurant }: { restaurant: Restaurant }) {
       }
 
       setSuccess(true)
+      setTestResult(null)
       setTimeout(() => {
         setSuccess(false)
       }, 3000)
@@ -393,19 +432,54 @@ function BotSettingsForm({ restaurant }: { restaurant: Restaurant }) {
         <label htmlFor="telegram_chat_id" className="block text-sm font-medium text-gray-700 mb-2">
           Telegram Chat ID
         </label>
-        <input
-          id="telegram_chat_id"
-          type="text"
-          value={chatId}
-          onChange={(e) => setChatId(e.target.value)}
-          placeholder="Masalan: 123456789"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
-        />
-        <p className="mt-2 text-sm text-gray-500">
-          Chat ID ni olish uchun: @userinfobot ga yozing yoki @getidsbot dan oling
-        </p>
-        <p className="mt-1 text-xs text-gray-400">
-          Agar Chat ID ko'rsatilsa, yangi buyurtmalar haqida Telegram orqali xabar yuboriladi
+        <div className="flex gap-2">
+          <input
+            id="telegram_chat_id"
+            type="text"
+            value={chatId}
+            onChange={(e) => {
+              setChatId(e.target.value)
+              setTestResult(null)
+              setError(null)
+            }}
+            placeholder="Masalan: 123456789"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900"
+          />
+          <button
+            type="button"
+            onClick={handleTest}
+            disabled={testing || !chatId.trim()}
+            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors whitespace-nowrap"
+          >
+            {testing ? 'Test...' : 'Test qilish'}
+          </button>
+        </div>
+        
+        {testResult && (
+          <p className={`mt-2 text-sm ${testResult.includes('✅') ? 'text-green-600' : 'text-red-600'}`}>
+            {testResult}
+          </p>
+        )}
+
+        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm font-medium text-blue-900 mb-2">📋 Chat ID ni olish:</p>
+          <ol className="text-xs text-blue-800 space-y-1 list-decimal list-inside">
+            <li>Telegram'da @userinfobot ga yozing</li>
+            <li>Yoki @getidsbot dan Chat ID ni oling</li>
+            <li>Raqamni (masalan: 123456789) ko'chirib oling</li>
+            <li>Shu yerga kiriting va "Test qilish" tugmasini bosing</li>
+            <li>Test muvaffaqiyatli bo'lsa, "Saqlash" tugmasini bosing</li>
+          </ol>
+        </div>
+
+        <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-xs text-yellow-800">
+            ⚠️ <strong>Muhim:</strong> Botni avval ishga tushirish kerak! Telegram'da botga /start buyrug'ini yuboring, keyin Chat ID ni kiriting.
+          </p>
+        </div>
+
+        <p className="mt-2 text-xs text-gray-500">
+          Chat ID saqlangandan keyin, yangi buyurtmalar haqida Telegram orqali avtomatik xabar yuboriladi.
         </p>
       </div>
 
@@ -419,7 +493,11 @@ function BotSettingsForm({ restaurant }: { restaurant: Restaurant }) {
         </button>
         <button
           type="button"
-          onClick={() => setChatId('')}
+          onClick={() => {
+            setChatId('')
+            setTestResult(null)
+            setError(null)
+          }}
           className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
         >
           Tozalash

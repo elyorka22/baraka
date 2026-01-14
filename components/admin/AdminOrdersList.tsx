@@ -94,13 +94,25 @@ export function AdminOrdersList({ orders: initialOrders, restaurantsWithBots }: 
       const data = await response.json()
 
       if (!response.ok) {
-        alert('Xatolik: ' + (data.error || 'Xabar yuborilmadi'))
+        console.error('Ошибка отправки в Telegram:', data)
+        
+        let errorMessage = data.error || 'Xabar yuborilmadi'
+        
+        // Более понятные сообщения об ошибках
+        if (errorMessage.includes('chat not found')) {
+          errorMessage = 'Chat ID topilmadi.\n\nYechim:\n1. Botni /start buyrug\'i bilan ishga tushiring\n2. Ombor sozlamalarida Chat ID ni qayta tekshiring\n3. "Test qilish" tugmasini bosing'
+        } else if (errorMessage.includes('bloklangan')) {
+          errorMessage = 'Bot bloklangan.\n\nYechim:\n1. Foydalanuvchi botni bloklagan\n2. Botni blokdan olib tashlang\n3. Botga /start buyrug\'ini yuboring'
+        }
+        
+        alert(`Xatolik: ${errorMessage}`)
       } else {
         alert('Buyurtma botga muvaffaqiyatli yuborildi!')
         setShowDistributeModal(null)
       }
     } catch (error: any) {
-      alert('Xatolik: ' + error.message)
+      console.error('Ошибка при отправке:', error)
+      alert('Xatolik: ' + (error.message || 'Tarmoq xatosi'))
     } finally {
       setSending(null)
     }

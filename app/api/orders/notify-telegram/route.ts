@@ -66,12 +66,28 @@ export async function POST(request: NextRequest) {
     }
 
     // Отправляем уведомление
-    await sendOrderNotification(finalChatId, notification)
+    const result = await sendOrderNotification(finalChatId, notification)
 
-    return NextResponse.json({ success: true })
+    if (!result.success) {
+      return NextResponse.json({ 
+        error: result.error || 'Не удалось отправить уведомление в Telegram',
+        details: {
+          chatId: finalChatId,
+          orderId: order.id,
+        }
+      }, { status: 500 })
+    }
+
+    return NextResponse.json({ 
+      success: true,
+      message: 'Уведомление успешно отправлено в Telegram'
+    })
   } catch (error: any) {
     console.error('Error sending Telegram notification:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ 
+      error: error.message || 'Внутренняя ошибка сервера',
+      details: error.stack
+    }, { status: 500 })
   }
 }
 
