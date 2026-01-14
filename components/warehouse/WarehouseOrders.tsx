@@ -96,21 +96,21 @@ export function WarehouseOrders({ orders: initialOrders, restaurantId }: Warehou
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Фильтры */}
       <div className="flex flex-wrap gap-2">
         {Object.entries(statusCounts).map(([status, count]) => (
           <button
             key={status}
             onClick={() => setFilterStatus(status)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors ${
               filterStatus === status
                 ? 'bg-black text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             {status === 'all' ? 'Barchasi' : getStatusLabel(status)}
-            <span className="ml-2">({count})</span>
+            <span className="ml-1 md:ml-2">({count})</span>
           </button>
         ))}
       </div>
@@ -121,36 +121,38 @@ export function WarehouseOrders({ orders: initialOrders, restaurantId }: Warehou
           <p className="text-gray-500">Buyurtmalar topilmadi</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {filteredOrders.map((order) => (
-            <div key={order.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900">
+            <div key={order.id} className="bg-gray-50 rounded-lg p-3 md:p-4 border border-gray-200">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3 gap-2">
+                <div className="flex-1">
+                  <h3 className="text-base md:text-lg font-bold text-gray-900">
                     Buyurtma #{order.id.slice(0, 8)}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs md:text-sm text-gray-500">
                     {new Date(order.created_at).toLocaleString('ru-RU')}
                   </p>
                 </div>
-                <span className={`px-3 py-1 rounded text-sm font-medium ${getStatusColor(order.status)}`}>
+                <span className={`px-2 md:px-3 py-1 rounded text-xs md:text-sm font-medium self-start ${getStatusColor(order.status)}`}>
                   {getStatusLabel(order.status)}
                 </span>
               </div>
 
               <div className="mb-3">
-                <p className="text-sm text-gray-500">Manzil:</p>
-                <p className="text-base text-gray-900">{order.address}</p>
-                <p className="text-sm text-gray-500 mt-1">Telefon:</p>
-                <p className="text-base text-gray-900">{order.phone}</p>
+                <p className="text-xs md:text-sm text-gray-500">Manzil:</p>
+                <p className="text-sm md:text-base text-gray-900 break-words">{order.address}</p>
+                <p className="text-xs md:text-sm text-gray-500 mt-1">Telefon:</p>
+                <a href={`tel:${order.phone}`} className="text-sm md:text-base text-gray-900 hover:text-blue-600">
+                  {order.phone}
+                </a>
               </div>
 
               {order.order_items && order.order_items.length > 0 && (
                 <div className="mb-3">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Buyurtma tarkibi:</p>
+                  <p className="text-xs md:text-sm font-medium text-gray-700 mb-2">Buyurtma tarkibi:</p>
                   <ul className="space-y-1">
                     {order.order_items.map((item) => (
-                      <li key={item.id} className="text-sm text-gray-600">
+                      <li key={item.id} className="text-xs md:text-sm text-gray-600">
                         {item.dishes?.name || 'Mahsulot'} × {item.quantity} - {Number(item.price * item.quantity).toLocaleString('ru-RU')} so'm
                       </li>
                     ))}
@@ -158,15 +160,15 @@ export function WarehouseOrders({ orders: initialOrders, restaurantId }: Warehou
                 </div>
               )}
 
-              <div className="flex justify-between items-center pt-3 border-t border-gray-200">
-                <span className="text-lg font-bold text-gray-900">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center pt-3 border-t border-gray-200 gap-3">
+                <span className="text-base md:text-lg font-bold text-gray-900">
                   {Number(order.total_price).toLocaleString('ru-RU')} so'm
                 </span>
                 <select
                   value={order.status}
                   onChange={(e) => handleStatusChange(order.id, e.target.value)}
                   disabled={updating === order.id}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium bg-white disabled:opacity-50"
+                  className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg text-xs md:text-sm font-medium bg-white disabled:opacity-50"
                 >
                   <option value="pending">Kutilmoqda</option>
                   <option value="assigned_to_collector">Yig'uvchiga tayinlangan</option>

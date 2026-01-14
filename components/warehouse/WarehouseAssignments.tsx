@@ -123,24 +123,24 @@ export function WarehouseAssignments({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Назначение сборщиков */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Yig'uvchilarni tayinlash</h3>
+        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Yig'uvchilarni tayinlash</h3>
         {assignableOrders.filter(o => o.status === 'pending').length === 0 ? (
           <p className="text-gray-500">Tayinlash uchun buyurtmalar yo'q</p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {assignableOrders
               .filter(o => o.status === 'pending')
               .map((order) => (
-                <div key={order.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium text-gray-900">
+                <div key={order.id} className="bg-gray-50 rounded-lg p-3 md:p-4 border border-gray-200">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900 text-sm md:text-base">
                         Buyurtma #{order.id.slice(0, 8)}
                       </p>
-                      <p className="text-sm text-gray-500">Kutilmoqda</p>
+                      <p className="text-xs md:text-sm text-gray-500">Kutilmoqda</p>
                     </div>
                     <select
                       onChange={(e) => {
@@ -150,7 +150,7 @@ export function WarehouseAssignments({
                       }}
                       disabled={assigning === order.id}
                       defaultValue=""
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium bg-white disabled:opacity-50"
+                      className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg text-xs md:text-sm font-medium bg-white disabled:opacity-50"
                     >
                       <option value="">Yig'uvchi tanlang</option>
                       {collectors.map((collector) => (
@@ -168,21 +168,21 @@ export function WarehouseAssignments({
 
       {/* Назначение курьеров */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Kuryerlarni tayinlash</h3>
+        <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4">Kuryerlarni tayinlash</h3>
         {assignableOrders.filter(o => o.status === 'ready').length === 0 ? (
           <p className="text-gray-500">Tayinlash uchun tayyor buyurtmalar yo'q</p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {assignableOrders
               .filter(o => o.status === 'ready')
               .map((order) => (
-                <div key={order.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium text-gray-900">
+                <div key={order.id} className="bg-gray-50 rounded-lg p-3 md:p-4 border border-gray-200">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900 text-sm md:text-base">
                         Buyurtma #{order.id.slice(0, 8)}
                       </p>
-                      <p className="text-sm text-gray-500">Tayyor</p>
+                      <p className="text-xs md:text-sm text-gray-500">Tayyor</p>
                     </div>
                     <select
                       onChange={(e) => {
@@ -192,7 +192,7 @@ export function WarehouseAssignments({
                       }}
                       disabled={assigning === order.id}
                       defaultValue=""
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium bg-white disabled:opacity-50"
+                      className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-lg text-xs md:text-sm font-medium bg-white disabled:opacity-50"
                     >
                       <option value="">Kuryer tanlang</option>
                       {couriers.map((courier) => (
@@ -209,9 +209,9 @@ export function WarehouseAssignments({
       </div>
 
       {/* Список доступных сотрудников */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <div>
-          <h4 className="text-base font-semibold text-gray-900 mb-3">Mavjud yig'uvchilar</h4>
+          <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-3">Mavjud yig'uvchilar</h4>
           {collectors.length === 0 ? (
             <p className="text-sm text-gray-500">Yig'uvchilar yo'q</p>
           ) : (
@@ -231,7 +231,7 @@ export function WarehouseAssignments({
         </div>
 
         <div>
-          <h4 className="text-base font-semibold text-gray-900 mb-3">Mavjud kuryerlar</h4>
+          <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-3">Mavjud kuryerlar</h4>
           {couriers.length === 0 ? (
             <p className="text-sm text-gray-500">Kuryerlar yo'q</p>
           ) : (

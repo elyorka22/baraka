@@ -94,27 +94,27 @@ export default async function WarehousePage({
     <div className="min-h-screen bg-gray-50">
       <Navbar role={profile.role} userName={profile.full_name || user.email || undefined} />
       
-      <div className="container mx-auto px-4 py-6">
-        <div className="mb-6">
+      <div className="container mx-auto px-3 md:px-4 py-4 md:py-6">
+        <div className="mb-4 md:mb-6">
           {isSuperAdmin ? (
             <a 
               href="/admin/restaurants" 
-              className="text-gray-900 hover:text-gray-700 mb-4 inline-flex items-center gap-2 font-medium transition-colors"
+              className="text-gray-900 hover:text-gray-700 mb-3 md:mb-4 inline-flex items-center gap-2 text-sm md:text-base font-medium transition-colors"
             >
               <span>←</span> Omborlarga qaytish
             </a>
           ) : (
             <a 
               href="/manager/dashboard" 
-              className="text-gray-900 hover:text-gray-700 mb-4 inline-flex items-center gap-2 font-medium transition-colors"
+              className="text-gray-900 hover:text-gray-700 mb-3 md:mb-4 inline-flex items-center gap-2 text-sm md:text-base font-medium transition-colors"
             >
               <span>←</span> Boshqaruv paneliga qaytish
             </a>
           )}
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">
             {restaurant.name}
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 mt-1 text-sm md:text-base">
             Ombor boshqaruvi
           </p>
         </div>
