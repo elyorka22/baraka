@@ -23,10 +23,43 @@ export default async function AdminRestaurantsPage() {
     redirect('/')
   }
 
-  const { data: restaurants } = await supabase
+  // Загружаем склады
+  const { data: restaurants, error: restaurantsError } = await supabase
     .from('restaurants')
-    .select('*, profiles!restaurants_manager_id_fkey(id, full_name, email)')
+    .select('*')
     .order('created_at', { ascending: false })
+
+  if (restaurantsError) {
+    console.error('Error loading restaurants:', restaurantsError)
+  }
+
+  // Загружаем информацию о менеджерах отдельно
+  const managerIds = restaurants?.filter(r => r.manager_id).map(r => r.manager_id) || []
+  let managersMap: Record<string, { id: string; full_name: string | null; email: string | null }> = {}
+  
+  if (managerIds.length > 0) {
+    const { data: managers } = await supabase
+      .from('profiles')
+      .select('id, full_name')
+      .in('id', managerIds)
+    
+    if (managers) {
+      managersMap = managers.reduce((acc, manager) => {
+        acc[manager.id] = {
+          id: manager.id,
+          full_name: manager.full_name,
+          email: null // Email нужно получать из auth.users, но для простоты оставим null
+        }
+        return acc
+      }, {} as Record<string, { id: string; full_name: string | null; email: string | null }>)
+    }
+  }
+
+  // Объединяем данные
+  const restaurantsWithManagers = restaurants?.map(restaurant => ({
+    ...restaurant,
+    profiles: restaurant.manager_id ? managersMap[restaurant.manager_id] || null : null
+  })) || []
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -48,7 +81,12 @@ export default async function AdminRestaurantsPage() {
           </a>
         </div>
 
-        <RestaurantsList restaurants={restaurants || []} />
+        {restaurantsError && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+            Xatolik: {restaurantsError.message}
+          </div>
+        )}
+        <RestaurantsList restaurants={restaurantsWithManagers} />
       </div>
     </div>
   )
