@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createSupabaseClient } from '@/lib/supabase/client'
 
 interface Order {
@@ -47,6 +47,41 @@ export function AdminOrdersList({ orders: initialOrders, restaurantsWithBots }: 
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [showDistributeModal, setShowDistributeModal] = useState<string | null>(null)
   const [sending, setSending] = useState<string | null>(null)
+
+  // Функция для проверки, можно ли отправлять заказ в боты
+  const canDistributeToBots = (status: string) => {
+    // Кнопка скрыта для финальных статусов
+    return !['ready', 'delivered', 'cancelled'].includes(status)
+  }
+
+  // Подписка на изменения заказов в реальном времени
+  useEffect(() => {
+    const supabase = createSupabaseClient()
+    
+    const channel = supabase
+      .channel('orders-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'orders',
+        },
+        (payload) => {
+          // Обновляем заказ в списке
+          setOrders((prevOrders) =>
+            prevOrders.map((order) =>
+              order.id === payload.new.id ? { ...order, ...payload.new } : order
+            )
+          )
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
@@ -188,12 +223,20 @@ export function AdminOrdersList({ orders: initialOrders, restaurantsWithBots }: 
                     {Number(order.total_price).toLocaleString('ru-RU')} so'm
                   </span>
                 </div>
-                <button
-                  onClick={() => setShowDistributeModal(order.id)}
-                  className="w-full bg-black hover:bg-gray-800 text-white px-3 py-2 rounded-lg transition-colors font-medium text-sm"
-                >
-                  Botlarga tarqatish
-                </button>
+                {canDistributeToBots(order.status) ? (
+                  <button
+                    onClick={() => setShowDistributeModal(order.id)}
+                    className="w-full bg-black hover:bg-gray-800 text-white px-3 py-2 rounded-lg transition-colors font-medium text-sm"
+                  >
+                    Botlarga tarqatish
+                  </button>
+                ) : (
+                  <div className="w-full bg-gray-100 text-gray-500 px-3 py-2 rounded-lg text-center font-medium text-sm">
+                    {order.status === 'ready' && 'Tayyor'}
+                    {order.status === 'delivered' && 'Yetkazib berildi'}
+                    {order.status === 'cancelled' && 'Bekor qilindi'}
+                  </div>
+                )}
               </div>
             </div>
           ))}
